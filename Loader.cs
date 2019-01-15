@@ -18,6 +18,7 @@ namespace RealConstruction
         public static bool isGuiRunning = false;
 
         public static bool realCityRunning = false;
+        public static bool fuelAlarmRunning = false;
 
         public static UIPanel playerbuildingInfo;
 
@@ -89,23 +90,17 @@ namespace RealConstruction
         public static void SetupGui()
         {
             SetupPlayerBuidingGui();
-            if (!realCityRunning)
-            {
-                SetupPlayerBuildingButton();
-            }
+            SetupPlayerBuildingButton();
             Loader.isGuiRunning = true;
         }
 
         public static void RemoveGui()
         {
             Loader.isGuiRunning = false;
-            if (!realCityRunning)
+            if (playerbuildingInfo != null)
             {
-                if (playerbuildingInfo != null)
-                {
-                    UnityEngine.Object.Destroy(PBMenuPanel);
-                    Loader.PBMenuPanel = null;
-                }
+                UnityEngine.Object.Destroy(PBMenuPanel);
+                Loader.PBMenuPanel = null;
             }
 
             //remove PlayerbuildingUI
@@ -149,7 +144,7 @@ namespace RealConstruction
                 PBMenuPanel = (playerbuildingInfo.AddUIComponent(typeof(PlayerBuildingButton)) as PlayerBuildingButton);
             }
             PBMenuPanel.RefPanel = playerbuildingInfo;
-            PBMenuPanel.Alignment = UIAlignAnchor.BottomLeft;
+            PBMenuPanel.Alignment = UIAlignAnchor.TopLeft;
             PBMenuPanel.Show();
         }
 
@@ -198,17 +193,18 @@ namespace RealConstruction
             state9 = RedirectionHelper.RedirectCalls(srcMethod9, destMethod9);
 
             realCityRunning = CheckRealCityIsLoaded();
+            fuelAlarmRunning = CheckFuelAlarmIsLoaded();
             if (!realCityRunning)
             {
-                var srcMethod2 = typeof(CargoTruckAI).GetMethod("ArriveAtTarget", BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null);
-                var destMethod2 = typeof(CustomCargoTruckAI).GetMethod("ArriveAtTarget", BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null);
-                state2 = RedirectionHelper.RedirectCalls(srcMethod2, destMethod2);
+                //var srcMethod2 = typeof(CargoTruckAI).GetMethod("ArriveAtTarget", BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null);
+                //var destMethod2 = typeof(CustomCargoTruckAI).GetMethod("ArriveAtTarget", BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null);
+                //state2 = RedirectionHelper.RedirectCalls(srcMethod2, destMethod2);
                 var srcMethod3 = typeof(CargoTruckAI).GetMethod("SetSource", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType(), typeof(ushort) }, null);
                 var destMethod3 = typeof(CustomCargoTruckAI).GetMethod("SetSource", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType(), typeof(ushort) }, null);
                 state3 = RedirectionHelper.RedirectCalls(srcMethod3, destMethod3);
-                var srcMethod4 = typeof(TransferManager).GetMethod("StartTransfer", BindingFlags.NonPublic | BindingFlags.Instance);
-                var destMethod4 = typeof(CustomTransferManager).GetMethod("StartTransfer", BindingFlags.NonPublic | BindingFlags.Instance);
-                state4 = RedirectionHelper.RedirectCalls(srcMethod4, destMethod4);
+                //var srcMethod4 = typeof(TransferManager).GetMethod("StartTransfer", BindingFlags.NonPublic | BindingFlags.Instance);
+                //var destMethod4 = typeof(CustomTransferManager).GetMethod("StartTransfer", BindingFlags.NonPublic | BindingFlags.Instance);
+                //state4 = RedirectionHelper.RedirectCalls(srcMethod4, destMethod4);
                 var srcMethod8 = typeof(CommonBuildingAI).GetMethod("ReleaseBuilding", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType() }, null);
                 var destMethod8 = typeof(CustomCommonBuildingAI).GetMethod("ReleaseBuilding", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType() }, null);
                 state8 = RedirectionHelper.RedirectCalls(srcMethod8, destMethod8);
@@ -283,6 +279,11 @@ namespace RealConstruction
         private bool CheckRealCityIsLoaded()
         {
             return this.Check3rdPartyModLoaded("RealCity", true);
+        }
+
+        private bool CheckFuelAlarmIsLoaded()
+        {
+            return this.Check3rdPartyModLoaded("FuelAlarm", true);
         }
 
     }

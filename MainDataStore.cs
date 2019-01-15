@@ -17,11 +17,12 @@ namespace RealConstruction
         public static ushort[] operationResourceBuffer = new ushort[49152];
 
         public static bool[] buildingFlag = new bool[49152];
+        public static byte[] buildingFlag1 = new byte[49152];
 
         public static ushort last_buildingid = 0;
         public static byte last_language = 0;
 
-        public static byte[] saveData = new byte[786432];
+        public static byte[] saveData = new byte[835584];
 
         public static void DataInit()
         {
@@ -34,6 +35,7 @@ namespace RealConstruction
                 constructionResourceBuffer[i] = 0;
                 operationResourceBuffer[i] = 0;
                 buildingFlag[i] = false;
+                buildingFlag1[i] = 0;
             }
         }
 
@@ -46,6 +48,7 @@ namespace RealConstruction
             SaveAndRestore.save_ushorts(ref i, petrolBuffer, ref saveData);
             SaveAndRestore.save_ushorts(ref i, constructionResourceBuffer, ref saveData);
             SaveAndRestore.save_ushorts(ref i, operationResourceBuffer, ref saveData);
+            SaveAndRestore.save_bytes(ref i, buildingFlag1, ref saveData);
         }
 
         public static void load()
@@ -57,6 +60,7 @@ namespace RealConstruction
             petrolBuffer = SaveAndRestore.load_ushorts(ref i, saveData, foodBuffer.Length);
             constructionResourceBuffer = SaveAndRestore.load_ushorts(ref i, saveData, foodBuffer.Length);
             operationResourceBuffer = SaveAndRestore.load_ushorts(ref i, saveData, foodBuffer.Length);
+            buildingFlag1 = SaveAndRestore.load_bytes(ref i, saveData, buildingFlag1.Length);
         }
 
     }

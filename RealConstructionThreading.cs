@@ -62,23 +62,29 @@ namespace RealConstruction
                         {
                             if (!(instance.m_buildings.m_buffer[i].Info.m_buildingAI is OutsideConnectionAI) && !((instance.m_buildings.m_buffer[i].Info.m_buildingAI is DecorationBuildingAI)) && !(instance.m_buildings.m_buffer[i].Info.m_buildingAI is WildlifeSpawnPointAI))
                             {
-                                if (canConstruction((ushort)i, ref instance.m_buildings.m_buffer[i]))
+                                if (!(instance.m_buildings.m_buffer[i].Info.m_buildingAI is ExtractingDummyAI) && !((instance.m_buildings.m_buffer[i].Info.m_buildingAI is PowerPoleAI)) && !(instance.m_buildings.m_buffer[i].Info.m_buildingAI is WaterJunctionAI))
                                 {
-                                    ProcessBuildingConstruction((ushort)i, ref instance.m_buildings.m_buffer[i]);
-                                }
-
-                                if (canOperation((ushort)i, ref instance.m_buildings.m_buffer[i]))
-                                {
-                                    ProcessPlayerBuildingOperation((ushort)i, ref instance.m_buildings.m_buffer[i]);
-                                }
-
-                                if (IsSpecialBuilding((ushort)i))
-                                {
-                                    if (instance.m_buildings.m_buffer[i].m_flags.IsFlagSet(Building.Flags.Completed))
+                                    if (!(instance.m_buildings.m_buffer[i].Info.m_buildingAI is IntersectionAI) && !((instance.m_buildings.m_buffer[i].Info.m_buildingAI is CableCarPylonAI)) && !(instance.m_buildings.m_buffer[i].Info.m_buildingAI is MonorailPylonAI))
                                     {
-                                        ProcessCityResourceDepartmentBuildingGoods((ushort)i, instance.m_buildings.m_buffer[i]);
-                                        ProcessCityResourceDepartmentBuildingOutgoing((ushort)i, instance.m_buildings.m_buffer[i]);
-                                        ProcessCityResourceDepartmentBuildingIncoming((ushort)i, instance.m_buildings.m_buffer[i]);
+                                        if (canConstruction((ushort)i, ref instance.m_buildings.m_buffer[i]))
+                                        {
+                                            ProcessBuildingConstruction((ushort)i, ref instance.m_buildings.m_buffer[i]);
+                                        }
+
+                                        if (canOperation((ushort)i, ref instance.m_buildings.m_buffer[i]))
+                                        {
+                                            ProcessPlayerBuildingOperation((ushort)i, ref instance.m_buildings.m_buffer[i]);
+                                        }
+
+                                        if (IsSpecialBuilding((ushort)i))
+                                        {
+                                            if (instance.m_buildings.m_buffer[i].m_flags.IsFlagSet(Building.Flags.Completed))
+                                            {
+                                                ProcessCityResourceDepartmentBuildingGoods((ushort)i, instance.m_buildings.m_buffer[i]);
+                                                ProcessCityResourceDepartmentBuildingOutgoing((ushort)i, instance.m_buildings.m_buffer[i]);
+                                                ProcessCityResourceDepartmentBuildingIncoming((ushort)i, instance.m_buildings.m_buffer[i]);
+                                            }
+                                        }
                                     }
                                 }
 
@@ -156,26 +162,31 @@ namespace RealConstruction
             }
             else if (buildingData.Info.m_class.m_service == ItemClass.Service.Road || buildingData.Info.m_class.m_service == ItemClass.Service.PoliceDepartment || buildingData.Info.m_class.m_service == ItemClass.Service.Electricity)
             {
+                //DebugLog.LogToFileOnly(buildingData.Info.m_buildingAI.ToString());
                 PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
                 return AI.RequireRoadAccess();
             }
             else if (buildingData.Info.m_class.m_service == ItemClass.Service.PlayerIndustry || buildingData.Info.m_class.m_service == ItemClass.Service.PublicTransport || buildingData.Info.m_class.m_service == ItemClass.Service.Water)
             {
+                //DebugLog.LogToFileOnly(buildingData.Info.m_buildingAI.ToString());
                 PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
                 return AI.RequireRoadAccess();
             }
             else if (buildingData.Info.m_class.m_service == ItemClass.Service.HealthCare || buildingData.Info.m_class.m_service == ItemClass.Service.Garbage || buildingData.Info.m_class.m_service == ItemClass.Service.Education)
             {
+                //DebugLog.LogToFileOnly(buildingData.Info.m_buildingAI.ToString());
                 PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
                 return AI.RequireRoadAccess();
             }
             else if (buildingData.Info.m_class.m_service == ItemClass.Service.FireDepartment || buildingData.Info.m_class.m_service == ItemClass.Service.Disaster || buildingData.Info.m_class.m_service == ItemClass.Service.Beautification)
             {
+                //DebugLog.LogToFileOnly(buildingData.Info.m_buildingAI.ToString());
                 PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
                 return AI.RequireRoadAccess();
             }
             else if (buildingData.Info.m_class.m_service == ItemClass.Service.Monument)
             {
+                //DebugLog.LogToFileOnly(buildingData.Info.m_buildingAI.ToString());
                 PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
                 return AI.RequireRoadAccess();
             }
@@ -190,6 +201,7 @@ namespace RealConstruction
         {
             if (MainDataStore.constructionResourceBuffer[buildingID] < 8000 && (!IsSpecialBuilding(buildingID)))
             {
+                System.Random rand = new System.Random();
                 //DebugLog.LogToFileOnly("buildingData.m_flags = " + buildingData.m_flags.ToString());
                 if (buildingData.m_flags.IsFlagSet(Building.Flags.Created) && (!buildingData.m_flags.IsFlagSet(Building.Flags.Completed)) && (!buildingData.m_flags.IsFlagSet(Building.Flags.Deleted)))
                 {
@@ -220,7 +232,11 @@ namespace RealConstruction
                     if (num34 > 0)
                     {
                         TransferManager.TransferOffer offer = default(TransferManager.TransferOffer);
-                        offer.Priority = 7;
+                        offer.Priority = rand.Next(7) + 1;
+                        if ((buildingData.Info.m_class.m_service != ItemClass.Service.Residential) && (buildingData.Info.m_class.m_service != ItemClass.Service.Industrial) && (buildingData.Info.m_class.m_service != ItemClass.Service.Commercial) && (buildingData.Info.m_class.m_service != ItemClass.Service.Office))
+                        {
+                            offer.Priority = 7;
+                        }
                         offer.Building = buildingID;
                         offer.Position = buildingData.m_position;
                         offer.Amount = 1;
@@ -261,7 +277,7 @@ namespace RealConstruction
                     buildingData.m_tempImport = (byte)Mathf.Clamp(value, (int)buildingData.m_tempImport, 255);
                 }
 
-                num34 = 18000 - MainDataStore.operationResourceBuffer[buildingID] - num29;
+                num34 = 8000 - MainDataStore.operationResourceBuffer[buildingID] - num29;
                 if (num34 > 0)
                 {
                     TransferManager.TransferOffer offer = default(TransferManager.TransferOffer);
@@ -285,16 +301,22 @@ namespace RealConstruction
             {
                 if (MainDataStore.lumberBuffer[buildingID] > 20 && MainDataStore.coalBuffer[buildingID] > 20 && MainDataStore.constructionResourceBuffer[buildingID] < 64000)
                 {
-                    MainDataStore.lumberBuffer[buildingID] -= 20;
-                    MainDataStore.coalBuffer[buildingID] -= 20;
-                    MainDataStore.constructionResourceBuffer[buildingID] += 400;
+                    if (MainDataStore.buildingFlag1[buildingID] == 0 || MainDataStore.buildingFlag1[buildingID] == 1)
+                    {
+                        MainDataStore.lumberBuffer[buildingID] -= 20;
+                        MainDataStore.coalBuffer[buildingID] -= 20;
+                        MainDataStore.constructionResourceBuffer[buildingID] += 400;
+                    }
                 }
 
                 if (MainDataStore.petrolBuffer[buildingID] > 20 && MainDataStore.foodBuffer[buildingID] > 20 && MainDataStore.operationResourceBuffer[buildingID] < 64000)
                 {
-                    MainDataStore.petrolBuffer[buildingID] -= 20;
-                    MainDataStore.foodBuffer[buildingID] -= 20;
-                    MainDataStore.operationResourceBuffer[buildingID] += 400;
+                    if (MainDataStore.buildingFlag1[buildingID] == 0 || MainDataStore.buildingFlag1[buildingID] == 2)
+                    {
+                        MainDataStore.petrolBuffer[buildingID] -= 20;
+                        MainDataStore.foodBuffer[buildingID] -= 20;
+                        MainDataStore.operationResourceBuffer[buildingID] += 400;
+                    }
                 }
             }
         }
@@ -309,6 +331,7 @@ namespace RealConstruction
             TransferManager.TransferReason outgoingTransferReason = default(TransferManager.TransferReason);
 
             //constructionResource
+            System.Random rand = new System.Random();
             outgoingTransferReason = (TransferManager.TransferReason)110;
             if (outgoingTransferReason != TransferManager.TransferReason.None)
             {
@@ -324,12 +347,11 @@ namespace RealConstruction
                 {
                     //DebugLog.LogToFileOnly("send constructionResource outgoing offer");
                     TransferManager.TransferOffer offer2 = default(TransferManager.TransferOffer);
-                    offer2.Priority = 7;
+                    offer2.Priority = rand.Next(7) + 1;
                     offer2.Building = buildingID;
                     offer2.Position = buildingData.m_position;
                     offer2.Amount = Mathf.Min(customBuffer / 8000, num36 - num27);
                     offer2.Active = true;
-                    offer2.Exclude = true;
                     Singleton<TransferManager>.instance.AddOutgoingOffer(outgoingTransferReason, offer2);
                 }
             }
@@ -349,12 +371,11 @@ namespace RealConstruction
                 if (customBuffer >= 8000 && num27 < num36)
                 {
                     TransferManager.TransferOffer offer2 = default(TransferManager.TransferOffer);
-                    offer2.Priority = 7;
+                    offer2.Priority = rand.Next(7) + 1;
                     offer2.Building = buildingID;
                     offer2.Position = buildingData.m_position;
                     offer2.Amount = Mathf.Min((customBuffer) / 8000, num36 - num27);
                     offer2.Active = true;
-                    offer2.Exclude = true;
                     Singleton<TransferManager>.instance.AddOutgoingOffer(outgoingTransferReason, offer2);
                 }
             }
@@ -372,109 +393,115 @@ namespace RealConstruction
             TransferManager.TransferReason incomingTransferReason = default(TransferManager.TransferReason);
 
             //Foods
-            incomingTransferReason = TransferManager.TransferReason.Food;
-            if (incomingTransferReason != TransferManager.TransferReason.None)
+            if (MainDataStore.buildingFlag1[buildingID] == 0 || MainDataStore.buildingFlag1[buildingID] == 2)
             {
-                CalculateGuestVehicles(buildingID, ref buildingData, incomingTransferReason, ref num27, ref num28, ref num29, ref value);
-                buildingData.m_tempImport = (byte)Mathf.Clamp(value, (int)buildingData.m_tempImport, 255);
-            }
-
-            num34 = 4000 - MainDataStore.foodBuffer[buildingID] - num29;
-            if (buildingData.m_fireIntensity == 0 && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
-            {
-                if (num34 >= 0)
+                incomingTransferReason = TransferManager.TransferReason.Food;
+                if (incomingTransferReason != TransferManager.TransferReason.None)
                 {
-                    TransferManager.TransferOffer offer = default(TransferManager.TransferOffer);
-                    offer.Priority = 7;
-                    offer.Building = buildingID;
-                    offer.Position = buildingData.m_position;
-                    offer.Amount = 1;
-                    offer.Active = false;
-                    Singleton<TransferManager>.instance.AddIncomingOffer(incomingTransferReason, offer);
+                    CalculateGuestVehicles(buildingID, ref buildingData, incomingTransferReason, ref num27, ref num28, ref num29, ref value);
+                    buildingData.m_tempImport = (byte)Mathf.Clamp(value, (int)buildingData.m_tempImport, 255);
                 }
-            }
 
-            //Petrol
-            incomingTransferReason = TransferManager.TransferReason.Petrol;
-            num27 = 0;
-            num28 = 0;
-            num29 = 0;
-            value = 0;
-            num34 = 0;
-            if (incomingTransferReason != TransferManager.TransferReason.None && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
-            {
-                CalculateGuestVehicles(buildingID, ref buildingData, incomingTransferReason, ref num27, ref num28, ref num29, ref value);
-                buildingData.m_tempImport = (byte)Mathf.Clamp(value, (int)buildingData.m_tempImport, 255);
-            }
-
-            num34 = 4000 - MainDataStore.petrolBuffer[buildingID] - num29;
-            if (buildingData.m_fireIntensity == 0)
-            {
-                if (num34 >= 0)
+                num34 = 4000 - MainDataStore.foodBuffer[buildingID] - num29;
+                if (buildingData.m_fireIntensity == 0 && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
                 {
-                    TransferManager.TransferOffer offer = default(TransferManager.TransferOffer);
-                    offer.Priority = 7;
-                    offer.Building = buildingID;
-                    offer.Position = buildingData.m_position;
-                    offer.Amount = 1;
-                    offer.Active = false;
-                    Singleton<TransferManager>.instance.AddIncomingOffer(incomingTransferReason, offer);
+                    if (num34 >= 0)
+                    {
+                        TransferManager.TransferOffer offer = default(TransferManager.TransferOffer);
+                        offer.Priority = 7;
+                        offer.Building = buildingID;
+                        offer.Position = buildingData.m_position;
+                        offer.Amount = 1;
+                        offer.Active = false;
+                        Singleton<TransferManager>.instance.AddIncomingOffer(incomingTransferReason, offer);
+                    }
+                }
+
+                //Petrol
+                incomingTransferReason = TransferManager.TransferReason.Petrol;
+                num27 = 0;
+                num28 = 0;
+                num29 = 0;
+                value = 0;
+                num34 = 0;
+                if (incomingTransferReason != TransferManager.TransferReason.None && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
+                {
+                    CalculateGuestVehicles(buildingID, ref buildingData, incomingTransferReason, ref num27, ref num28, ref num29, ref value);
+                    buildingData.m_tempImport = (byte)Mathf.Clamp(value, (int)buildingData.m_tempImport, 255);
+                }
+
+                num34 = 4000 - MainDataStore.petrolBuffer[buildingID] - num29;
+                if (buildingData.m_fireIntensity == 0)
+                {
+                    if (num34 >= 0)
+                    {
+                        TransferManager.TransferOffer offer = default(TransferManager.TransferOffer);
+                        offer.Priority = 7;
+                        offer.Building = buildingID;
+                        offer.Position = buildingData.m_position;
+                        offer.Amount = 1;
+                        offer.Active = false;
+                        Singleton<TransferManager>.instance.AddIncomingOffer(incomingTransferReason, offer);
+                    }
                 }
             }
 
             //Coal
-            incomingTransferReason = TransferManager.TransferReason.Coal;
-            num27 = 0;
-            num28 = 0;
-            num29 = 0;
-            value = 0;
-            num34 = 0;
-            if (incomingTransferReason != TransferManager.TransferReason.None && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
+            if (MainDataStore.buildingFlag1[buildingID] == 0 || MainDataStore.buildingFlag1[buildingID] == 1)
             {
-                CalculateGuestVehicles(buildingID, ref buildingData, incomingTransferReason, ref num27, ref num28, ref num29, ref value);
-                buildingData.m_tempImport = (byte)Mathf.Clamp(value, (int)buildingData.m_tempImport, 255);
-            }
-
-            num34 = 4000 - MainDataStore.coalBuffer[buildingID] - num29;
-            if (buildingData.m_fireIntensity == 0)
-            {
-                if (num34 >= 0)
+                incomingTransferReason = TransferManager.TransferReason.Coal;
+                num27 = 0;
+                num28 = 0;
+                num29 = 0;
+                value = 0;
+                num34 = 0;
+                if (incomingTransferReason != TransferManager.TransferReason.None && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
                 {
-                    TransferManager.TransferOffer offer = default(TransferManager.TransferOffer);
-                    offer.Priority = 7;
-                    offer.Building = buildingID;
-                    offer.Position = buildingData.m_position;
-                    offer.Amount = 1;
-                    offer.Active = false;
-                    Singleton<TransferManager>.instance.AddIncomingOffer(incomingTransferReason, offer);
+                    CalculateGuestVehicles(buildingID, ref buildingData, incomingTransferReason, ref num27, ref num28, ref num29, ref value);
+                    buildingData.m_tempImport = (byte)Mathf.Clamp(value, (int)buildingData.m_tempImport, 255);
                 }
-            }
 
-            //Lumber
-            incomingTransferReason = TransferManager.TransferReason.Lumber;
-            num27 = 0;
-            num28 = 0;
-            num29 = 0;
-            value = 0;
-            num34 = 0;
-            if (incomingTransferReason != TransferManager.TransferReason.None)
-            {
-                CalculateGuestVehicles(buildingID, ref buildingData, incomingTransferReason, ref num27, ref num28, ref num29, ref value);
-                buildingData.m_tempImport = (byte)Mathf.Clamp(value, (int)buildingData.m_tempImport, 255);
-            }
-
-            num34 = 4000 - MainDataStore.lumberBuffer[buildingID] - num29;
-            if (buildingData.m_fireIntensity == 0 && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
-            {
-                if (num34 >= 0)
+                num34 = 4000 - MainDataStore.coalBuffer[buildingID] - num29;
+                if (buildingData.m_fireIntensity == 0)
                 {
-                    TransferManager.TransferOffer offer = default(TransferManager.TransferOffer);
-                    offer.Priority = 7;
-                    offer.Building = buildingID;
-                    offer.Position = buildingData.m_position;
-                    offer.Amount = 1;
-                    offer.Active = false;
-                    Singleton<TransferManager>.instance.AddIncomingOffer(incomingTransferReason, offer);
+                    if (num34 >= 0)
+                    {
+                        TransferManager.TransferOffer offer = default(TransferManager.TransferOffer);
+                        offer.Priority = 7;
+                        offer.Building = buildingID;
+                        offer.Position = buildingData.m_position;
+                        offer.Amount = 1;
+                        offer.Active = false;
+                        Singleton<TransferManager>.instance.AddIncomingOffer(incomingTransferReason, offer);
+                    }
+                }
+
+                //Lumber
+                incomingTransferReason = TransferManager.TransferReason.Lumber;
+                num27 = 0;
+                num28 = 0;
+                num29 = 0;
+                value = 0;
+                num34 = 0;
+                if (incomingTransferReason != TransferManager.TransferReason.None)
+                {
+                    CalculateGuestVehicles(buildingID, ref buildingData, incomingTransferReason, ref num27, ref num28, ref num29, ref value);
+                    buildingData.m_tempImport = (byte)Mathf.Clamp(value, (int)buildingData.m_tempImport, 255);
+                }
+
+                num34 = 4000 - MainDataStore.lumberBuffer[buildingID] - num29;
+                if (buildingData.m_fireIntensity == 0 && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
+                {
+                    if (num34 >= 0)
+                    {
+                        TransferManager.TransferOffer offer = default(TransferManager.TransferOffer);
+                        offer.Priority = 7;
+                        offer.Building = buildingID;
+                        offer.Position = buildingData.m_position;
+                        offer.Amount = 1;
+                        offer.Active = false;
+                        Singleton<TransferManager>.instance.AddIncomingOffer(incomingTransferReason, offer);
+                    }
                 }
             }
         }

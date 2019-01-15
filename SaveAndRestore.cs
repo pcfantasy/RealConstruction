@@ -8,6 +8,38 @@ namespace RealConstruction
     { 
         private static ISerializableData _serializableData;
 
+        public static void save_bytes(ref int idex, byte[] item, ref byte[] container)
+        {
+            int j;
+            for (j = 0; j < item.Length; j++)
+            {
+                container[idex + j] = item[j];
+            }
+            idex = idex + item.Length;
+        }
+
+        public static byte[] load_bytes(ref int idex, byte[] container, int length)
+        {
+            byte[] tmp = new byte[length];
+            int i;
+            if (idex < container.Length)
+            {
+                for (i = 0; i < length; i++)
+                {
+                    tmp[i] = container[idex];
+                    idex = idex + 1;
+                }
+            }
+            else
+            {
+                for (i = 0; i < length; i++)
+                {
+                    idex = idex + 1;
+                }
+                DebugLog.LogToFileOnly("load data is too short, please check" + container.Length.ToString());
+            }
+            return tmp;
+        }
 
         public static void save_ushorts(ref int idex, ushort[] item, ref byte[] container)
         {
@@ -67,7 +99,7 @@ namespace RealConstruction
             if (Loader.CurrentLoadMode == LoadMode.LoadGame || Loader.CurrentLoadMode == LoadMode.NewGame)
             {
                 DebugLog.LogToFileOnly("startsave");
-                MainDataStore.saveData = new byte[786432];
+                MainDataStore.saveData = new byte[835584];
                 gather_saveData();
                 SaveAndRestore._serializableData.SaveData("RealConstruction MainDataStore", MainDataStore.saveData);
                 RealConstruction.SaveSetting();
@@ -77,7 +109,7 @@ namespace RealConstruction
         public override void OnLoadData()
         {
             MainDataStore.DataInit();
-            MainDataStore.saveData = new byte[786432];
+            MainDataStore.saveData = new byte[835584];
             DebugLog.LogToFileOnly("OnLoadData");
             DebugLog.LogToFileOnly("startload");
 
@@ -90,6 +122,7 @@ namespace RealConstruction
             {
                 MainDataStore.load();
             }
+
             RealConstruction.LoadSetting();
         }
     }

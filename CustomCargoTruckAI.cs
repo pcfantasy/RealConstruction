@@ -14,6 +14,18 @@ namespace RealConstruction
     {
         private bool ArriveAtTarget(ushort vehicleID, ref Vehicle data)
         {
+            if (data.m_transferType == 112 && Loader.fuelAlarmRunning)
+            {
+                //DebugLog.LogToFileOnly("vehicle arrive at to gas station for petrol now");
+                data.m_transferType = FuelAlarm.MainDataStore.preTranferReason[vehicleID];
+                if (FuelAlarm.MainDataStore.petrolBuffer[data.m_targetBuilding] > 1000)
+                {
+                    FuelAlarm.MainDataStore.petrolBuffer[data.m_targetBuilding] -= 1000;
+                }
+                SetTarget(vehicleID, ref data, FuelAlarm.MainDataStore.preTargetBuilding[vehicleID]);
+                return true;
+            }
+
             if (data.m_targetBuilding == 0)
             {
                 return true;
@@ -22,7 +34,11 @@ namespace RealConstruction
             if ((data.m_flags & Vehicle.Flags.TransferToTarget) != (Vehicle.Flags)0)
             {
                 //new added begin
-                Detour(vehicleID, ref data);
+                RealConstructionDetour(vehicleID, ref data);
+                if (Loader.fuelAlarmRunning)
+                {
+                    FuelAlarm.CustomCargoTruckAI.FuelAlarmDetour(vehicleID, ref data);
+                }
                 //new added end
                 num = (int)data.m_transferSize;
             }
@@ -176,7 +192,7 @@ namespace RealConstruction
 
 
 
-        public void Detour(ushort vehicleID, ref Vehicle vehicleData)
+        public static void RealConstructionDetour(ushort vehicleID, ref Vehicle vehicleData)
         {
             BuildingManager instance = Singleton<BuildingManager>.instance;
             if (vehicleData.m_targetBuilding != 0)
@@ -199,20 +215,32 @@ namespace RealConstruction
                             switch ((TransferManager.TransferReason)vehicleData.m_transferType)
                             {
                                 case TransferManager.TransferReason.Food:
-                                    vehicleData.m_transferSize = 0;
-                                    MainDataStore.foodBuffer[vehicleData.m_targetBuilding] += 8000;
+                                    if (!Loader.realCityRunning)
+                                    {
+                                        vehicleData.m_transferSize = 0;
+                                        MainDataStore.foodBuffer[vehicleData.m_targetBuilding] += 8000;
+                                    }
                                     break;
                                 case TransferManager.TransferReason.Lumber:
-                                    vehicleData.m_transferSize = 0;
-                                    MainDataStore.lumberBuffer[vehicleData.m_targetBuilding] += 8000;
+                                    if (!Loader.realCityRunning)
+                                    {
+                                        vehicleData.m_transferSize = 0;
+                                        MainDataStore.lumberBuffer[vehicleData.m_targetBuilding] += 8000;
+                                    }
                                     break;
                                 case TransferManager.TransferReason.Coal:
-                                    vehicleData.m_transferSize = 0;
-                                    MainDataStore.coalBuffer[vehicleData.m_targetBuilding] += 8000;
+                                    if (!Loader.realCityRunning)
+                                    {
+                                        vehicleData.m_transferSize = 0;
+                                        MainDataStore.coalBuffer[vehicleData.m_targetBuilding] += 8000;
+                                    }
                                     break;
                                 case TransferManager.TransferReason.Petrol:
-                                    vehicleData.m_transferSize = 0;
-                                    MainDataStore.petrolBuffer[vehicleData.m_targetBuilding] += 8000;
+                                    if (!Loader.realCityRunning)
+                                    {
+                                        vehicleData.m_transferSize = 0;
+                                        MainDataStore.petrolBuffer[vehicleData.m_targetBuilding] += 8000;
+                                    }
                                     break;
                                 default:
                                     DebugLog.LogToFileOnly("find a import trade m_transferType error = " + vehicleData.m_transferType.ToString()); break;
@@ -240,6 +268,11 @@ namespace RealConstruction
                 if ((data.m_flags & Vehicle.Flags.GoingBack) != 0)
                 {
                     target = InstanceID.Empty;
+                    TransferManager.TransferReason transferType = (TransferManager.TransferReason)data.m_transferType;
+                    if (transferType == (TransferManager.TransferReason)112)
+                    {
+                        return Language.Strings[11];
+                    }
                     return ColossalFramework.Globalization.Locale.Get("VEHICLE_STATUS_CARGOTRUCK_RETURN");
                 }
                 if ((data.m_flags & Vehicle.Flags.WaitingTarget) != 0)
@@ -254,12 +287,20 @@ namespace RealConstruction
                     if ((data.m_flags & Vehicle.Flags.Exporting) != 0 || (flags & Building.Flags.IncomingOutgoing) != 0)
                     {
                         target = InstanceID.Empty;
+                        if (transferType == (TransferManager.TransferReason)112)
+                        {
+                            return Language.Strings[11];
+                        }
                         return ColossalFramework.Globalization.Locale.Get("VEHICLE_STATUS_CARGOTRUCK_EXPORT", transferType.ToString());
                     }
                     if ((data.m_flags & Vehicle.Flags.Importing) != 0)
                     {
                         target = InstanceID.Empty;
                         target.Building = targetBuilding;
+                        if (transferType == (TransferManager.TransferReason)112)
+                        {
+                            return Language.Strings[11];
+                        }
                         return ColossalFramework.Globalization.Locale.Get("VEHICLE_STATUS_CARGOTRUCK_IMPORT", transferType.ToString());
                     }
                     target = InstanceID.Empty;
@@ -271,6 +312,10 @@ namespace RealConstruction
                     else if (transferType == (TransferManager.TransferReason)111)
                     {
                         return Language.Strings[10];
+                    }
+                    else if (transferType == (TransferManager.TransferReason)112)
+                    {
+                        return Language.Strings[11];
                     }
                     else
                     {

@@ -11,7 +11,7 @@ namespace RealConstruction
 {
     public class PlayerBuildingButton : UIPanel
     {
-        private UIButton PBButton;
+        public static UIButton PBButton;
 
         private ItemClass.Availability CurrentMode;
 
@@ -39,30 +39,44 @@ namespace RealConstruction
         {
             UIView aView = UIView.GetAView();
             base.name = "PlayerBuildingUIPanel";
-            base.width = 30f;
-            base.height = 30f;
-            this.BringToFront();
+            base.width = 200f;
+            base.height = 15f;
+            //this.MoveBackward();
             //base.backgroundSprite = "MenuPanel";
             //base.autoLayout = true;
             base.opacity = 1f;
             this.CurrentMode = Singleton<ToolManager>.instance.m_properties.m_mode;
-            this.PBButton = base.AddUIComponent<UIButton>();
-            this.PBButton.normalBgSprite = "PBButton";
-            this.PBButton.hoveredBgSprite = "PBButtonHovered";
-            this.PBButton.focusedBgSprite = "PBButtonFocused";
-            this.PBButton.pressedBgSprite = "PBButtonPressed";
-            this.PBButton.playAudioEvents = true;
-            this.PBButton.name = "PBButton";
-            this.PBButton.tooltipBox = aView.defaultTooltipBox;
-            this.PBButton.text = "B";
-            this.PBButton.textScale = 1.4f;
-            this.PBButton.size = new Vector2(30f, 30f);
-            this.PBButton.relativePosition = new Vector3(0f, 0f);
+            PBButton = base.AddUIComponent<UIButton>();
+            PBButton.normalBgSprite = "PBButton";
+            PBButton.hoveredBgSprite = "PBButtonHovered";
+            PBButton.focusedBgSprite = "PBButtonFocused";
+            PBButton.pressedBgSprite = "PBButtonPressed";
+            PBButton.playAudioEvents = true;
+            PBButton.name = "PBButton";
+            PBButton.tooltipBox = aView.defaultTooltipBox;
+            PBButton.text = Language.Strings[12];
+            PBButton.textScale = 0.9f;
+            PBButton.size = new Vector2(200f, 15f);
+            PBButton.relativePosition = new Vector3(0f, 0f);
             base.AlignTo(this.RefPanel, this.Alignment);
-            this.PBButton.eventClick += delegate (UIComponent component, UIMouseEventParameter eventParam)
+            PBButton.eventClick += delegate (UIComponent component, UIMouseEventParameter eventParam)
             {
                 PlayerBuildingButton.PlayerBuildingUIToggle();
             };
         }
+
+        /*public override void Update()
+        {
+            MainDataStore.last_buildingid = WorldInfoPanel.GetCurrentInstanceID().Building;
+            if (RealConstructionThreading.IsSpecialBuilding(MainDataStore.last_buildingid) && Loader.isGuiRunning)
+            {
+                base.Show();
+            }
+            else
+            {
+                base.Hide();
+            }
+            base.Update();
+        }*/
     }
 }

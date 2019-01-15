@@ -18,6 +18,11 @@ namespace RealConstruction
             MainDataStore.constructionResourceBuffer[buildingID] = 0;
             MainDataStore.operationResourceBuffer[buildingID] = 0;
 
+            if (Loader.fuelAlarmRunning)
+            {
+                FuelAlarm.MainDataStore.petrolBuffer[buildingID] = 0;
+            }
+
             this.ManualDeactivation(buildingID, ref data);
             this.BuildingDeactivated(buildingID, ref data);
             base.ReleaseBuilding(buildingID, ref data);
@@ -42,6 +47,9 @@ namespace RealConstruction
             Singleton<TransferManager>.instance.RemoveIncomingOffer(TransferManager.TransferReason.Worker2, offer);
             Singleton<TransferManager>.instance.RemoveIncomingOffer(TransferManager.TransferReason.Worker3, offer);
             Singleton<TransferManager>.instance.RemoveOutgoingOffer(TransferManager.TransferReason.Mail, offer);
+            Singleton<TransferManager>.instance.RemoveOutgoingOffer((TransferManager.TransferReason)110, offer);
+            Singleton<TransferManager>.instance.RemoveOutgoingOffer((TransferManager.TransferReason)111, offer);
+            Singleton<TransferManager>.instance.RemoveOutgoingOffer((TransferManager.TransferReason)112, offer);
             data.m_flags &= ~Building.Flags.Active;
             this.EmptyBuilding(buildingID, ref data, CitizenUnit.Flags.Created, false);
             base.BuildingDeactivated(buildingID, ref data);
@@ -122,38 +130,44 @@ namespace RealConstruction
             {
                 if (!(buildingData.Info.m_buildingAI is OutsideConnectionAI) && !((buildingData.Info.m_buildingAI is DecorationBuildingAI)) && !(buildingData.Info.m_buildingAI is WildlifeSpawnPointAI))
                 {
-                    if (RealConstructionThreading.canOperation(buildingID, ref buildingData) && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
+                    if (!(buildingData.Info.m_buildingAI is ExtractingDummyAI) && !((buildingData.Info.m_buildingAI is PowerPoleAI)) && !(buildingData.Info.m_buildingAI is WaterJunctionAI))
                     {
-                        if (MainDataStore.operationResourceBuffer[buildingID] > 1000)
+                        if (!(buildingData.Info.m_buildingAI is IntersectionAI) && !((buildingData.Info.m_buildingAI is CableCarPylonAI)) && !(buildingData.Info.m_buildingAI is MonorailPylonAI))
                         {
-                            MainDataStore.operationResourceBuffer[buildingID] -= 100;
-                            Notification.Problem problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem.NoResources);
-                            buildingData.m_problems = problem;
-                        }
-                        else
-                        {
-                            if (buildingData.m_problems == Notification.Problem.None)
+                            if (RealConstructionThreading.canOperation(buildingID, ref buildingData) && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
                             {
-                                Notification.Problem problem = Notification.AddProblems(buildingData.m_problems, Notification.Problem.NoResources);
-                                buildingData.m_problems = problem;
+                                if (MainDataStore.operationResourceBuffer[buildingID] > 1000)
+                                {
+                                    MainDataStore.operationResourceBuffer[buildingID] -= 100;
+                                    Notification.Problem problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                                    buildingData.m_problems = problem;
+                                }
+                                else
+                                {
+                                    if (buildingData.m_problems == Notification.Problem.None)
+                                    {
+                                        Notification.Problem problem = Notification.AddProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                                        buildingData.m_problems = problem;
+                                    }
+                                }
                             }
-                        }
-                    }
 
 
-                    if (RealConstructionThreading.canConstruction(buildingID, ref buildingData) && !buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
-                    {
-                        if (MainDataStore.constructionResourceBuffer[buildingID] >= 8000)
-                        {
-                            Notification.Problem problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem.NoResources);
-                            buildingData.m_problems = problem;
-                        }
-                        else
-                        {
-                            if (buildingData.m_problems == Notification.Problem.None)
+                            if (RealConstructionThreading.canConstruction(buildingID, ref buildingData) && !buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
                             {
-                                Notification.Problem problem = Notification.AddProblems(buildingData.m_problems, Notification.Problem.NoResources);
-                                buildingData.m_problems = problem;
+                                if (MainDataStore.constructionResourceBuffer[buildingID] >= 8000)
+                                {
+                                    Notification.Problem problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                                    buildingData.m_problems = problem;
+                                }
+                                else
+                                {
+                                    if (buildingData.m_problems == Notification.Problem.None)
+                                    {
+                                        Notification.Problem problem = Notification.AddProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                                        buildingData.m_problems = problem;
+                                    }
+                                }
                             }
                         }
                     }

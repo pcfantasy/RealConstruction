@@ -9,7 +9,7 @@ namespace RealConstruction
 {
     public class CustomTransferManager: TransferManager
     {
-        public void StartSpecialBuildingTransfer(ushort buildingID, ref Building data, TransferManager.TransferReason material, TransferManager.TransferOffer offer)
+        public static void StartSpecialBuildingTransfer(ushort buildingID, ref Building data, TransferManager.TransferReason material, TransferManager.TransferOffer offer)
         {
                 //DebugLog.LogToFileOnly("find valid SpecialBuilding");
                 VehicleInfo vehicleInfo = null;
@@ -64,7 +64,21 @@ namespace RealConstruction
                 ushort vehicle2 = offerOut.Vehicle;
                 VehicleInfo info2 = vehicles2.m_buffer[(int)vehicle2].Info;
                 offerIn.Amount = delta;
-                info2.m_vehicleAI.StartTransfer(vehicle2, ref vehicles2.m_buffer[(int)vehicle2], material, offerIn);
+
+                if (Loader.fuelAlarmRunning)
+                {
+                    if (FuelAlarm.FuelAlarmThreading.IsGasBuilding(offerIn.Building))
+                    {
+                        Array16<Building> buildings = Singleton<BuildingManager>.instance.m_buildings;
+                        ushort building = offerIn.Building;
+                        BuildingInfo info3 = buildings.m_buffer[(int)building].Info;
+                        FuelAlarm.CustomTransferManager.StartGasTransfer(vehicle2, ref vehicles2.m_buffer[(int)vehicle2], material, offerIn);
+                    }
+                }
+                else
+                {
+                    info2.m_vehicleAI.StartTransfer(vehicle2, ref vehicles2.m_buffer[(int)vehicle2], material, offerIn);
+                }
             }
             else if (active && offerIn.Citizen != 0u)
             {
@@ -114,7 +128,6 @@ namespace RealConstruction
             }
         }
 
-
         // global::TransferManager
         private static TransferReason GetFrameReason(int frameIndex)
         {
@@ -132,6 +145,9 @@ namespace RealConstruction
                     return (TransferReason)111;
                 case 5:
                     return TransferReason.Metals;
+                case 6:
+                    //operation
+                    return (TransferReason)112;
                 case 7:
                     return TransferReason.Worker0;
                 case 9:

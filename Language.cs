@@ -20,8 +20,12 @@ namespace RealConstruction
             "Operation Resource",//3
             "Operation Resource Left",
             "Transfer construction resource to",
-            "Transfer operation resource to"
-
+            "Transfer operation resource to",
+            "Going for Fuel to",
+            "Click Here For More Info",
+            "Generate Both Resources",
+            "Generate Construction Resource",
+            "Generate Operation Resource",
         };
 
 
@@ -38,7 +42,12 @@ namespace RealConstruction
             "日常运营材料",//3
             "剩余的运营材料",
             "运输建筑材料到",
-            "运输日常运营材料到"
+            "运输日常运营材料到",
+            "前往加油站",
+            "点击这里获得更多信息",
+            "生成两种资源",
+            "生成建筑资源",
+            "生成运营资源",
         };
 
 
@@ -74,6 +83,13 @@ namespace RealConstruction
                 currentLanguage = 0;
             }
 
+            if (Loader.isGuiRunning)
+            {
+                PlayerBuildingButton.PBButton.text = Language.Strings[12];
+                PlayerBuildingUI.Both.text = Language.Strings[13];
+                PlayerBuildingUI.Construction.text = Language.Strings[14];
+                PlayerBuildingUI.Operation.text = Language.Strings[15];
+            }
             MainDataStore.last_language = currentLanguage;
         }
     }

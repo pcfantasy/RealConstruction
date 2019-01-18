@@ -22,3 +22,4 @@ C:\Users\Administrator\Desktop\Other Mod\RealConstruction\RealConstruction\obj\R
 C:\Users\Administrator\Desktop\Other Mod\RealConstruction\RealConstruction\obj\Release\RealConstruction.pdb
 C:\Users\Administrator\Desktop\Other Mod\RealConstruction\RealConstruction\bin\Release\FuelAlarm.dll
 C:\Users\Administrator\Desktop\Other Mod\RealConstruction\RealConstruction\bin\Release\FuelAlarm.pdb
+C:\Users\Administrator\Desktop\Other Mod\RealConstruction\RealConstruction\obj\Release\RealConstruction.csprojResolveAssemblyReference.cache

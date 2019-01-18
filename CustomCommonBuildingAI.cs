@@ -17,6 +17,7 @@ namespace RealConstruction
             MainDataStore.coalBuffer[buildingID] = 0;
             MainDataStore.constructionResourceBuffer[buildingID] = 0;
             MainDataStore.operationResourceBuffer[buildingID] = 0;
+            MainDataStore.buildingFlag[buildingID] = false;
 
             if (Loader.fuelAlarmRunning)
             {

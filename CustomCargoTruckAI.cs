@@ -18,9 +18,9 @@ namespace RealConstruction
             {
                 //DebugLog.LogToFileOnly("vehicle arrive at to gas station for petrol now");
                 data.m_transferType = FuelAlarm.MainDataStore.preTranferReason[vehicleID];
-                if (FuelAlarm.MainDataStore.petrolBuffer[data.m_targetBuilding] > 1000)
+                if (FuelAlarm.MainDataStore.petrolBuffer[data.m_targetBuilding] > 400)
                 {
-                    FuelAlarm.MainDataStore.petrolBuffer[data.m_targetBuilding] -= 1000;
+                    FuelAlarm.MainDataStore.petrolBuffer[data.m_targetBuilding] -= 400;
                 }
                 SetTarget(vehicleID, ref data, FuelAlarm.MainDataStore.preTargetBuilding[vehicleID]);
                 return true;

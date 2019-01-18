@@ -190,6 +190,9 @@ namespace RealConstruction
                     return TransferReason.PassengerShip;
                 case 57:
                     return TransferReason.AnimalProducts;
+                case 58:
+                    //operation
+                    return (TransferReason)112;
                 case 59:
                     return TransferReason.Single1;
                 case 61:
@@ -240,6 +243,9 @@ namespace RealConstruction
                     return TransferReason.CableCar;
                 case 115:
                     return TransferReason.ShoppingD;
+                case 117:
+                    //operation
+                    return (TransferReason)112;
                 case 119:
                     return TransferReason.CriminalMove;
                 case 121:
@@ -316,6 +322,9 @@ namespace RealConstruction
                     return TransferReason.Student3;
                 case 209:
                     return TransferReason.TouristBus;
+                case 210:
+                    //operation
+                    return (TransferReason)112;
                 case 211:
                     return TransferReason.ShoppingG;
                 case 215:

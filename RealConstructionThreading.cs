@@ -49,6 +49,7 @@ namespace RealConstruction
                             if (instance.m_buildings.m_buffer[i].m_flags == Building.Flags.Completed)
                             {
                                 instance.m_buildings.m_buffer[i].m_flags = Building.Flags.None;
+                                MainDataStore.buildingFlag[i] = true;
                             }
                             else
                             {

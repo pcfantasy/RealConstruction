@@ -131,7 +131,7 @@ namespace RealConstruction
             {
                 if (!(buildingData.Info.m_buildingAI is OutsideConnectionAI) && !((buildingData.Info.m_buildingAI is DecorationBuildingAI)) && !(buildingData.Info.m_buildingAI is WildlifeSpawnPointAI))
                 {
-                    if (!(buildingData.Info.m_buildingAI is ExtractingDummyAI) && !((buildingData.Info.m_buildingAI is PowerPoleAI)) && !(buildingData.Info.m_buildingAI is WaterJunctionAI))
+                    if (!(buildingData.Info.m_buildingAI is ExtractingDummyAI) && !(buildingData.Info.m_buildingAI is DummyBuildingAI) && !((buildingData.Info.m_buildingAI is PowerPoleAI)) && !(buildingData.Info.m_buildingAI is WaterJunctionAI))
                     {
                         if (!(buildingData.Info.m_buildingAI is IntersectionAI) && !((buildingData.Info.m_buildingAI is CableCarPylonAI)) && !(buildingData.Info.m_buildingAI is MonorailPylonAI))
                         {

@@ -34,6 +34,12 @@ namespace RealConstruction
                     for (int i = num5; i <= num6; i = i + 1)
                     {
 
+                        if (instance.m_buildings.m_buffer[i].m_flags == Building.Flags.Completed)
+                        {
+                            instance.m_buildings.m_buffer[i].m_flags = Building.Flags.None;
+                            //MainDataStore.buildingFlag[i] = true;
+                        }
+
 
                         if (instance.m_buildings.m_buffer[i].m_flags == Building.Flags.None)
                         {
@@ -63,7 +69,7 @@ namespace RealConstruction
                         {
                             if (!(instance.m_buildings.m_buffer[i].Info.m_buildingAI is OutsideConnectionAI) && !((instance.m_buildings.m_buffer[i].Info.m_buildingAI is DecorationBuildingAI)) && !(instance.m_buildings.m_buffer[i].Info.m_buildingAI is WildlifeSpawnPointAI))
                             {
-                                if (!(instance.m_buildings.m_buffer[i].Info.m_buildingAI is ExtractingDummyAI) && !((instance.m_buildings.m_buffer[i].Info.m_buildingAI is PowerPoleAI)) && !(instance.m_buildings.m_buffer[i].Info.m_buildingAI is WaterJunctionAI))
+                                if (!(instance.m_buildings.m_buffer[i].Info.m_buildingAI is ExtractingDummyAI) && !(instance.m_buildings.m_buffer[i].Info.m_buildingAI is DummyBuildingAI) && !((instance.m_buildings.m_buffer[i].Info.m_buildingAI is PowerPoleAI)) && !(instance.m_buildings.m_buffer[i].Info.m_buildingAI is WaterJunctionAI))
                                 {
                                     if (!(instance.m_buildings.m_buffer[i].Info.m_buildingAI is IntersectionAI) && !((instance.m_buildings.m_buffer[i].Info.m_buildingAI is CableCarPylonAI)) && !(instance.m_buildings.m_buffer[i].Info.m_buildingAI is MonorailPylonAI))
                                     {
@@ -139,6 +145,10 @@ namespace RealConstruction
             }
             else if (buildingData.Info.m_class.m_service == ItemClass.Service.FireDepartment || buildingData.Info.m_class.m_service == ItemClass.Service.Disaster || buildingData.Info.m_class.m_service == ItemClass.Service.Beautification)
             {
+                if (buildingData.Info.m_buildingAI is ParkBuildingAI)
+                {
+                    return false;
+                }
                 PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
                 return AI.RequireRoadAccess();
             }
@@ -182,6 +192,10 @@ namespace RealConstruction
             else if (buildingData.Info.m_class.m_service == ItemClass.Service.FireDepartment || buildingData.Info.m_class.m_service == ItemClass.Service.Disaster || buildingData.Info.m_class.m_service == ItemClass.Service.Beautification)
             {
                 //DebugLog.LogToFileOnly(buildingData.Info.m_buildingAI.ToString());
+                if (buildingData.Info.m_buildingAI is ParkBuildingAI)
+                {
+                    return false;
+                }
                 PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
                 return AI.RequireRoadAccess();
             }
@@ -203,9 +217,10 @@ namespace RealConstruction
             if (MainDataStore.constructionResourceBuffer[buildingID] < 8000 && (!IsSpecialBuilding(buildingID)))
             {
                 System.Random rand = new System.Random();
-                //DebugLog.LogToFileOnly("buildingData.m_flags = " + buildingData.m_flags.ToString());
                 if (buildingData.m_flags.IsFlagSet(Building.Flags.Created) && (!buildingData.m_flags.IsFlagSet(Building.Flags.Completed)) && (!buildingData.m_flags.IsFlagSet(Building.Flags.Deleted)))
                 {
+                    //DebugLog.LogToFileOnly("buildingData.m_flags = " + buildingData.m_flags.ToString());
+                    //DebugLog.LogToFileOnly("MainDataStore.constructionResourceBuffer[buildingID] = " + MainDataStore.constructionResourceBuffer[buildingID].ToString());
                     buildingData.m_frame0.m_constructState = 10;
                     buildingData.m_frame1.m_constructState = 10;
                     buildingData.m_frame2.m_constructState = 10;
@@ -342,7 +357,7 @@ namespace RealConstruction
 
             if (buildingData.m_fireIntensity == 0 && outgoingTransferReason != TransferManager.TransferReason.None && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
             {
-                int num36 = 6;
+                int num36 = 10;
                 int customBuffer = MainDataStore.constructionResourceBuffer[buildingID];
                 if (customBuffer >= 8000 && num27 < num36)
                 {
@@ -367,7 +382,7 @@ namespace RealConstruction
 
             if (buildingData.m_fireIntensity == 0 && outgoingTransferReason != TransferManager.TransferReason.None && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
             {
-                int num36 = 6;
+                int num36 = 10;
                 int customBuffer = MainDataStore.operationResourceBuffer[buildingID];
                 if (customBuffer >= 8000 && num27 < num36)
                 {

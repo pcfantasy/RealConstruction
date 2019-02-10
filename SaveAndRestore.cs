@@ -102,7 +102,6 @@ namespace RealConstruction
                 MainDataStore.saveData = new byte[835584];
                 gather_saveData();
                 SaveAndRestore._serializableData.SaveData("RealConstruction MainDataStore", MainDataStore.saveData);
-                RealConstruction.SaveSetting();
             }
         }
 
@@ -122,8 +121,6 @@ namespace RealConstruction
             {
                 MainDataStore.load();
             }
-
-            RealConstruction.LoadSetting();
         }
     }
 }

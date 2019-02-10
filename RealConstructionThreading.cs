@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using ColossalFramework.Globalization;
 
 namespace RealConstruction
 {
@@ -31,40 +32,24 @@ namespace RealConstruction
                         PlayerBuildingUI.refeshOnce = true;
                     }
 
+
+                    if (SingletonLite<LocaleManager>.instance.language.Contains("zh") && (MainDataStore.lastLanguage == 1))
+                    {
+                        //MainDataStore.lastLanguage = (byte)(SingletonLite<LocaleManager>.instance.language.Contains("zh") ? 1 : 0);
+                    }
+                    else if (!SingletonLite<LocaleManager>.instance.language.Contains("zh") && (MainDataStore.lastLanguage != 1))
+                    {
+                        //MainDataStore.lastLanguage = (byte)(SingletonLite<LocaleManager>.instance.language.Contains("zh") ? 1 : 0);
+                    }
+                    else
+                    {
+                        MainDataStore.lastLanguage = (byte)(SingletonLite<LocaleManager>.instance.language.Contains("zh") ? 1 : 0);
+                        Language.LanguageSwitch(MainDataStore.lastLanguage);
+                        PlayerBuildingUI.refeshOnce = true;
+                    }
+
                     for (int i = num5; i <= num6; i = i + 1)
                     {
-
-                        if (instance.m_buildings.m_buffer[i].m_flags == Building.Flags.Completed)
-                        {
-                            instance.m_buildings.m_buffer[i].m_flags = Building.Flags.None;
-                            //MainDataStore.buildingFlag[i] = true;
-                        }
-
-
-                        if (instance.m_buildings.m_buffer[i].m_flags == Building.Flags.None)
-                        {
-                            //DebugLog.LogToFileOnly("find a delete uncompleted building");
-                            //realtime bug
-                            if (MainDataStore.buildingFlag[i])
-                            {
-                                instance.m_buildings.m_buffer[i].m_flags |= Building.Flags.Completed;
-                            }
-                            MainDataStore.buildingFlag[i] = false;                            
-                        } else
-                        {
-                            if (instance.m_buildings.m_buffer[i].m_flags == Building.Flags.Completed)
-                            {
-                                instance.m_buildings.m_buffer[i].m_flags = Building.Flags.None;
-                                MainDataStore.buildingFlag[i] = true;
-                            }
-                            else
-                            {
-                                MainDataStore.buildingFlag[i] = true;
-                            }
-                        }
-
-
-
                         if (instance.m_buildings.m_buffer[i].m_flags.IsFlagSet(Building.Flags.Created) && (!instance.m_buildings.m_buffer[i].m_flags.IsFlagSet(Building.Flags.Deleted)) && (!instance.m_buildings.m_buffer[i].m_flags.IsFlagSet(Building.Flags.Untouchable)))
                         {
                             if (!(instance.m_buildings.m_buffer[i].Info.m_buildingAI is OutsideConnectionAI) && !((instance.m_buildings.m_buffer[i].Info.m_buildingAI is DecorationBuildingAI)) && !(instance.m_buildings.m_buffer[i].Info.m_buildingAI is WildlifeSpawnPointAI))

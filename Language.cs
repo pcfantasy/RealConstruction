@@ -82,15 +82,7 @@ namespace RealConstruction
                 }
                 currentLanguage = 0;
             }
-
-            if (Loader.isGuiRunning)
-            {
-                PlayerBuildingButton.PBButton.text = Language.Strings[12];
-                PlayerBuildingUI.Both.text = Language.Strings[13];
-                PlayerBuildingUI.Construction.text = Language.Strings[14];
-                PlayerBuildingUI.Operation.text = Language.Strings[15];
-            }
-            MainDataStore.last_language = currentLanguage;
+            MainDataStore.lastLanguage = currentLanguage;
         }
     }
 }

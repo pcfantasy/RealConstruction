@@ -65,18 +65,19 @@ namespace RealConstruction
             };
         }
 
-        /*public override void Update()
+        public override void Update()
         {
             MainDataStore.last_buildingid = WorldInfoPanel.GetCurrentInstanceID().Building;
-            if (RealConstructionThreading.IsSpecialBuilding(MainDataStore.last_buildingid) && Loader.isGuiRunning)
+            if (Loader.isGuiRunning)
             {
                 base.Show();
+                PlayerBuildingButton.PBButton.text = Language.Strings[12];
             }
             else
             {
                 base.Hide();
             }
             base.Update();
-        }*/
+        }
     }
 }

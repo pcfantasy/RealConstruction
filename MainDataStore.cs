@@ -20,7 +20,7 @@ namespace RealConstruction
         public static byte[] buildingFlag1 = new byte[49152];
 
         public static ushort last_buildingid = 0;
-        public static byte last_language = 0;
+        public static byte lastLanguage = 0;
 
         public static byte[] saveData = new byte[835584];
 

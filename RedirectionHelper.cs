@@ -63,7 +63,6 @@ namespace RealConstruction
             // GetFunctionPointer enforces compilation of the method.
             var fptr1 = from.MethodHandle.GetFunctionPointer();
             var fptr2 = to.MethodHandle.GetFunctionPointer();
-            DebugLog.LogToFileOnly("Patching from " + fptr1 + " to " + fptr2);
             return PatchJumpTo(fptr1, fptr2);
         }
 

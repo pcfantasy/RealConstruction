@@ -8,11 +8,32 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using ColossalFramework.Globalization;
+using System.Reflection;
+using System.IO;
 
 namespace RealConstruction
 {
     public class RealConstructionThreading : ThreadingExtensionBase
     {
+        public static bool isFirstTime = true;
+
+
+        public override void OnBeforeSimulationFrame()
+        {
+            base.OnBeforeSimulationFrame();
+            if (Loader.CurrentLoadMode == LoadMode.LoadGame || Loader.CurrentLoadMode == LoadMode.NewGame)
+            {
+                if (RealConstruction.IsEnabled)
+                {
+                    //Check language
+                    CheckLanguage();
+                    CheckDetour();
+                }
+            }
+
+        }
+
+
         public override void OnAfterSimulationFrame()
         {
             base.OnAfterSimulationFrame();
@@ -26,64 +47,151 @@ namespace RealConstruction
                 if (RealConstruction.IsEnabled)
                 {
                     BuildingManager instance = Singleton<BuildingManager>.instance;
-
                     if (num4 == 255)
                     {
                         PlayerBuildingUI.refeshOnce = true;
                     }
-
-
-                    if (SingletonLite<LocaleManager>.instance.language.Contains("zh") && (MainDataStore.lastLanguage == 1))
-                    {
-                        //MainDataStore.lastLanguage = (byte)(SingletonLite<LocaleManager>.instance.language.Contains("zh") ? 1 : 0);
-                    }
-                    else if (!SingletonLite<LocaleManager>.instance.language.Contains("zh") && (MainDataStore.lastLanguage != 1))
-                    {
-                        //MainDataStore.lastLanguage = (byte)(SingletonLite<LocaleManager>.instance.language.Contains("zh") ? 1 : 0);
-                    }
-                    else
-                    {
-                        MainDataStore.lastLanguage = (byte)(SingletonLite<LocaleManager>.instance.language.Contains("zh") ? 1 : 0);
-                        Language.LanguageSwitch(MainDataStore.lastLanguage);
-                        PlayerBuildingUI.refeshOnce = true;
-                    }
-
+                    //CustomSimulationStepImpl for 110 111 TransferReason
+                    CustomTransferManager.CustomSimulationStepImpl();
                     for (int i = num5; i <= num6; i = i + 1)
                     {
-                        if (instance.m_buildings.m_buffer[i].m_flags.IsFlagSet(Building.Flags.Created) && (!instance.m_buildings.m_buffer[i].m_flags.IsFlagSet(Building.Flags.Deleted)) && (!instance.m_buildings.m_buffer[i].m_flags.IsFlagSet(Building.Flags.Untouchable)))
+                        if (instance.m_buildings.m_buffer[i].m_flags.IsFlagSet(Building.Flags.Created) && (!instance.m_buildings.m_buffer[i].m_flags.IsFlagSet(Building.Flags.Deleted)))
                         {
-                            if (!(instance.m_buildings.m_buffer[i].Info.m_buildingAI is OutsideConnectionAI) && !((instance.m_buildings.m_buffer[i].Info.m_buildingAI is DecorationBuildingAI)) && !(instance.m_buildings.m_buffer[i].Info.m_buildingAI is WildlifeSpawnPointAI))
+                            MainDataStore.isBuildingReleased[i] = false;
+                            if (!instance.m_buildings.m_buffer[i].m_flags.IsFlagSet(Building.Flags.Untouchable))
                             {
-                                if (!(instance.m_buildings.m_buffer[i].Info.m_buildingAI is ExtractingDummyAI) && !(instance.m_buildings.m_buffer[i].Info.m_buildingAI is DummyBuildingAI) && !((instance.m_buildings.m_buffer[i].Info.m_buildingAI is PowerPoleAI)) && !(instance.m_buildings.m_buffer[i].Info.m_buildingAI is WaterJunctionAI))
+                                if (!(instance.m_buildings.m_buffer[i].Info.m_buildingAI is OutsideConnectionAI) && !((instance.m_buildings.m_buffer[i].Info.m_buildingAI is DecorationBuildingAI)) && !(instance.m_buildings.m_buffer[i].Info.m_buildingAI is WildlifeSpawnPointAI))
                                 {
-                                    if (!(instance.m_buildings.m_buffer[i].Info.m_buildingAI is IntersectionAI) && !((instance.m_buildings.m_buffer[i].Info.m_buildingAI is CableCarPylonAI)) && !(instance.m_buildings.m_buffer[i].Info.m_buildingAI is MonorailPylonAI))
+                                    if (!(instance.m_buildings.m_buffer[i].Info.m_buildingAI is ExtractingDummyAI) && !(instance.m_buildings.m_buffer[i].Info.m_buildingAI is DummyBuildingAI) && !((instance.m_buildings.m_buffer[i].Info.m_buildingAI is PowerPoleAI)) && !(instance.m_buildings.m_buffer[i].Info.m_buildingAI is WaterJunctionAI))
                                     {
-                                        if (canConstruction((ushort)i, ref instance.m_buildings.m_buffer[i]))
+                                        if (!(instance.m_buildings.m_buffer[i].Info.m_buildingAI is IntersectionAI) && !((instance.m_buildings.m_buffer[i].Info.m_buildingAI is CableCarPylonAI)) && !(instance.m_buildings.m_buffer[i].Info.m_buildingAI is MonorailPylonAI))
                                         {
-                                            ProcessBuildingConstruction((ushort)i, ref instance.m_buildings.m_buffer[i]);
-                                        }
-
-                                        if (canOperation((ushort)i, ref instance.m_buildings.m_buffer[i]))
-                                        {
-                                            ProcessPlayerBuildingOperation((ushort)i, ref instance.m_buildings.m_buffer[i]);
-                                        }
-
-                                        if (IsSpecialBuilding((ushort)i))
-                                        {
-                                            if (instance.m_buildings.m_buffer[i].m_flags.IsFlagSet(Building.Flags.Completed))
+                                            if (canConstruction((ushort)i, ref instance.m_buildings.m_buffer[i]))
                                             {
-                                                ProcessCityResourceDepartmentBuildingGoods((ushort)i, instance.m_buildings.m_buffer[i]);
-                                                ProcessCityResourceDepartmentBuildingOutgoing((ushort)i, instance.m_buildings.m_buffer[i]);
-                                                ProcessCityResourceDepartmentBuildingIncoming((ushort)i, instance.m_buildings.m_buffer[i]);
+                                                ProcessBuildingConstruction((ushort)i, ref instance.m_buildings.m_buffer[i]);
+                                            }
+
+                                            if (canOperation((ushort)i, ref instance.m_buildings.m_buffer[i]))
+                                            {
+                                                ProcessPlayerBuildingOperation((ushort)i, ref instance.m_buildings.m_buffer[i]);
+                                            }
+
+                                            if (IsSpecialBuilding((ushort)i))
+                                            {
+                                                if (instance.m_buildings.m_buffer[i].m_flags.IsFlagSet(Building.Flags.Completed))
+                                                {
+                                                    ProcessCityResourceDepartmentBuildingGoods((ushort)i, instance.m_buildings.m_buffer[i]);
+                                                    ProcessCityResourceDepartmentBuildingOutgoing((ushort)i, instance.m_buildings.m_buffer[i]);
+                                                    ProcessCityResourceDepartmentBuildingIncoming((ushort)i, instance.m_buildings.m_buffer[i]);
+                                                }
                                             }
                                         }
                                     }
-                                }
 
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (!MainDataStore.isBuildingReleased[i])
+                            {
+                                MainDataStore.isBuildingReleased[i] = true;
+                                CustomCommonBuildingAI.CustomReleaseBuilding((ushort)i);
                             }
                         }
                     }
                 }
+            }
+        }
+
+
+        public void DetourAfterLoad()
+        {
+            //This is for Detour RealCity method
+            DebugLog.LogToFileOnly("Init DetourAfterLoad");
+            bool detourFailed = false;
+
+            if (Loader.realCityRunning)
+            {
+                Assembly as1 = Assembly.Load("RealCity");
+                //1
+                DebugLog.LogToFileOnly("Detour RealCityCargoTruckAI::CargoTruckAIArriveAtTargetForRealConstruction calls");
+                try
+                {
+                    Loader.Detours.Add(new Loader.Detour(as1.GetType("RealCity.CustomAI.RealCityCargoTruckAI").GetMethod("CargoTruckAIArriveAtTargetForRealConstruction", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null),
+                                           typeof(CustomCargoTruckAI).GetMethod("CargoTruckAIArriveAtTargetForRealConstruction", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null)));
+                }
+                catch (Exception)
+                {
+                    DebugLog.LogToFileOnly("Could not detour RealCityCargoTruckAI::CargoTruckAIArriveAtTargetForRealConstruction");
+                    detourFailed = true;
+                }
+
+                if (detourFailed)
+                {
+                    DebugLog.LogToFileOnly("DetourAfterLoad failed");
+                }
+                else
+                {
+                    DebugLog.LogToFileOnly("DetourAfterLoad successful");
+                }
+            }
+        }
+
+
+        public void CheckDetour()
+        {
+            if (isFirstTime && Loader.DetourInited)
+            {
+                isFirstTime = false;
+                DetourAfterLoad();
+                if (Loader.DetourInited)
+                {
+                    DebugLog.LogToFileOnly("ThreadingExtension.OnBeforeSimulationFrame: First frame detected. Checking detours.");
+                    List<string> list = new List<string>();
+                    foreach (Loader.Detour current in Loader.Detours)
+                    {
+                        if (!RedirectionHelper.IsRedirected(current.OriginalMethod, current.CustomMethod))
+                        {
+                            list.Add(string.Format("{0}.{1} with {2} parameters ({3})", new object[]
+                            {
+                    current.OriginalMethod.DeclaringType.Name,
+                    current.OriginalMethod.Name,
+                    current.OriginalMethod.GetParameters().Length,
+                    current.OriginalMethod.DeclaringType.AssemblyQualifiedName
+                            }));
+                        }
+                    }
+                    DebugLog.LogToFileOnly(string.Format("ThreadingExtension.OnBeforeSimulationFrame: First frame detected. Detours checked. Result: {0} missing detours", list.Count));
+                    if (list.Count > 0)
+                    {
+                        string error = "RealCity detected an incompatibility with another mod! You can continue playing but it's NOT recommended. RealCity will not work as expected. See RealCity.log for technical details.";
+                        DebugLog.LogToFileOnly(error);
+                        string text = "The following methods were overriden by another mod:";
+                        foreach (string current2 in list)
+                        {
+                            text += string.Format("\n\t{0}", current2);
+                        }
+                        DebugLog.LogToFileOnly(text);
+                    }
+                }
+            }
+        }
+
+
+        public void CheckLanguage()
+        {
+            if (SingletonLite<LocaleManager>.instance.language.Contains("zh") && (MainDataStore.lastLanguage == 1))
+            {
+            }
+            else if (!SingletonLite<LocaleManager>.instance.language.Contains("zh") && (MainDataStore.lastLanguage != 1))
+            {
+            }
+            else
+            {
+                MainDataStore.lastLanguage = (byte)(SingletonLite<LocaleManager>.instance.language.Contains("zh") ? 1 : 0);
+                Language.LanguageSwitch(MainDataStore.lastLanguage);
+                PlayerBuildingUI.refeshOnce = true;
             }
         }
 
@@ -101,7 +209,6 @@ namespace RealConstruction
 
         public static bool canConstruction(ushort buildingID, ref Building buildingData)
         {
-            //DebugLog.LogToFileOnly(buildingData.Info.m_buildingAI.ToString());
             if (IsSpecialBuilding(buildingID))
             {
                 return false;
@@ -150,33 +257,27 @@ namespace RealConstruction
 
         public static bool canOperation(ushort buildingID, ref Building buildingData)
         {
-            //DebugLog.LogToFileOnly(buildingData.Info.m_buildingAI.ToString());
-            //DebugLog.LogToFileOnly(buildingData.m_flags.ToString());
             if (IsSpecialBuilding(buildingID))
             {
                 return false;
             }
             else if (buildingData.Info.m_class.m_service == ItemClass.Service.Road || buildingData.Info.m_class.m_service == ItemClass.Service.PoliceDepartment || buildingData.Info.m_class.m_service == ItemClass.Service.Electricity)
             {
-                //DebugLog.LogToFileOnly(buildingData.Info.m_buildingAI.ToString());
                 PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
                 return AI.RequireRoadAccess();
             }
             else if (buildingData.Info.m_class.m_service == ItemClass.Service.PlayerIndustry || buildingData.Info.m_class.m_service == ItemClass.Service.PublicTransport || buildingData.Info.m_class.m_service == ItemClass.Service.Water)
             {
-                //DebugLog.LogToFileOnly(buildingData.Info.m_buildingAI.ToString());
                 PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
                 return AI.RequireRoadAccess();
             }
             else if (buildingData.Info.m_class.m_service == ItemClass.Service.HealthCare || buildingData.Info.m_class.m_service == ItemClass.Service.Garbage || buildingData.Info.m_class.m_service == ItemClass.Service.Education)
             {
-                //DebugLog.LogToFileOnly(buildingData.Info.m_buildingAI.ToString());
                 PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
                 return AI.RequireRoadAccess();
             }
             else if (buildingData.Info.m_class.m_service == ItemClass.Service.FireDepartment || buildingData.Info.m_class.m_service == ItemClass.Service.Disaster || buildingData.Info.m_class.m_service == ItemClass.Service.Beautification)
             {
-                //DebugLog.LogToFileOnly(buildingData.Info.m_buildingAI.ToString());
                 if (buildingData.Info.m_buildingAI is ParkBuildingAI)
                 {
                     return false;
@@ -186,7 +287,6 @@ namespace RealConstruction
             }
             else if (buildingData.Info.m_class.m_service == ItemClass.Service.Monument)
             {
-                //DebugLog.LogToFileOnly(buildingData.Info.m_buildingAI.ToString());
                 PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
                 return AI.RequireRoadAccess();
             }
@@ -204,8 +304,6 @@ namespace RealConstruction
                 System.Random rand = new System.Random();
                 if (buildingData.m_flags.IsFlagSet(Building.Flags.Created) && (!buildingData.m_flags.IsFlagSet(Building.Flags.Completed)) && (!buildingData.m_flags.IsFlagSet(Building.Flags.Deleted)))
                 {
-                    //DebugLog.LogToFileOnly("buildingData.m_flags = " + buildingData.m_flags.ToString());
-                    //DebugLog.LogToFileOnly("MainDataStore.constructionResourceBuffer[buildingID] = " + MainDataStore.constructionResourceBuffer[buildingID].ToString());
                     buildingData.m_frame0.m_constructState = 10;
                     buildingData.m_frame1.m_constructState = 10;
                     buildingData.m_frame2.m_constructState = 10;
@@ -346,7 +444,6 @@ namespace RealConstruction
                 int customBuffer = MainDataStore.constructionResourceBuffer[buildingID];
                 if (customBuffer >= 8000 && num27 < num36)
                 {
-                    //DebugLog.LogToFileOnly("send constructionResource outgoing offer");
                     TransferManager.TransferOffer offer2 = default(TransferManager.TransferOffer);
                     offer2.Priority = rand.Next(7) + 1;
                     offer2.Building = buildingID;
@@ -566,6 +663,5 @@ namespace RealConstruction
                 }
             }
         }
-
     }
 }

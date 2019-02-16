@@ -12,20 +12,32 @@ namespace RealConstruction
 {
     public class CustomCargoTruckAI: CargoTruckAI
     {
+        public void CargoTruckAIArriveAtTargetForRealGasStationPre(ushort vehicleID, ref Vehicle data)
+        {
+            DebugLog.LogToFileOnly("Error: Should be detour by RealGasStation @ CargoTruckAIArriveAtTargetForRealGasStationPre");
+        }
+
+        public void CargoTruckAIArriveAtTargetForRealGasStationPost(ushort vehicleID, ref Vehicle data)
+        {
+            DebugLog.LogToFileOnly("Error: Should be detour by RealGasStation @ CargoTruckAIArriveAtTargetForRealGasStationPost");
+        }
+
         private bool ArriveAtTarget(ushort vehicleID, ref Vehicle data)
         {
+            // NON-STOCK CODE START
+            // 112 means fuel demand, see more in RealGasStation mod
             if (data.m_transferType == 112 && Loader.fuelAlarmRunning)
             {
-                //DebugLog.LogToFileOnly("vehicle arrive at to gas station for petrol now");
-                data.m_transferType = FuelAlarm.MainDataStore.preTranferReason[vehicleID];
+                /*data.m_transferType = FuelAlarm.MainDataStore.preTranferReason[vehicleID];
                 if (FuelAlarm.MainDataStore.petrolBuffer[data.m_targetBuilding] > 400)
                 {
                     FuelAlarm.MainDataStore.petrolBuffer[data.m_targetBuilding] -= 400;
                 }
-                SetTarget(vehicleID, ref data, FuelAlarm.MainDataStore.preTargetBuilding[vehicleID]);
+                SetTarget(vehicleID, ref data, FuelAlarm.MainDataStore.preTargetBuilding[vehicleID]);*/
+                CargoTruckAIArriveAtTargetForRealGasStationPre(vehicleID, ref data);
                 return true;
             }
-
+            /// NON-STOCK CODE END ///
             if (data.m_targetBuilding == 0)
             {
                 return true;
@@ -33,13 +45,13 @@ namespace RealConstruction
             int num = 0;
             if ((data.m_flags & Vehicle.Flags.TransferToTarget) != (Vehicle.Flags)0)
             {
-                //new added begin
-                RealConstructionDetour(vehicleID, ref data);
+                // NON-STOCK CODE START
+                CargoTruckAIArriveAtTargetForRealConstruction(vehicleID, ref data);
                 if (Loader.fuelAlarmRunning)
                 {
-                    FuelAlarm.CustomCargoTruckAI.FuelAlarmDetour(vehicleID, ref data);
+                    CargoTruckAIArriveAtTargetForRealGasStationPost(vehicleID, ref data);
                 }
-                //new added end
+                /// NON-STOCK CODE END ///
                 num = (int)data.m_transferSize;
             }
             if ((data.m_flags & Vehicle.Flags.TransferToSource) != (Vehicle.Flags)0)
@@ -109,90 +121,46 @@ namespace RealConstruction
         }
 
 
-        private void RemoveSource(ushort vehicleID, ref Vehicle data)
+        public static void CargoTruckAISetSourceForRealConstruction(ushort vehicleID, ref Vehicle data, ushort sourceBuilding)
         {
-            if (data.m_sourceBuilding != 0)
+            CargoTruckAI AI = data.Info.m_vehicleAI as CargoTruckAI;
+            int num = Mathf.Min(0, (int)data.m_transferSize - AI.m_cargoCapacity);
+            //new added begin
+            if (RealConstructionThreading.IsSpecialBuilding(sourceBuilding))
             {
-                Singleton<BuildingManager>.instance.m_buildings.m_buffer[(int)data.m_sourceBuilding].RemoveOwnVehicle(vehicleID, ref data);
-                data.m_sourceBuilding = 0;
-            }
-        }
-
-        public override void SetSource(ushort vehicleID, ref Vehicle data, ushort sourceBuilding)
-        {
-            this.RemoveSource(vehicleID, ref data);
-            data.m_sourceBuilding = sourceBuilding;
-            if (sourceBuilding != 0)
-            {
-                BuildingManager instance = Singleton<BuildingManager>.instance;
-                BuildingInfo info = instance.m_buildings.m_buffer[(int)sourceBuilding].Info;
-                data.Unspawn(vehicleID);
-                Randomizer randomizer = new Randomizer((int)vehicleID);
-                Vector3 vector;
-                Vector3 vector2;
-                info.m_buildingAI.CalculateSpawnPosition(sourceBuilding, ref instance.m_buildings.m_buffer[(int)sourceBuilding], ref randomizer, this.m_info, out vector, out vector2);
-                Quaternion rotation = Quaternion.identity;
-                Vector3 forward = vector2 - vector;
-                if (forward.sqrMagnitude > 0.01f)
+                if ((TransferManager.TransferReason)data.m_transferType == (TransferManager.TransferReason)110)
                 {
-                    rotation = Quaternion.LookRotation(forward);
+                    MainDataStore.constructionResourceBuffer[sourceBuilding] -= 8000;
                 }
-                data.m_frame0 = new Vehicle.Frame(vector, rotation);
-                data.m_frame1 = data.m_frame0;
-                data.m_frame2 = data.m_frame0;
-                data.m_frame3 = data.m_frame0;
-                data.m_targetPos0 = vector;
-                data.m_targetPos0.w = 2f;
-                data.m_targetPos1 = vector2;
-                data.m_targetPos1.w = 2f;
-                data.m_targetPos2 = data.m_targetPos1;
-                data.m_targetPos3 = data.m_targetPos1;
-                if ((data.m_flags & Vehicle.Flags.TransferToTarget) != (Vehicle.Flags)0)
+                else if ((TransferManager.TransferReason)data.m_transferType == (TransferManager.TransferReason)111)
                 {
-                    int num = Mathf.Min(0, (int)data.m_transferSize - this.m_cargoCapacity);
-                    //new added begin
-                    if (RealConstructionThreading.IsSpecialBuilding(sourceBuilding))
-                    {
-                        if ((TransferManager.TransferReason)data.m_transferType == (TransferManager.TransferReason)110)
-                        {
-                            MainDataStore.constructionResourceBuffer[sourceBuilding] -= 8000;
-                        }
-                        else if ((TransferManager.TransferReason)data.m_transferType == (TransferManager.TransferReason)111)
-                        {
-                            MainDataStore.operationResourceBuffer[sourceBuilding] -= 8000;
-                        }
-                        else
-                        {
-                            DebugLog.LogToFileOnly("find unknow transfor for SpecialBuilding " + data.m_transferType.ToString());
-                        }
-                    }
-                    else
-                    {
-                        info.m_buildingAI.ModifyMaterialBuffer(sourceBuilding, ref instance.m_buildings.m_buffer[(int)sourceBuilding], (TransferManager.TransferReason)data.m_transferType, ref num);
-                    }
-                    // new added end
-                    num = Mathf.Max(0, -num);
-                    data.m_transferSize += (ushort)num;
+                    MainDataStore.operationResourceBuffer[sourceBuilding] -= 8000;
                 }
-                this.FrameDataUpdated(vehicleID, ref data, ref data.m_frame0);
-                instance.m_buildings.m_buffer[(int)sourceBuilding].AddOwnVehicle(vehicleID, ref data);
-                if ((instance.m_buildings.m_buffer[(int)sourceBuilding].m_flags & Building.Flags.IncomingOutgoing) != Building.Flags.None)
+                else
                 {
-                    if ((data.m_flags & Vehicle.Flags.TransferToTarget) != (Vehicle.Flags)0)
-                    {
-                        data.m_flags |= Vehicle.Flags.Importing;
-                    }
-                    else if ((data.m_flags & Vehicle.Flags.TransferToSource) != (Vehicle.Flags)0)
-                    {
-                        data.m_flags |= Vehicle.Flags.Exporting;
-                    }
+                    DebugLog.LogToFileOnly("find unknow transfor for SpecialBuilding " + data.m_transferType.ToString());
                 }
             }
         }
 
+        public static float GetResourcePrice(TransferManager.TransferReason material)
+        {
+            //need to sync with realcity mod
+            switch (material)
+            {
+                case TransferManager.TransferReason.Petrol:
+                    return 3f;
+                case TransferManager.TransferReason.Food:
+                    return 1.5f;
+                case TransferManager.TransferReason.Lumber:
+                    return 2f;
+                case TransferManager.TransferReason.Coal:
+                    return 2.5f;
+                default: DebugLog.LogToFileOnly("Error: Unknow material in realconstruction = " + material.ToString()); return 0f;
+            }
+        }
 
-
-        public static void RealConstructionDetour(ushort vehicleID, ref Vehicle vehicleData)
+        public void CargoTruckAIArriveAtTargetForRealConstruction(ushort vehicleID, ref Vehicle vehicleData)
         {
             BuildingManager instance = Singleton<BuildingManager>.instance;
             if (vehicleData.m_targetBuilding != 0)
@@ -214,36 +182,45 @@ namespace RealConstruction
                         {
                             switch ((TransferManager.TransferReason)vehicleData.m_transferType)
                             {
-                                case TransferManager.TransferReason.Food:
-                                    if (!Loader.realCityRunning)
+                                case TransferManager.TransferReason.Food:                                    
+                                    vehicleData.m_transferSize = 0;
+                                    MainDataStore.foodBuffer[vehicleData.m_targetBuilding] += 8000;
+                                    if (Loader.realCityRunning)
                                     {
-                                        vehicleData.m_transferSize = 0;
-                                        MainDataStore.foodBuffer[vehicleData.m_targetBuilding] += 8000;
+                                        float productionValue1 = 8000 * GetResourcePrice((TransferManager.TransferReason)vehicleData.m_transferType);
+                                        Singleton<EconomyManager>.instance.FetchResource(EconomyManager.Resource.ResourcePrice, (int)productionValue1, ItemClass.Service.PlayerIndustry, ItemClass.SubService.PlayerIndustryFarming, ItemClass.Level.Level1);
                                     }
                                     break;
                                 case TransferManager.TransferReason.Lumber:
-                                    if (!Loader.realCityRunning)
+                                    
+                                    vehicleData.m_transferSize = 0;
+                                    MainDataStore.lumberBuffer[vehicleData.m_targetBuilding] += 8000;
+                                    if (Loader.realCityRunning)
                                     {
-                                        vehicleData.m_transferSize = 0;
-                                        MainDataStore.lumberBuffer[vehicleData.m_targetBuilding] += 8000;
+                                        float productionValue1 = 8000 * GetResourcePrice((TransferManager.TransferReason)vehicleData.m_transferType);
+                                        Singleton<EconomyManager>.instance.FetchResource(EconomyManager.Resource.ResourcePrice, (int)productionValue1, ItemClass.Service.PlayerIndustry, ItemClass.SubService.PlayerIndustryForestry, ItemClass.Level.Level1);
                                     }
                                     break;
                                 case TransferManager.TransferReason.Coal:
-                                    if (!Loader.realCityRunning)
+                                    vehicleData.m_transferSize = 0;
+                                    MainDataStore.coalBuffer[vehicleData.m_targetBuilding] += 8000;
+                                    if (Loader.realCityRunning)
                                     {
-                                        vehicleData.m_transferSize = 0;
-                                        MainDataStore.coalBuffer[vehicleData.m_targetBuilding] += 8000;
+                                        float productionValue1 = 8000 * GetResourcePrice((TransferManager.TransferReason)vehicleData.m_transferType);
+                                        Singleton<EconomyManager>.instance.FetchResource(EconomyManager.Resource.ResourcePrice, (int)productionValue1, ItemClass.Service.PlayerIndustry, ItemClass.SubService.PlayerIndustryOre, ItemClass.Level.Level1);
                                     }
                                     break;
-                                case TransferManager.TransferReason.Petrol:
-                                    if (!Loader.realCityRunning)
+                                case TransferManager.TransferReason.Petrol:                                    
+                                    vehicleData.m_transferSize = 0;
+                                    MainDataStore.petrolBuffer[vehicleData.m_targetBuilding] += 8000;
+                                    if (Loader.realCityRunning)
                                     {
-                                        vehicleData.m_transferSize = 0;
-                                        MainDataStore.petrolBuffer[vehicleData.m_targetBuilding] += 8000;
+                                        float productionValue1 = 8000 * GetResourcePrice((TransferManager.TransferReason)vehicleData.m_transferType);
+                                        Singleton<EconomyManager>.instance.FetchResource(EconomyManager.Resource.ResourcePrice, (int)productionValue1, ItemClass.Service.PlayerIndustry, ItemClass.SubService.PlayerIndustryOil, ItemClass.Level.Level1);
                                     }
                                     break;
                                 default:
-                                    DebugLog.LogToFileOnly("find a import trade m_transferType error = " + vehicleData.m_transferType.ToString()); break;
+                                    DebugLog.LogToFileOnly("Error: Unknow m_transferType in realconstruction = " + vehicleData.m_transferType.ToString()); break;
                             }
                         }
                         else

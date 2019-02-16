@@ -16,8 +16,9 @@ namespace RealConstruction
         public static ushort[] constructionResourceBuffer = new ushort[49152];
         public static ushort[] operationResourceBuffer = new ushort[49152];
 
-        public static bool[] buildingFlag = new bool[49152];
+        public static bool[] isBuildingReleased = new bool[49152];
         public static byte[] buildingFlag1 = new byte[49152];
+
 
         public static ushort last_buildingid = 0;
         public static byte lastLanguage = 0;
@@ -34,7 +35,7 @@ namespace RealConstruction
                 petrolBuffer[i] = 0;
                 constructionResourceBuffer[i] = 0;
                 operationResourceBuffer[i] = 0;
-                buildingFlag[i] = false;
+                isBuildingReleased[i] = false;
                 buildingFlag1[i] = 0;
             }
         }

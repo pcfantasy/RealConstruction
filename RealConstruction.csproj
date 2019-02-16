@@ -40,9 +40,6 @@
     <Reference Include="ColossalManaged">
       <HintPath>F:\SteamLibrary\steamapps\common\Cities_Skylines\Cities_Data\Managed\ColossalManaged.dll</HintPath>
     </Reference>
-    <Reference Include="FuelAlarm">
-      <HintPath>..\..\GasStation\GasStation\bin\Release\FuelAlarm.dll</HintPath>
-    </Reference>
     <Reference Include="ICities">
       <HintPath>F:\SteamLibrary\steamapps\common\Cities_Skylines\Cities_Data\Managed\ICities.dll</HintPath>
     </Reference>

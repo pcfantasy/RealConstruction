@@ -15,8 +15,25 @@ namespace RealConstruction
     {
         public static LoadMode CurrentLoadMode;
 
-        public static bool isGuiRunning = false;
+        public class Detour
+        {
+            public MethodInfo OriginalMethod;
+            public MethodInfo CustomMethod;
+            public RedirectCallsState Redirect;
 
+            public Detour(MethodInfo originalMethod, MethodInfo customMethod)
+            {
+                this.OriginalMethod = originalMethod;
+                this.CustomMethod = customMethod;
+                this.Redirect = RedirectionHelper.RedirectCalls(originalMethod, customMethod);
+            }
+        }
+
+        public static List<Detour> Detours { get; set; }
+
+        public static bool DetourInited = false;
+
+        public static bool isGuiRunning = false;
         public static bool realCityRunning = false;
         public static bool fuelAlarmRunning = false;
 
@@ -28,18 +45,9 @@ namespace RealConstruction
 
         public static GameObject PlayerbuildingWindowGameObject;
 
-        public static RedirectCallsState state1;
-        public static RedirectCallsState state2;
-        public static RedirectCallsState state3;
-        public static RedirectCallsState state4;
-        public static RedirectCallsState state5;
-        public static RedirectCallsState state6;
-        public static RedirectCallsState state7;
-        public static RedirectCallsState state8;
-        public static RedirectCallsState state9;
-
         public override void OnCreated(ILoading loading)
         {
+            Detours = new List<Detour>();
             base.OnCreated(loading);
         }
 
@@ -52,7 +60,7 @@ namespace RealConstruction
                 if (mode == LoadMode.LoadGame || mode == LoadMode.NewGame)
                 {
                     DebugLog.LogToFileOnly("OnLevelLoaded");
-                    Detour();
+                    InitDetour();
                     SetupGui();
                     //RealConstruction.LoadSetting();
                     if (mode == LoadMode.NewGame)
@@ -71,6 +79,7 @@ namespace RealConstruction
             {
                 if (RealConstruction.IsEnabled)
                 {
+                    RealConstructionThreading.isFirstTime = true;
                     RevertDetour();
                     if (Loader.isGuiRunning)
                     {
@@ -157,88 +166,120 @@ namespace RealConstruction
                 Loader.guiPanel4.size = new Vector3(Loader.playerbuildingInfo.size.x, Loader.playerbuildingInfo.size.y);
                 Loader.guiPanel4.baseBuildingWindow = Loader.playerbuildingInfo.gameObject.transform.GetComponentInChildren<CityServiceWorldInfoPanel>();
                 Loader.guiPanel4.position = new Vector3(Loader.playerbuildingInfo.size.x, Loader.playerbuildingInfo.size.y);
-                //DebugLog.LogToFileOnly("select building found!!!!!:\n");
-                //comm_data.current_buildingid = 0;
-                //PlayerBuildingUI.refesh_once = true;
-                //guiPanel4.Show();
             }
             else
             {
-                //comm_data.current_buildingid = 0;
                 guiPanel4.Hide();
             }
         }
 
 
-        public void Detour()
+        public void InitDetour()
         {
-            var srcMethod1 = typeof(PlayerBuildingAI).GetMethod("GetConstructionTime", BindingFlags.NonPublic | BindingFlags.Instance);
-            var destMethod1 = typeof(CustomPlayerBuildingAI).GetMethod("GetConstructionTime", BindingFlags.NonPublic | BindingFlags.Instance);
-            state1 = RedirectionHelper.RedirectCalls(srcMethod1, destMethod1);
-
-            var srcMethod5 = typeof(TransferManager).GetMethod("GetFrameReason", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
-            var destMethod5 = typeof(CustomTransferManager).GetMethod("GetFrameReason", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
-            state5 = RedirectionHelper.RedirectCalls(srcMethod5, destMethod5);
-
-            var srcMethod6 = typeof(CargoTruckAI).GetMethod("GetLocalizedStatus", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType(), typeof(InstanceID).MakeByRefType() }, null);
-            var destMethod6 = typeof(CustomCargoTruckAI).GetMethod("GetLocalizedStatus", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType(), typeof(InstanceID).MakeByRefType() }, null);
-            state6 = RedirectionHelper.RedirectCalls(srcMethod6, destMethod6);
-
-            var srcMethod7 = typeof(PlayerBuildingAI).GetMethod("GetBudget", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType() }, null);
-            var destMethod7 = typeof(CustomPlayerBuildingAI).GetMethod("CustomGetBudget", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType() }, null);
-            state7 = RedirectionHelper.RedirectCalls(srcMethod7, destMethod7);
-
-            var srcMethod9 = typeof(BuildingAI).GetMethod("SimulationStep", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType() , typeof(Building.Frame).MakeByRefType() }, null);
-            var destMethod9 = typeof(CustomCommonBuildingAI).GetMethod("CustomSimulationStep", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType(), typeof(Building.Frame).MakeByRefType() }, null);
-            state9 = RedirectionHelper.RedirectCalls(srcMethod9, destMethod9);
-
-            realCityRunning = CheckRealCityIsLoaded();
-            fuelAlarmRunning = CheckFuelAlarmIsLoaded();
-            if (!realCityRunning)
+            if (!DetourInited)
             {
-                var srcMethod2 = typeof(CargoTruckAI).GetMethod("ArriveAtTarget", BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null);
-                var destMethod2 = typeof(CustomCargoTruckAI).GetMethod("ArriveAtTarget", BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null);
-                state2 = RedirectionHelper.RedirectCalls(srcMethod2, destMethod2);
-                var srcMethod3 = typeof(CargoTruckAI).GetMethod("SetSource", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType(), typeof(ushort) }, null);
-                var destMethod3 = typeof(CustomCargoTruckAI).GetMethod("SetSource", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType(), typeof(ushort) }, null);
-                state3 = RedirectionHelper.RedirectCalls(srcMethod3, destMethod3);
-                var srcMethod4 = typeof(TransferManager).GetMethod("StartTransfer", BindingFlags.NonPublic | BindingFlags.Instance);
-                var destMethod4 = typeof(CustomTransferManager).GetMethod("StartTransfer", BindingFlags.NonPublic | BindingFlags.Instance);
-                state4 = RedirectionHelper.RedirectCalls(srcMethod4, destMethod4);
-                var srcMethod8 = typeof(CommonBuildingAI).GetMethod("ReleaseBuilding", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType() }, null);
-                var destMethod8 = typeof(CustomCommonBuildingAI).GetMethod("ReleaseBuilding", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType() }, null);
-                state8 = RedirectionHelper.RedirectCalls(srcMethod8, destMethod8);
-            }
-            else
-            {
-                DebugLog.LogToFileOnly("realCity is Running");
+                DebugLog.LogToFileOnly("Init detours");
+                bool detourFailed = false;
+
+                //1
+                DebugLog.LogToFileOnly("Detour PlayerBuildingAI::GetConstructionTime calls");
+                try
+                {
+                    Detours.Add(new Detour(typeof(PlayerBuildingAI).GetMethod("GetConstructionTime", BindingFlags.NonPublic | BindingFlags.Instance),
+                                           typeof(CustomPlayerBuildingAI).GetMethod("GetConstructionTime", BindingFlags.NonPublic | BindingFlags.Instance)));
+                }
+                catch (Exception)
+                {
+                    DebugLog.LogToFileOnly("Could not detour PlayerBuildingAI::GetConstructionTime");
+                    detourFailed = true;
+                }
+
+                //2
+                DebugLog.LogToFileOnly("Detour CargoTruckAI::GetLocalizedStatus calls");
+                try
+                {
+                    Detours.Add(new Detour(typeof(CargoTruckAI).GetMethod("GetLocalizedStatus", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType(), typeof(InstanceID).MakeByRefType() }, null),
+                                           typeof(CustomCargoTruckAI).GetMethod("GetLocalizedStatus", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType(), typeof(InstanceID).MakeByRefType() }, null)));
+                }
+                catch (Exception)
+                {
+                    DebugLog.LogToFileOnly("Could not detour CargoTruckAI::GetLocalizedStatus");
+                    detourFailed = true;
+                }
+
+                //3
+                DebugLog.LogToFileOnly("Detour PlayerBuildingAI::GetBudget calls");
+                try
+                {
+                    Detours.Add(new Detour(typeof(PlayerBuildingAI).GetMethod("GetBudget", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType() }, null),
+                                           typeof(CustomPlayerBuildingAI).GetMethod("CustomGetBudget", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType() }, null)));
+                }
+                catch (Exception)
+                {
+                    DebugLog.LogToFileOnly("Could not detour PlayerBuildingAI::GetBudget");
+                    detourFailed = true;
+                }
+
+                //4
+                DebugLog.LogToFileOnly("Detour BuildingAI::SimulationStep calls");
+                try
+                {
+                    Detours.Add(new Detour(typeof(BuildingAI).GetMethod("SimulationStep", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType(), typeof(Building.Frame).MakeByRefType() }, null),
+                                           typeof(CustomCommonBuildingAI).GetMethod("CustomSimulationStep", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType(), typeof(Building.Frame).MakeByRefType() }, null)));
+                }
+                catch (Exception)
+                {
+                    DebugLog.LogToFileOnly("Could not detour BuildingAI::SimulationStep ");
+                    detourFailed = true;
+                }
+
+                realCityRunning = CheckRealCityIsLoaded();
+                fuelAlarmRunning = CheckFuelAlarmIsLoaded();
+                if (realCityRunning)
+                {
+                    DebugLog.LogToFileOnly("realCity is Running");
+                }
+                else
+                {
+                    //5
+                    DebugLog.LogToFileOnly("Detour CargoTruckAI::ArriveAtTarget calls");
+                    try
+                    {
+                        Detours.Add(new Detour(typeof(CargoTruckAI).GetMethod("ArriveAtTarget", BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null),
+                                               typeof(CustomCargoTruckAI).GetMethod("ArriveAtTarget", BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null)));
+                    }
+                    catch (Exception)
+                    {
+                        DebugLog.LogToFileOnly("Could not detour CargoTruckAI::ArriveAtTarget");
+                        detourFailed = true;
+                    }
+                }
+
+                if (detourFailed)
+                {
+                    DebugLog.LogToFileOnly("Detours failed");
+                }
+                else
+                {
+                    DebugLog.LogToFileOnly("Detours successful");
+                }
+                DetourInited = true;
             }
         }
 
         public void RevertDetour()
         {
-            var srcMethod1 = typeof(PlayerBuildingAI).GetMethod("GetConstructionTime", BindingFlags.NonPublic | BindingFlags.Instance);
-            RedirectionHelper.RevertRedirect(srcMethod1, state1);
-            var srcMethod5 = typeof(TransferManager).GetMethod("GetFrameReason", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
-            RedirectionHelper.RevertRedirect(srcMethod5, state5);
-            var srcMethod6 = typeof(CargoTruckAI).GetMethod("GetLocalizedStatus", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType(), typeof(InstanceID).MakeByRefType() }, null);
-            RedirectionHelper.RevertRedirect(srcMethod6, state6);
-            var srcMethod7 = typeof(PlayerBuildingAI).GetMethod("GetBudget", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType() }, null);
-            RedirectionHelper.RevertRedirect(srcMethod7, state7);
-
-            var srcMethod9 = typeof(BuildingAI).GetMethod("SimulationStep", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType(), typeof(Building.Frame).MakeByRefType() }, null);
-            RedirectionHelper.RevertRedirect(srcMethod9, state9);
-
-            if (!realCityRunning)
+            if (DetourInited)
             {
-                var srcMethod2 = typeof(CargoTruckAI).GetMethod("ArriveAtTarget", BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null);
-                RedirectionHelper.RevertRedirect(srcMethod2, state2);
-                var srcMethod3 = typeof(CargoTruckAI).GetMethod("SetSource", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType(), typeof(ushort) }, null);
-                RedirectionHelper.RevertRedirect(srcMethod3, state3);
-                var srcMethod4 = typeof(TransferManager).GetMethod("StartTransfer", BindingFlags.NonPublic | BindingFlags.Instance);
-                RedirectionHelper.RevertRedirect(srcMethod4, state4);
-                var srcMethod8 = typeof(CommonBuildingAI).GetMethod("ReleaseBuilding", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType() }, null);
-                RedirectionHelper.RevertRedirect(srcMethod8, state8);
+                DebugLog.LogToFileOnly("Revert detours");
+                Detours.Reverse();
+                foreach (Detour d in Detours)
+                {
+                    RedirectionHelper.RevertRedirect(d.OriginalMethod, d.Redirect);
+                }
+                DetourInited = false;
+                Detours.Clear();
+                DebugLog.LogToFileOnly("Reverting detours finished.");
             }
         }
 

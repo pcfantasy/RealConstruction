@@ -1,4 +1,6 @@
 ﻿using ColossalFramework;
+using RealConstruction.CustomAI;
+using RealConstruction.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace RealConstruction
+namespace RealConstruction.CustomManager
 {
     public class CustomTransferManager: TransferManager
     {

@@ -10,6 +10,10 @@ using UnityEngine;
 using ColossalFramework.Globalization;
 using System.Reflection;
 using System.IO;
+using RealConstruction.CustomAI;
+using RealConstruction.Util;
+using RealConstruction.UI;
+using RealConstruction.CustomManager;
 
 namespace RealConstruction
 {

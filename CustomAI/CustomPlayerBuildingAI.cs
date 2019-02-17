@@ -1,11 +1,12 @@
 ﻿using ColossalFramework;
+using RealConstruction.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RealConstruction
+namespace RealConstruction.CustomAI
 {
     public class CustomPlayerBuildingAI: CommonBuildingAI
     {

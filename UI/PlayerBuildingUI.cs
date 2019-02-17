@@ -5,8 +5,9 @@ using ColossalFramework;
 using System;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using RealConstruction.Util;
 
-namespace RealConstruction
+namespace RealConstruction.UI
 {
     public class PlayerBuildingUI : UIPanel
     {

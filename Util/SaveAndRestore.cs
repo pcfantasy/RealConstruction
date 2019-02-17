@@ -2,7 +2,7 @@
 using ICities;
 using System.IO;
 
-namespace RealConstruction
+namespace RealConstruction.Util
 {
     public class SaveAndRestore : SerializableDataExtensionBase
     { 

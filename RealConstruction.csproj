@@ -56,21 +56,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomCargoTruckAI.cs" />
-    <Compile Include="CustomCommonBuildingAI.cs" />
-    <Compile Include="CustomTransferManager.cs" />
-    <Compile Include="DebugLog.cs" />
-    <Compile Include="Language.cs" />
+    <Compile Include="CustomAI\CustomCargoTruckAI.cs" />
+    <Compile Include="CustomAI\CustomCommonBuildingAI.cs" />
+    <Compile Include="CustomManager\CustomTransferManager.cs" />
+    <Compile Include="Util\DebugLog.cs" />
+    <Compile Include="Util\Language.cs" />
     <Compile Include="Loader.cs" />
-    <Compile Include="CustomPlayerBuildingAI.cs" />
-    <Compile Include="MainDataStore.cs" />
-    <Compile Include="PlayerBuildingButton.cs" />
-    <Compile Include="PlayerBuildingUI.cs" />
+    <Compile Include="CustomAI\CustomPlayerBuildingAI.cs" />
+    <Compile Include="Util\MainDataStore.cs" />
+    <Compile Include="UI\PlayerBuildingButton.cs" />
+    <Compile Include="UI\PlayerBuildingUI.cs" />
     <Compile Include="RealConstruction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RealConstructionThreading.cs" />
-    <Compile Include="RedirectionHelper.cs" />
-    <Compile Include="SaveAndRestore.cs" />
+    <Compile Include="Util\RedirectionHelper.cs" />
+    <Compile Include="Util\SaveAndRestore.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

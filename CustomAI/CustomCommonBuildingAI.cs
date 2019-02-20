@@ -18,7 +18,7 @@ namespace RealConstruction.CustomAI
             MainDataStore.coalBuffer[buildingID] = 0;
             MainDataStore.constructionResourceBuffer[buildingID] = 0;
             MainDataStore.operationResourceBuffer[buildingID] = 0;
-            if (!Loader.realCityRunning)
+            if (!Loader.isRealCityRunning)
             {
                 //RealCity Mod will also do this
                 TransferManager.TransferOffer offer = default(TransferManager.TransferOffer);

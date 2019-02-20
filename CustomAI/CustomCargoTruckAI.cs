@@ -27,7 +27,7 @@ namespace RealConstruction.CustomAI
         {
             // NON-STOCK CODE START
             // 112 means fuel demand, see more in RealGasStation mod
-            if (data.m_transferType == 112 && Loader.fuelAlarmRunning)
+            if (data.m_transferType == 112 && Loader.isRealGasStationRunning)
             {
                 /*data.m_transferType = FuelAlarm.MainDataStore.preTranferReason[vehicleID];
                 if (FuelAlarm.MainDataStore.petrolBuffer[data.m_targetBuilding] > 400)
@@ -48,7 +48,7 @@ namespace RealConstruction.CustomAI
             {
                 // NON-STOCK CODE START
                 CargoTruckAIArriveAtTargetForRealConstruction(vehicleID, ref data);
-                if (Loader.fuelAlarmRunning)
+                if (Loader.isRealGasStationRunning)
                 {
                     CargoTruckAIArriveAtTargetForRealGasStationPost(vehicleID, ref data);
                 }
@@ -146,7 +146,7 @@ namespace RealConstruction.CustomAI
 
         public static float GetResourcePrice(TransferManager.TransferReason material)
         {
-            //need to sync with realcity mod
+            //Need to sync with RealCity mod
             switch (material)
             {
                 case TransferManager.TransferReason.Petrol:
@@ -186,7 +186,7 @@ namespace RealConstruction.CustomAI
                                 case TransferManager.TransferReason.Food:                                    
                                     vehicleData.m_transferSize = 0;
                                     MainDataStore.foodBuffer[vehicleData.m_targetBuilding] += 8000;
-                                    if (Loader.realCityRunning)
+                                    if (Loader.isRealCityRunning)
                                     {
                                         float productionValue1 = 8000 * GetResourcePrice((TransferManager.TransferReason)vehicleData.m_transferType);
                                         Singleton<EconomyManager>.instance.FetchResource(EconomyManager.Resource.ResourcePrice, (int)productionValue1, ItemClass.Service.PlayerIndustry, ItemClass.SubService.PlayerIndustryFarming, ItemClass.Level.Level1);
@@ -196,7 +196,7 @@ namespace RealConstruction.CustomAI
                                     
                                     vehicleData.m_transferSize = 0;
                                     MainDataStore.lumberBuffer[vehicleData.m_targetBuilding] += 8000;
-                                    if (Loader.realCityRunning)
+                                    if (Loader.isRealCityRunning)
                                     {
                                         float productionValue1 = 8000 * GetResourcePrice((TransferManager.TransferReason)vehicleData.m_transferType);
                                         Singleton<EconomyManager>.instance.FetchResource(EconomyManager.Resource.ResourcePrice, (int)productionValue1, ItemClass.Service.PlayerIndustry, ItemClass.SubService.PlayerIndustryForestry, ItemClass.Level.Level1);
@@ -205,7 +205,7 @@ namespace RealConstruction.CustomAI
                                 case TransferManager.TransferReason.Coal:
                                     vehicleData.m_transferSize = 0;
                                     MainDataStore.coalBuffer[vehicleData.m_targetBuilding] += 8000;
-                                    if (Loader.realCityRunning)
+                                    if (Loader.isRealCityRunning)
                                     {
                                         float productionValue1 = 8000 * GetResourcePrice((TransferManager.TransferReason)vehicleData.m_transferType);
                                         Singleton<EconomyManager>.instance.FetchResource(EconomyManager.Resource.ResourcePrice, (int)productionValue1, ItemClass.Service.PlayerIndustry, ItemClass.SubService.PlayerIndustryOre, ItemClass.Level.Level1);
@@ -214,7 +214,7 @@ namespace RealConstruction.CustomAI
                                 case TransferManager.TransferReason.Petrol:                                    
                                     vehicleData.m_transferSize = 0;
                                     MainDataStore.petrolBuffer[vehicleData.m_targetBuilding] += 8000;
-                                    if (Loader.realCityRunning)
+                                    if (Loader.isRealCityRunning)
                                     {
                                         float productionValue1 = 8000 * GetResourcePrice((TransferManager.TransferReason)vehicleData.m_transferType);
                                         Singleton<EconomyManager>.instance.FetchResource(EconomyManager.Resource.ResourcePrice, (int)productionValue1, ItemClass.Service.PlayerIndustry, ItemClass.SubService.PlayerIndustryOil, ItemClass.Level.Level1);

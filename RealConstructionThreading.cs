@@ -115,7 +115,7 @@ namespace RealConstruction
             DebugLog.LogToFileOnly("Init DetourAfterLoad");
             bool detourFailed = false;
 
-            if (Loader.realCityRunning)
+            if (Loader.isRealCityRunning)
             {
                 Assembly as1 = Assembly.Load("RealCity");
                 //1
@@ -169,7 +169,7 @@ namespace RealConstruction
                     DebugLog.LogToFileOnly(string.Format("ThreadingExtension.OnBeforeSimulationFrame: First frame detected. Detours checked. Result: {0} missing detours", list.Count));
                     if (list.Count > 0)
                     {
-                        string error = "RealCity detected an incompatibility with another mod! You can continue playing but it's NOT recommended. RealCity will not work as expected. See RealCity.log for technical details.";
+                        string error = "RealConstruction detected an incompatibility with another mod! You can continue playing but it's NOT recommended. RealConstruction will not work as expected. See RealConstruction.log for technical details.";
                         DebugLog.LogToFileOnly(error);
                         string text = "The following methods were overriden by another mod:";
                         foreach (string current2 in list)
@@ -177,6 +177,7 @@ namespace RealConstruction
                             text += string.Format("\n\t{0}", current2);
                         }
                         DebugLog.LogToFileOnly(text);
+                        Debug.LogError(text);
                     }
                 }
             }

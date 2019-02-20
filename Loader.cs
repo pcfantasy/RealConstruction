@@ -37,8 +37,8 @@ namespace RealConstruction
         public static bool DetourInited = false;
 
         public static bool isGuiRunning = false;
-        public static bool realCityRunning = false;
-        public static bool fuelAlarmRunning = false;
+        public static bool isRealCityRunning = false;
+        public static bool isRealGasStationRunning = false;
 
         public static UIPanel playerbuildingInfo;
 
@@ -236,9 +236,9 @@ namespace RealConstruction
                     detourFailed = true;
                 }
 
-                realCityRunning = CheckRealCityIsLoaded();
-                fuelAlarmRunning = CheckFuelAlarmIsLoaded();
-                if (realCityRunning)
+                isRealCityRunning = CheckRealCityIsLoaded();
+                isRealGasStationRunning = CheckRealGasStationIsLoaded();
+                if (isRealCityRunning)
                 {
                     DebugLog.LogToFileOnly("realCity is Running");
                 }
@@ -325,9 +325,9 @@ namespace RealConstruction
             return this.Check3rdPartyModLoaded("RealCity", true);
         }
 
-        private bool CheckFuelAlarmIsLoaded()
+        private bool CheckRealGasStationIsLoaded()
         {
-            return this.Check3rdPartyModLoaded("FuelAlarm", true);
+            return this.Check3rdPartyModLoaded("RealGasStation", true);
         }
 
     }

@@ -14,6 +14,7 @@ using RealConstruction.CustomAI;
 using RealConstruction.Util;
 using RealConstruction.UI;
 using RealConstruction.CustomManager;
+using ColossalFramework.UI;
 
 namespace RealConstruction
 {
@@ -177,7 +178,7 @@ namespace RealConstruction
                             text += string.Format("\n\t{0}", current2);
                         }
                         DebugLog.LogToFileOnly(text);
-                        Debug.LogError(text);
+                        UIView.library.ShowModal<ExceptionPanel>("ExceptionPanel").SetMessage("Incompatibility Issue", text, true);
                     }
                 }
             }

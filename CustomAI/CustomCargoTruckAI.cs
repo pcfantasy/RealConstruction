@@ -185,7 +185,10 @@ namespace RealConstruction.CustomAI
                             {
                                 case TransferManager.TransferReason.Food:                                    
                                     vehicleData.m_transferSize = 0;
-                                    MainDataStore.foodBuffer[vehicleData.m_targetBuilding] += 8000;
+                                    if (MainDataStore.foodBuffer[vehicleData.m_targetBuilding] < 57000)
+                                    {
+                                        MainDataStore.foodBuffer[vehicleData.m_targetBuilding] += 8000;
+                                    }
                                     if (Loader.isRealCityRunning)
                                     {
                                         float productionValue1 = 8000 * GetResourcePrice((TransferManager.TransferReason)vehicleData.m_transferType);
@@ -195,7 +198,10 @@ namespace RealConstruction.CustomAI
                                 case TransferManager.TransferReason.Lumber:
                                     
                                     vehicleData.m_transferSize = 0;
-                                    MainDataStore.lumberBuffer[vehicleData.m_targetBuilding] += 8000;
+                                    if (MainDataStore.lumberBuffer[vehicleData.m_targetBuilding] < 57000)
+                                    {
+                                        MainDataStore.lumberBuffer[vehicleData.m_targetBuilding] += 8000;
+                                    }
                                     if (Loader.isRealCityRunning)
                                     {
                                         float productionValue1 = 8000 * GetResourcePrice((TransferManager.TransferReason)vehicleData.m_transferType);
@@ -204,7 +210,10 @@ namespace RealConstruction.CustomAI
                                     break;
                                 case TransferManager.TransferReason.Coal:
                                     vehicleData.m_transferSize = 0;
-                                    MainDataStore.coalBuffer[vehicleData.m_targetBuilding] += 8000;
+                                    if (MainDataStore.coalBuffer[vehicleData.m_targetBuilding] < 57000)
+                                    {
+                                        MainDataStore.coalBuffer[vehicleData.m_targetBuilding] += 8000;
+                                    }
                                     if (Loader.isRealCityRunning)
                                     {
                                         float productionValue1 = 8000 * GetResourcePrice((TransferManager.TransferReason)vehicleData.m_transferType);
@@ -213,7 +222,10 @@ namespace RealConstruction.CustomAI
                                     break;
                                 case TransferManager.TransferReason.Petrol:                                    
                                     vehicleData.m_transferSize = 0;
-                                    MainDataStore.petrolBuffer[vehicleData.m_targetBuilding] += 8000;
+                                    if (MainDataStore.petrolBuffer[vehicleData.m_targetBuilding] < 57000)
+                                    {
+                                        MainDataStore.petrolBuffer[vehicleData.m_targetBuilding] += 8000;
+                                    }
                                     if (Loader.isRealCityRunning)
                                     {
                                         float productionValue1 = 8000 * GetResourcePrice((TransferManager.TransferReason)vehicleData.m_transferType);

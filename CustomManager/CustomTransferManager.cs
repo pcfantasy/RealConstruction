@@ -35,7 +35,9 @@ namespace RealConstruction.CustomManager
                     vehicleInfo.m_vehicleAI.SetSource(num16, ref vehicles.m_buffer[(int)num16], buildingID);
                     if (vehicleInfo.m_vehicleAI is CargoTruckAI)
                     {
+                        CargoTruckAI AI = vehicleInfo.m_vehicleAI as CargoTruckAI;
                         CustomCargoTruckAI.CargoTruckAISetSourceForRealConstruction(num16, ref vehicles.m_buffer[(int)num16], buildingID);
+                        vehicles.m_buffer[(int)num16].m_transferSize = (ushort)AI.m_cargoCapacity;
                     }
                     else
                     {

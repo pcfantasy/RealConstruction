@@ -58,7 +58,12 @@
   <ItemGroup>
     <Compile Include="CustomAI\CustomCargoTruckAI.cs" />
     <Compile Include="CustomAI\CustomCommonBuildingAI.cs" />
+    <Compile Include="CustomAI\CustomPrivateBuildingAI.cs" />
     <Compile Include="CustomManager\CustomTransferManager.cs" />
+    <Compile Include="UI\WareHouseUI.cs" />
+    <Compile Include="UI\UniqueFactoryUI.cs" />
+    <Compile Include="UI\UniqueFactoryButton.cs" />
+    <Compile Include="UI\WarehouseButton.cs" />
     <Compile Include="Util\DebugLog.cs" />
     <Compile Include="Util\Language.cs" />
     <Compile Include="Loader.cs" />

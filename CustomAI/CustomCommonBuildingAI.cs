@@ -29,7 +29,7 @@ namespace RealConstruction.CustomAI
             }
         }
 
-        public void CustomSimulationStep(ushort buildingID, ref Building buildingData, ref Building.Frame frameData)
+        /*public void CustomSimulationStep(ushort buildingID, ref Building buildingData, ref Building.Frame frameData)
         {
             if (buildingData.Info.m_animalPlaces != null && buildingData.Info.m_animalPlaces.Length != 0 && (buildingData.m_flags & Building.Flags.Active) != Building.Flags.None)
             {
@@ -83,6 +83,6 @@ namespace RealConstruction.CustomAI
                     }
                 }
             }
-        }
+        }*/
     }
 }

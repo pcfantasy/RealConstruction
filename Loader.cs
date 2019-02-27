@@ -40,13 +40,21 @@ namespace RealConstruction
         public static bool isRealCityRunning = false;
         public static bool isRealGasStationRunning = false;
 
-        public static UIPanel playerbuildingInfo;
+        public static UIPanel playerBuildingInfo;
+        public static UIPanel uniqueFactoryInfo;
+        public static UIPanel wareHouseInfo;
 
+        public static UniqueFactoryUI guiPanel2;
+        public static WareHouseUI guiPanel3;
         public static PlayerBuildingUI guiPanel4;
 
         public static PlayerBuildingButton PBMenuPanel;
+        public static UniqueFactoryButton UBMenuPanel;
+        public static WarehouseButton WBMenuPanel;
 
         public static GameObject PlayerbuildingWindowGameObject;
+        public static GameObject UniqueFactoryWindowGameObject;
+        public static GameObject WareHouseWindowGameObject;
 
         public override void OnCreated(ILoading loading)
         {
@@ -103,19 +111,47 @@ namespace RealConstruction
         {
             SetupPlayerBuidingGui();
             SetupPlayerBuildingButton();
+            SetupWareHouseGui();
+            SetupWareHouseButton();
+            SetupUniqueFactoryGui();
+            SetupUniqueFactoryButton();
             Loader.isGuiRunning = true;
         }
 
         public static void RemoveGui()
         {
             Loader.isGuiRunning = false;
-            if (playerbuildingInfo != null)
+            if (playerBuildingInfo != null)
             {
                 UnityEngine.Object.Destroy(PBMenuPanel);
                 Loader.PBMenuPanel = null;
             }
+            if (uniqueFactoryInfo != null)
+            {
+                UnityEngine.Object.Destroy(UBMenuPanel);
+                Loader.UBMenuPanel = null;
+            }
+            if (wareHouseInfo != null)
+            {
+                UnityEngine.Object.Destroy(WBMenuPanel);
+                Loader.WBMenuPanel = null;
+            }
 
             //remove PlayerbuildingUI
+            if (guiPanel2 != null)
+            {
+                if (guiPanel2.parent != null)
+                {
+                    guiPanel2.parent.eventVisibilityChanged -= uniqueFactoryInfo_eventVisibilityChanged;
+                }
+            }
+            if (guiPanel3 != null)
+            {
+                if (guiPanel3.parent != null)
+                {
+                    guiPanel3.parent.eventVisibilityChanged -= wareHouseInfo_eventVisibilityChanged;
+                }
+            }
             if (guiPanel4 != null)
             {
                 if (guiPanel4.parent != null)
@@ -128,6 +164,52 @@ namespace RealConstruction
             {
                 UnityEngine.Object.Destroy(PlayerbuildingWindowGameObject);
             }
+
+            if (WareHouseWindowGameObject != null)
+            {
+                UnityEngine.Object.Destroy(WareHouseWindowGameObject);
+            }
+
+            if (UniqueFactoryWindowGameObject != null)
+            {
+                UnityEngine.Object.Destroy(UniqueFactoryWindowGameObject);
+            }
+        }
+
+        public static void SetupUniqueFactoryGui()
+        {
+            UniqueFactoryWindowGameObject = new GameObject("UniqueFactoryWindowGameObject");
+            guiPanel2 = (UniqueFactoryUI)UniqueFactoryWindowGameObject.AddComponent(typeof(UniqueFactoryUI));
+
+
+            uniqueFactoryInfo = UIView.Find<UIPanel>("(Library) UniqueFactoryWorldInfoPanel");
+            if (uniqueFactoryInfo == null)
+            {
+                DebugLog.LogToFileOnly("UIPanel not found (update broke the mod!): (Library) UniqueFactoryWorldInfoPanel\nAvailable panels are:\n");
+            }
+            guiPanel2.transform.parent = uniqueFactoryInfo.transform;
+            guiPanel2.size = new Vector3(uniqueFactoryInfo.size.x, uniqueFactoryInfo.size.y);
+            guiPanel2.baseBuildingWindow = uniqueFactoryInfo.gameObject.transform.GetComponentInChildren<UniqueFactoryWorldInfoPanel>();
+            guiPanel2.position = new Vector3(uniqueFactoryInfo.size.x, uniqueFactoryInfo.size.y);
+            uniqueFactoryInfo.eventVisibilityChanged += uniqueFactoryInfo_eventVisibilityChanged;
+        }
+
+        public static void SetupWareHouseGui()
+        {
+            WareHouseWindowGameObject = new GameObject("WareHouseWindowGameObject");
+            guiPanel3 = (WareHouseUI)WareHouseWindowGameObject.AddComponent(typeof(WareHouseUI));
+
+
+            wareHouseInfo = UIView.Find<UIPanel>("(Library) WarehouseWorldInfoPanel");
+            if (wareHouseInfo == null)
+            {
+                DebugLog.LogToFileOnly("UIPanel not found (update broke the mod!): (Library) WarehouseWorldInfoPanel\nAvailable panels are:\n");
+            }
+            guiPanel3.transform.parent = wareHouseInfo.transform;
+            guiPanel3.size = new Vector3(wareHouseInfo.size.x, wareHouseInfo.size.y);
+            guiPanel3.baseBuildingWindow = wareHouseInfo.gameObject.transform.GetComponentInChildren<WarehouseWorldInfoPanel>();
+            guiPanel3.position = new Vector3(wareHouseInfo.size.x, wareHouseInfo.size.y);
+            wareHouseInfo.eventVisibilityChanged += wareHouseInfo_eventVisibilityChanged;
         }
 
         public static void SetupPlayerBuidingGui()
@@ -136,16 +218,16 @@ namespace RealConstruction
             guiPanel4 = (PlayerBuildingUI)PlayerbuildingWindowGameObject.AddComponent(typeof(PlayerBuildingUI));
 
 
-            playerbuildingInfo = UIView.Find<UIPanel>("(Library) CityServiceWorldInfoPanel");
-            if (playerbuildingInfo == null)
+            playerBuildingInfo = UIView.Find<UIPanel>("(Library) CityServiceWorldInfoPanel");
+            if (playerBuildingInfo == null)
             {
                 DebugLog.LogToFileOnly("UIPanel not found (update broke the mod!): (Library) CityServiceWorldInfoPanel\nAvailable panels are:\n");
             }
-            guiPanel4.transform.parent = playerbuildingInfo.transform;
-            guiPanel4.size = new Vector3(playerbuildingInfo.size.x, playerbuildingInfo.size.y);
-            guiPanel4.baseBuildingWindow = playerbuildingInfo.gameObject.transform.GetComponentInChildren<CityServiceWorldInfoPanel>();
-            guiPanel4.position = new Vector3(playerbuildingInfo.size.x, playerbuildingInfo.size.y);
-            playerbuildingInfo.eventVisibilityChanged += playerbuildingInfo_eventVisibilityChanged;
+            guiPanel4.transform.parent = playerBuildingInfo.transform;
+            guiPanel4.size = new Vector3(playerBuildingInfo.size.x, playerBuildingInfo.size.y);
+            guiPanel4.baseBuildingWindow = playerBuildingInfo.gameObject.transform.GetComponentInChildren<CityServiceWorldInfoPanel>();
+            guiPanel4.position = new Vector3(playerBuildingInfo.size.x, playerBuildingInfo.size.y);
+            playerBuildingInfo.eventVisibilityChanged += playerbuildingInfo_eventVisibilityChanged;
         }
 
 
@@ -153,11 +235,33 @@ namespace RealConstruction
         {
             if (PBMenuPanel == null)
             {
-                PBMenuPanel = (playerbuildingInfo.AddUIComponent(typeof(PlayerBuildingButton)) as PlayerBuildingButton);
+                PBMenuPanel = (playerBuildingInfo.AddUIComponent(typeof(PlayerBuildingButton)) as PlayerBuildingButton);
             }
-            PBMenuPanel.RefPanel = playerbuildingInfo;
+            PBMenuPanel.RefPanel = playerBuildingInfo;
             PBMenuPanel.Alignment = UIAlignAnchor.TopLeft;
             PBMenuPanel.Show();
+        }
+
+        public static void SetupUniqueFactoryButton()
+        {
+            if (UBMenuPanel == null)
+            {
+                UBMenuPanel = (uniqueFactoryInfo.AddUIComponent(typeof(UniqueFactoryButton)) as UniqueFactoryButton);
+            }
+            UBMenuPanel.RefPanel = uniqueFactoryInfo;
+            UBMenuPanel.Alignment = UIAlignAnchor.TopLeft;
+            UBMenuPanel.Show();
+        }
+
+        public static void SetupWareHouseButton()
+        {
+            if (WBMenuPanel == null)
+            {
+                WBMenuPanel = (wareHouseInfo.AddUIComponent(typeof(WarehouseButton)) as WarehouseButton);
+            }
+            WBMenuPanel.RefPanel = wareHouseInfo;
+            WBMenuPanel.Alignment = UIAlignAnchor.TopLeft;
+            WBMenuPanel.Show();
         }
 
         public static void playerbuildingInfo_eventVisibilityChanged(UIComponent component, bool value)
@@ -165,14 +269,46 @@ namespace RealConstruction
             guiPanel4.isEnabled = value;
             if (value)
             {
-                Loader.guiPanel4.transform.parent = Loader.playerbuildingInfo.transform;
-                Loader.guiPanel4.size = new Vector3(Loader.playerbuildingInfo.size.x, Loader.playerbuildingInfo.size.y);
-                Loader.guiPanel4.baseBuildingWindow = Loader.playerbuildingInfo.gameObject.transform.GetComponentInChildren<CityServiceWorldInfoPanel>();
-                Loader.guiPanel4.position = new Vector3(Loader.playerbuildingInfo.size.x, Loader.playerbuildingInfo.size.y);
+                Loader.guiPanel4.transform.parent = Loader.playerBuildingInfo.transform;
+                Loader.guiPanel4.size = new Vector3(Loader.playerBuildingInfo.size.x, Loader.playerBuildingInfo.size.y);
+                Loader.guiPanel4.baseBuildingWindow = Loader.playerBuildingInfo.gameObject.transform.GetComponentInChildren<CityServiceWorldInfoPanel>();
+                Loader.guiPanel4.position = new Vector3(Loader.playerBuildingInfo.size.x, Loader.playerBuildingInfo.size.y);
             }
             else
             {
                 guiPanel4.Hide();
+            }
+        }
+
+        public static void uniqueFactoryInfo_eventVisibilityChanged(UIComponent component, bool value)
+        {
+            guiPanel2.isEnabled = value;
+            if (value)
+            {
+                Loader.guiPanel2.transform.parent = Loader.uniqueFactoryInfo.transform;
+                Loader.guiPanel2.size = new Vector3(Loader.uniqueFactoryInfo.size.x, Loader.uniqueFactoryInfo.size.y);
+                Loader.guiPanel2.baseBuildingWindow = Loader.uniqueFactoryInfo.gameObject.transform.GetComponentInChildren<UniqueFactoryWorldInfoPanel>();
+                Loader.guiPanel2.position = new Vector3(Loader.uniqueFactoryInfo.size.x, Loader.uniqueFactoryInfo.size.y);
+            }
+            else
+            {
+                guiPanel2.Hide();
+            }
+        }
+
+        public static void wareHouseInfo_eventVisibilityChanged(UIComponent component, bool value)
+        {
+            guiPanel3.isEnabled = value;
+            if (value)
+            {
+                Loader.guiPanel3.transform.parent = Loader.wareHouseInfo.transform;
+                Loader.guiPanel3.size = new Vector3(Loader.wareHouseInfo.size.x, Loader.wareHouseInfo.size.y);
+                Loader.guiPanel3.baseBuildingWindow = Loader.wareHouseInfo.gameObject.transform.GetComponentInChildren<WarehouseWorldInfoPanel>();
+                Loader.guiPanel3.position = new Vector3(Loader.wareHouseInfo.size.x, Loader.wareHouseInfo.size.y);
+            }
+            else
+            {
+                guiPanel3.Hide();
             }
         }
 
@@ -224,15 +360,28 @@ namespace RealConstruction
                 }
 
                 //4
-                DebugLog.LogToFileOnly("Detour BuildingAI::SimulationStep calls");
+                DebugLog.LogToFileOnly("Detour PlayerBuildingAI::SimulationStep calls");
                 try
                 {
-                    Detours.Add(new Detour(typeof(BuildingAI).GetMethod("SimulationStep", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType(), typeof(Building.Frame).MakeByRefType() }, null),
-                                           typeof(CustomCommonBuildingAI).GetMethod("CustomSimulationStep", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType(), typeof(Building.Frame).MakeByRefType() }, null)));
+                    Detours.Add(new Detour(typeof(PlayerBuildingAI).GetMethod("SimulationStep", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType(), typeof(Building.Frame).MakeByRefType() }, null),
+                                           typeof(CustomPlayerBuildingAI).GetMethod("SimulationStep", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType(), typeof(Building.Frame).MakeByRefType() }, null)));
                 }
                 catch (Exception)
                 {
-                    DebugLog.LogToFileOnly("Could not detour BuildingAI::SimulationStep ");
+                    DebugLog.LogToFileOnly("Could not detour PlayerBuildingAI::SimulationStep ");
+                    detourFailed = true;
+                }
+
+                //4.1
+                DebugLog.LogToFileOnly("Detour PrivateBuildingAI::SimulationStep calls");
+                try
+                {
+                    Detours.Add(new Detour(typeof(PrivateBuildingAI).GetMethod("SimulationStep", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType(), typeof(Building.Frame).MakeByRefType() }, null),
+                                           typeof(CustomPrivateBuildingAI).GetMethod("SimulationStep", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType(), typeof(Building.Frame).MakeByRefType() }, null)));
+                }
+                catch (Exception)
+                {
+                    DebugLog.LogToFileOnly("Could not detour PrivateBuildingAI::SimulationStep ");
                     detourFailed = true;
                 }
 

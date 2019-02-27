@@ -10,13 +10,13 @@ using UnityEngine;
 
 namespace RealConstruction.UI
 {
-    public class PlayerBuildingButton : UIPanel
+    public class WarehouseButton : UIPanel
     {
         public static UIButton PBButton;
 
         private ItemClass.Availability CurrentMode;
 
-        public static PlayerBuildingButton instance;
+        public static WarehouseButton instance;
 
         public UIAlignAnchor Alignment;
 
@@ -26,15 +26,15 @@ namespace RealConstruction.UI
 
         public static void PlayerBuildingUIToggle()
         {
-            if (!Loader.guiPanel4.isVisible)
+            if (!Loader.guiPanel3.isVisible)
             {
-                PlayerBuildingUI.refeshOnce = true;
+                WareHouseUI.refeshOnce = true;
                 MainDataStore.last_buildingid = WorldInfoPanel.GetCurrentInstanceID().Building;
-                Loader.guiPanel4.Show();
+                Loader.guiPanel3.Show();
             }
             else
             {
-                Loader.guiPanel4.Hide();
+                Loader.guiPanel3.Hide();
             }
         }
 

@@ -10,13 +10,13 @@ using UnityEngine;
 
 namespace RealConstruction.UI
 {
-    public class PlayerBuildingButton : UIPanel
+    public class UniqueFactoryButton : UIPanel
     {
         public static UIButton PBButton;
 
         private ItemClass.Availability CurrentMode;
 
-        public static PlayerBuildingButton instance;
+        public static UniqueFactoryButton instance;
 
         public UIAlignAnchor Alignment;
 
@@ -26,15 +26,15 @@ namespace RealConstruction.UI
 
         public static void PlayerBuildingUIToggle()
         {
-            if (!Loader.guiPanel4.isVisible)
+            if (!Loader.guiPanel2.isVisible)
             {
-                PlayerBuildingUI.refeshOnce = true;
+                UniqueFactoryUI.refeshOnce = true;
                 MainDataStore.last_buildingid = WorldInfoPanel.GetCurrentInstanceID().Building;
-                Loader.guiPanel4.Show();
+                Loader.guiPanel2.Show();
             }
             else
             {
-                Loader.guiPanel4.Hide();
+                Loader.guiPanel2.Hide();
             }
         }
 
@@ -83,9 +83,9 @@ namespace RealConstruction.UI
                     }
                     else
                     {
+                        refeshOnce = false;
                         PBButton.textColor = Color.red;
                     }
-                    refeshOnce = false;
                 }
                 else
                 {

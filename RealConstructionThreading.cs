@@ -55,6 +55,11 @@ namespace RealConstruction
                     if (num4 == 255)
                     {
                         PlayerBuildingUI.refeshOnce = true;
+                        UniqueFactoryUI.refeshOnce = true;
+                        UniqueFactoryButton.refeshOnce = true;
+                        WarehouseButton.refeshOnce = true;
+                        WareHouseUI.refeshOnce = true;
+                        PlayerBuildingButton.refeshOnce = true;
                     }
                     //CustomSimulationStepImpl for 110 111 TransferReason
                     CustomTransferManager.CustomSimulationStepImpl();
@@ -282,7 +287,7 @@ namespace RealConstruction
                 PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
                 return AI.RequireRoadAccess();
             }
-            else if (buildingData.Info.m_class.m_service == ItemClass.Service.FireDepartment || buildingData.Info.m_class.m_service == ItemClass.Service.Disaster || buildingData.Info.m_class.m_service == ItemClass.Service.Beautification)
+            else if (buildingData.Info.m_class.m_service == ItemClass.Service.FireDepartment || buildingData.Info.m_class.m_service == ItemClass.Service.Beautification)
             {
                 if (buildingData.Info.m_buildingAI is ParkBuildingAI)
                 {

@@ -17,6 +17,7 @@ namespace RealConstruction.Util
         public static ushort[] operationResourceBuffer = new ushort[49152];
 
         public static bool[] isBuildingReleased = new bool[49152];
+        public static bool[] isBuildingLackOfResource = new bool[49152];
         public static byte[] buildingFlag1 = new byte[49152];
 
 
@@ -37,6 +38,7 @@ namespace RealConstruction.Util
                 operationResourceBuffer[i] = 0;
                 isBuildingReleased[i] = false;
                 buildingFlag1[i] = 0;
+                isBuildingLackOfResource[i] = false;
             }
         }
 

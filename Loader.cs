@@ -90,8 +90,8 @@ namespace RealConstruction
             {
                 if (RealConstruction.IsEnabled)
                 {
-                    RealConstructionThreading.isFirstTime = true;
                     RevertDetour();
+                    RealConstructionThreading.isFirstTime = true;
                     if (Loader.isGuiRunning)
                     {
                         RemoveGui();

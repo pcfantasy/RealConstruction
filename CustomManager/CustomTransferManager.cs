@@ -96,7 +96,6 @@ namespace RealConstruction.CustomManager
             }
         }
 
-
         public static void Init()
         {
             DebugLog.LogToFileOnly("Init fake transfer manager");
@@ -161,239 +160,221 @@ namespace RealConstruction.CustomManager
             }
         }
 
-        // TransferManager
-        public static void MatchOffers(TransferManager.TransferReason material)
+        private static void MatchOffers(TransferReason material)
         {
-            if (material == TransferManager.TransferReason.None)
+            if (material != TransferReason.None)
             {
-                return;
-            }
-            float distanceMultiplier = 1E-07f;
-            float num;
-            if (distanceMultiplier != 0f)
-            {
-                num = 0.01f / distanceMultiplier;
-            }
-            else
-            {
-                num = 0f;
-            }
-            for (int i = 7; i >= 0; i--)
-            {
-                int num2 = (int)((int)material * 8 + i);
-                int num3 = (int)_incomingCount[num2];
-                int num4 = (int)_outgoingCount[num2];
-                int num5 = 0;
-                int num6 = 0;
-                while (num5 < num3 || num6 < num4)
+                float distanceMultiplier = 1E-07f;
+                float maxDistance = (distanceMultiplier == 0f) ? 0f : (0.01f / distanceMultiplier);
+                for (int priority = 7; priority >= 0; priority--)
                 {
-                    if (num5 < num3)
+                    int offerIdex = (int)material * 8 + priority;
+                    int incomingCount = _incomingCount[offerIdex];
+                    int outgoingCount = _outgoingCount[offerIdex];
+                    int incomingIdex = 0;
+                    int outgoingIdex = 0;
+                    while (incomingIdex < incomingCount || outgoingIdex < outgoingCount)
                     {
-                        TransferManager.TransferOffer transferOffer = _incomingOffers[num2 * 256 + num5];
-                        Vector3 position = transferOffer.Position;
-                        int num7 = transferOffer.Amount;
-                        do
+                        //use incomingOffer to match outgoingOffer
+                        if (incomingIdex < incomingCount)
                         {
-                            int num8 = Mathf.Max(0, 2 - i);
-                            int num9 = (!transferOffer.Exclude) ? num8 : Mathf.Max(0, 3 - i);
-                            int num10 = -1;
-                            int num11 = -1;
-                            float num12 = -1f;
-                            int num13 = num6;
-                            for (int j = i; j >= num8; j--)
+                            TransferOffer incomingOffer = _incomingOffers[offerIdex * 256 + incomingIdex];
+                            Vector3 incomingPosition = incomingOffer.Position;
+                            int incomingOfferAmount = incomingOffer.Amount;
+                            do
                             {
-                                int num14 = (int)((int)material * 8 + j);
-                                int num15 = (int)_outgoingCount[num14];
-                                float num16 = (float)j + 0.1f;
-                                if (num12 >= num16)
+                                int incomingPriority = Mathf.Max(0, 2 - priority);
+                                int incomingPriorityExclude = (!incomingOffer.Exclude) ? incomingPriority : Mathf.Max(0, 3 - priority);
+                                int validPriority = -1;
+                                int validOutgoingIdex = -1;
+                                float distanceOffsetPre = -1f;
+                                int outgoingIdexInsideIncoming = outgoingIdex;
+                                for (int incomingPriorityInside = priority; incomingPriorityInside >= incomingPriority; incomingPriorityInside--)
                                 {
-                                    break;
-                                }
-                                for (int k = num13; k < num15; k++)
-                                {
-                                    TransferManager.TransferOffer transferOffer2 = _outgoingOffers[num14 * 256 + k];
-                                    if (transferOffer.m_object != transferOffer2.m_object && (!transferOffer2.Exclude || j >= num9))
+                                    int outgoingIdexWithPriority = (int)material * 8 + incomingPriorityInside;
+                                    int outgoingCountWithPriority = _outgoingCount[outgoingIdexWithPriority];
+                                    //To let incomingPriorityInsideFloat!=0
+                                    float incomingPriorityInsideFloat = (float)incomingPriorityInside + 0.1f;
+                                    //Higher priority will get more chance to match
+                                    if (distanceOffsetPre >= incomingPriorityInsideFloat)
                                     {
-                                        float num17 = Vector3.SqrMagnitude(transferOffer2.Position - position);
-                                        float num18;
-                                        if (distanceMultiplier < 0f)
+                                        break;
+                                    }
+                                    //Find the nearest offer to match in every priority.
+                                    for (int i = outgoingIdexInsideIncoming; i < outgoingCountWithPriority; i++)
+                                    {
+                                        TransferOffer outgoingOfferPre = _outgoingOffers[outgoingIdexWithPriority * 256 + i];
+                                        if (incomingOffer.m_object != outgoingOfferPre.m_object && (!outgoingOfferPre.Exclude || incomingPriorityInside >= incomingPriorityExclude))
                                         {
-                                            num18 = num16 - num16 / (1f - num17 * distanceMultiplier);
-                                        }
-                                        else
-                                        {
-                                            num18 = num16 / (1f + num17 * distanceMultiplier);
-                                        }
-                                        if (num18 > num12)
-                                        {
-                                            num10 = j;
-                                            num11 = k;
-                                            num12 = num18;
-                                            if (num17 < num)
+                                            float incomingOutgoingDistance = Vector3.SqrMagnitude(outgoingOfferPre.Position - incomingPosition);
+                                            float distanceOffset = (!(distanceMultiplier < 0f)) ? (incomingPriorityInsideFloat / (1f + incomingOutgoingDistance * distanceMultiplier)) : (incomingPriorityInsideFloat - incomingPriorityInsideFloat / (1f - incomingOutgoingDistance * distanceMultiplier));
+                                            if (distanceOffset > distanceOffsetPre)
                                             {
-                                                break;
+                                                validPriority = incomingPriorityInside;
+                                                validOutgoingIdex = i;
+                                                distanceOffsetPre = distanceOffset;
+                                                if (incomingOutgoingDistance < maxDistance)
+                                                {
+                                                    break;
+                                                }
                                             }
                                         }
                                     }
+                                    outgoingIdexInsideIncoming = 0;
                                 }
-                                num13 = 0;
-                            }
-                            if (num10 == -1)
-                            {
-                                break;
-                            }
-                            int num19 = (int)((int)material * 8 + num10);
-                            TransferManager.TransferOffer transferOffer3 = _outgoingOffers[num19 * 256 + num11];
-                            int num20 = transferOffer3.Amount;
-                            int num21 = Mathf.Min(num7, num20);
-                            if (num21 != 0)
-                            {
-                                StartTransfer(material, transferOffer3, transferOffer, num21);
-                            }
-                            num7 -= num21;
-                            num20 -= num21;
-                            if (num20 == 0)
-                            {
-                                int num22 = (int)(_outgoingCount[num19] - 1);
-                                _outgoingCount[num19] = (ushort)num22;
-                                _outgoingOffers[num19 * 256 + num11] = _outgoingOffers[num19 * 256 + num22];
-                                if (num19 == num2)
-                                {
-                                    num4 = num22;
-                                }
-                            }
-                            else
-                            {
-                                transferOffer3.Amount = num20;
-                                _outgoingOffers[num19 * 256 + num11] = transferOffer3;
-                            }
-                            transferOffer.Amount = num7;
-                        }
-                        while (num7 != 0);
-                        IL_2E8:
-                        if (num7 == 0)
-                        {
-                            num3--;
-                            _incomingCount[num2] = (ushort)num3;
-                            _incomingOffers[num2 * 256 + num5] = _incomingOffers[num2 * 256 + num3];
-                            goto IL_364;
-                        }
-                        transferOffer.Amount = num7;
-                        _incomingOffers[num2 * 256 + num5] = transferOffer;
-                        num5++;
-                        goto IL_364;
-                        goto IL_2E8;
-                    }
-                    IL_364:
-                    if (num6 < num4)
-                    {
-                        TransferManager.TransferOffer transferOffer4 = _outgoingOffers[num2 * 256 + num6];
-                        Vector3 position2 = transferOffer4.Position;
-                        int num23 = transferOffer4.Amount;
-                        do
-                        {
-                            int num24 = Mathf.Max(0, 2 - i);
-                            int num25 = (!transferOffer4.Exclude) ? num24 : Mathf.Max(0, 3 - i);
-                            int num26 = -1;
-                            int num27 = -1;
-                            float num28 = -1f;
-                            int num29 = num5;
-                            for (int l = i; l >= num24; l--)
-                            {
-                                int num30 = (int)((int)material * 8 + l);
-                                int num31 = (int)_incomingCount[num30];
-                                float num32 = (float)l + 0.1f;
-                                if (num28 >= num32)
+                                if (validPriority == -1)
                                 {
                                     break;
                                 }
-                                for (int m = num29; m < num31; m++)
+                                //Find a validPriority, get outgoingOffer
+                                int matchedOutgoingOfferIdex = (int)material * 8 + validPriority;
+                                TransferOffer outgoingOffer = _outgoingOffers[matchedOutgoingOfferIdex * 256 + validOutgoingIdex];
+                                int outgoingOfferAmount = outgoingOffer.Amount;
+                                int matchedOfferAmount = Mathf.Min(incomingOfferAmount, outgoingOfferAmount);
+                                if (matchedOfferAmount != 0)
                                 {
-                                    TransferManager.TransferOffer transferOffer5 = _incomingOffers[num30 * 256 + m];
-                                    if (transferOffer4.m_object != transferOffer5.m_object && (!transferOffer5.Exclude || l >= num25))
+                                    StartTransfer(material, outgoingOffer, incomingOffer, matchedOfferAmount);
+                                }
+                                incomingOfferAmount -= matchedOfferAmount;
+                                outgoingOfferAmount -= matchedOfferAmount;
+                                //matched outgoingOffer is empty now
+                                if (outgoingOfferAmount == 0)
+                                {
+                                    int outgoingCountPost = _outgoingCount[matchedOutgoingOfferIdex] - 1;
+                                    _outgoingCount[matchedOutgoingOfferIdex] = (ushort)outgoingCountPost;
+                                    _outgoingOffers[matchedOutgoingOfferIdex * 256 + validOutgoingIdex] = _outgoingOffers[matchedOutgoingOfferIdex * 256 + outgoingCountPost];
+                                    if (matchedOutgoingOfferIdex == offerIdex)
                                     {
-                                        float num33 = Vector3.SqrMagnitude(transferOffer5.Position - position2);
-                                        float num34;
-                                        if (distanceMultiplier < 0f)
-                                        {
-                                            num34 = num32 - num32 / (1f - num33 * distanceMultiplier);
-                                        }
-                                        else
-                                        {
-                                            num34 = num32 / (1f + num33 * distanceMultiplier);
-                                        }
-                                        if (num34 > num28)
-                                        {
-                                            num26 = l;
-                                            num27 = m;
-                                            num28 = num34;
-                                            if (num33 < num)
-                                            {
-                                                break;
-                                            }
-                                        }
+                                        outgoingCount = outgoingCountPost;
                                     }
                                 }
-                                num29 = 0;
-                            }
-                            if (num26 == -1)
-                            {
-                                break;
-                            }
-                            int num35 = (int)((int)material * 8 + num26);
-                            TransferManager.TransferOffer transferOffer6 = _incomingOffers[num35 * 256 + num27];
-                            int num36 = transferOffer6.Amount;
-                            int num37 = Mathf.Min(num23, num36);
-                            if (num37 != 0)
-                            {
-                                StartTransfer(material, transferOffer4, transferOffer6, num37);
-                            }
-                            num23 -= num37;
-                            num36 -= num37;
-                            if (num36 == 0)
-                            {
-                                int num38 = (int)(_incomingCount[num35] - 1);
-                                _incomingCount[num35] = (ushort)num38;
-                                _incomingOffers[num35 * 256 + num27] = _incomingOffers[num35 * 256 + num38];
-                                if (num35 == num2)
+                                else
                                 {
-                                    num3 = num38;
+                                    outgoingOffer.Amount = outgoingOfferAmount;
+                                    _outgoingOffers[matchedOutgoingOfferIdex * 256 + validOutgoingIdex] = outgoingOffer;
                                 }
+                                incomingOffer.Amount = incomingOfferAmount;
+                            }
+                            while (incomingOfferAmount != 0);
+                            //matched incomingOffer is empty now
+                            if (incomingOfferAmount == 0)
+                            {
+                                incomingCount--;
+                                _incomingCount[offerIdex] = (ushort)incomingCount;
+                                _incomingOffers[offerIdex * 256 + incomingIdex] = _incomingOffers[offerIdex * 256 + incomingCount];
                             }
                             else
                             {
-                                transferOffer6.Amount = num36;
-                                _incomingOffers[num35 * 256 + num27] = transferOffer6;
+                                incomingOffer.Amount = incomingOfferAmount;
+                                _incomingOffers[offerIdex * 256 + incomingIdex] = incomingOffer;
+                                incomingIdex++;
                             }
-                            transferOffer4.Amount = num23;
                         }
-                        while (num23 != 0);
-                        IL_5EF:
-                        if (num23 == 0)
+                        //use outgoingOffer to match incomingOffer
+                        if (outgoingIdex < outgoingCount)
                         {
-                            num4--;
-                            _outgoingCount[num2] = (ushort)num4;
-                            _outgoingOffers[num2 * 256 + num6] = _outgoingOffers[num2 * 256 + num4];
-                            continue;
+                            TransferOffer outgoingOffer = _outgoingOffers[offerIdex * 256 + outgoingIdex];
+                            Vector3 outgoingOfferPosition = outgoingOffer.Position;
+                            int outgoingOfferAmount = outgoingOffer.Amount;
+                            do
+                            {
+                                int outgoingPriority = Mathf.Max(0, 2 - priority);
+                                int outgoingPriorityExclude = (!outgoingOffer.Exclude) ? outgoingPriority : Mathf.Max(0, 3 - priority);
+                                int validPriority = -1;
+                                int validIncomingIdex = -1;
+                                float distanceOffsetPre = -1f;
+                                int incomingIdexInsideOutgoing = incomingIdex;
+                                for (int outgoingPriorityInside = priority; outgoingPriorityInside >= outgoingPriority; outgoingPriorityInside--)
+                                {
+                                    int incomingIdexWithPriority = (int)material * 8 + outgoingPriorityInside;
+                                    int incomingCountWithPriority = _incomingCount[incomingIdexWithPriority];
+                                    //To let outgoingPriorityInsideFloat!=0
+                                    float outgoingPriorityInsideFloat = (float)outgoingPriorityInside + 0.1f;
+                                    //Higher priority will get more chance to match
+                                    if (distanceOffsetPre >= outgoingPriorityInsideFloat)
+                                    {
+                                        break;
+                                    }
+                                    for (int j = incomingIdexInsideOutgoing; j < incomingCountWithPriority; j++)
+                                    {
+                                        TransferOffer incomingOfferPre = _incomingOffers[incomingIdexWithPriority * 256 + j];
+                                        if (outgoingOffer.m_object != incomingOfferPre.m_object && (!incomingOfferPre.Exclude || outgoingPriorityInside >= outgoingPriorityExclude))
+                                        {
+                                            float incomingOutgoingDistance = Vector3.SqrMagnitude(incomingOfferPre.Position - outgoingOfferPosition);
+                                            float distanceOffset = (!(distanceMultiplier < 0f)) ? (outgoingPriorityInsideFloat / (1f + incomingOutgoingDistance * distanceMultiplier)) : (outgoingPriorityInsideFloat - outgoingPriorityInsideFloat / (1f - incomingOutgoingDistance * distanceMultiplier));
+                                            if (distanceOffset > distanceOffsetPre)
+                                            {
+                                                validPriority = outgoingPriorityInside;
+                                                validIncomingIdex = j;
+                                                distanceOffsetPre = distanceOffset;
+                                                if (incomingOutgoingDistance < maxDistance)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    incomingIdexInsideOutgoing = 0;
+                                }
+                                if (validPriority == -1)
+                                {
+                                    break;
+                                }
+                                //Find a validPriority, get incomingOffer
+                                int matchedIncomingOfferIdex = (int)material * 8 + validPriority;
+                                TransferOffer incomingOffers = _incomingOffers[matchedIncomingOfferIdex * 256 + validIncomingIdex];
+                                int incomingOffersAmount = incomingOffers.Amount;
+                                int matchedOfferAmount = Mathf.Min(outgoingOfferAmount, incomingOffersAmount);
+                                if (matchedOfferAmount != 0)
+                                {
+                                    StartTransfer(material, outgoingOffer, incomingOffers, matchedOfferAmount);
+                                }
+                                outgoingOfferAmount -= matchedOfferAmount;
+                                incomingOffersAmount -= matchedOfferAmount;
+                                //matched incomingOffer is empty now
+                                if (incomingOffersAmount == 0)
+                                {
+                                    int incomingCountPost = _incomingCount[matchedIncomingOfferIdex] - 1;
+                                    _incomingCount[matchedIncomingOfferIdex] = (ushort)incomingCountPost;
+                                    _incomingOffers[matchedIncomingOfferIdex * 256 + validIncomingIdex] = _incomingOffers[matchedIncomingOfferIdex * 256 + incomingCountPost];
+                                    if (matchedIncomingOfferIdex == offerIdex)
+                                    {
+                                        incomingCount = incomingCountPost;
+                                    }
+                                }
+                                else
+                                {
+                                    incomingOffers.Amount = incomingOffersAmount;
+                                    _incomingOffers[matchedIncomingOfferIdex * 256 + validIncomingIdex] = incomingOffers;
+                                }
+                                outgoingOffer.Amount = outgoingOfferAmount;
+                            }
+                            while (outgoingOfferAmount != 0);
+                            //matched outgoingOffer is empty now
+                            if (outgoingOfferAmount == 0)
+                            {
+                                outgoingCount--;
+                                _outgoingCount[offerIdex] = (ushort)outgoingCount;
+                                _outgoingOffers[offerIdex * 256 + outgoingIdex] = _outgoingOffers[offerIdex * 256 + outgoingCount];
+                            }
+                            else
+                            {
+                                outgoingOffer.Amount = outgoingOfferAmount;
+                                _outgoingOffers[offerIdex * 256 + outgoingIdex] = outgoingOffer;
+                                outgoingIdex++;
+                            }
                         }
-                        transferOffer4.Amount = num23;
-                        _outgoingOffers[num2 * 256 + num6] = transferOffer4;
-                        num6++;
-                        continue;
-                        goto IL_5EF;
                     }
                 }
+                for (int k = 0; k < 8; k++)
+                {
+                    int num40 = (int)material * 8 + k;
+                    _incomingCount[num40] = 0;
+                    _outgoingCount[num40] = 0;
+                }
+                _incomingAmount[(int)material] = 0;
+                _outgoingAmount[(int)material] = 0;
             }
-            for (int n = 0; n < 8; n++)
-            {
-                int num39 = (int)((int)material * 8 + n);
-                _incomingCount[num39] = 0;
-                _outgoingCount[num39] = 0;
-            }
-            _incomingAmount[(int)material] = 0;
-            _outgoingAmount[(int)material] = 0;
         }
-
-
     }
 }

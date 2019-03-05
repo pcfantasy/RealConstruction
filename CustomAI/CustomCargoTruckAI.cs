@@ -29,12 +29,6 @@ namespace RealConstruction.CustomAI
             // 112 means fuel demand, see more in RealGasStation mod
             if (data.m_transferType == 112 && Loader.isRealGasStationRunning)
             {
-                /*data.m_transferType = FuelAlarm.MainDataStore.preTranferReason[vehicleID];
-                if (FuelAlarm.MainDataStore.petrolBuffer[data.m_targetBuilding] > 400)
-                {
-                    FuelAlarm.MainDataStore.petrolBuffer[data.m_targetBuilding] -= 400;
-                }
-                SetTarget(vehicleID, ref data, FuelAlarm.MainDataStore.preTargetBuilding[vehicleID]);*/
                 CargoTruckAIArriveAtTargetForRealGasStationPre(vehicleID, ref data);
                 return true;
             }

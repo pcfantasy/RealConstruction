@@ -29,7 +29,7 @@ namespace RealConstruction.CustomAI
                 return info.m_eventAI.GetBudget(eventIndex, ref instance.m_events.m_buffer[eventIndex]);
             }
 
-            if (MainDataStore.operationResourceBuffer[buildingID] < 1000 && RealConstructionThreading.canOperation(buildingID, ref buildingData))
+            if (MainDataStore.operationResourceBuffer[buildingID] < 1000 && CanOperation(buildingID, ref buildingData))
             {
                 return 10;
             }
@@ -39,15 +39,50 @@ namespace RealConstruction.CustomAI
             }
         }
 
+        public static bool CanOperation(ushort buildingID, ref Building buildingData)
+        {
+            if (RealConstructionThreading.IsSpecialBuilding(buildingID))
+            {
+                return false;
+            }
+            else if (buildingData.Info.m_buildingAI is ParkBuildingAI)
+            {
+                return false;
+            }
+            else
+            {
+                PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
+                return AI.RequireRoadAccess();
+            }
+        }
+
+        public static bool CanConstruction(ushort buildingID, ref Building buildingData)
+        {
+            if (RealConstructionThreading.IsSpecialBuilding(buildingID))
+            {
+                return false;
+            }
+            else if (buildingData.Info.m_buildingAI is ParkBuildingAI)
+            {
+                return false;
+            }
+            else
+            {
+                PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
+                return AI.RequireRoadAccess();
+            }
+        }
+
         // PlayerBuildingAI
         public override void SimulationStep(ushort buildingID, ref Building buildingData, ref Building.Frame frameData)
         {
             base.SimulationStep(buildingID, ref buildingData, ref frameData);
             // NON-STOCK CODE START
             // Update problems
-            if (RealConstructionThreading.canOperation(buildingID, ref buildingData) && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
+            if (CanOperation(buildingID, ref buildingData) && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
             {
-                if (MainDataStore.operationResourceBuffer[buildingID] > 1000)
+                RealConstructionThreading.ProcessPlayerBuildingOperation(buildingID, ref buildingData);
+                if (MainDataStore.operationResourceBuffer[buildingID] > 100)
                 {
                     MainDataStore.isBuildingLackOfResource[buildingID] = false;
                     MainDataStore.operationResourceBuffer[buildingID] -= 100;
@@ -56,6 +91,7 @@ namespace RealConstruction.CustomAI
                 }
                 else
                 {
+                    MainDataStore.operationResourceBuffer[buildingID] = 0;
                     MainDataStore.isBuildingLackOfResource[buildingID] = true;
                     if (buildingData.m_problems == Notification.Problem.None)
                     {
@@ -66,19 +102,23 @@ namespace RealConstruction.CustomAI
             }
 
 
-            if (RealConstructionThreading.canConstruction(buildingID, ref buildingData) && !buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
+            if (CanConstruction(buildingID, ref buildingData))
             {
-                if (MainDataStore.constructionResourceBuffer[buildingID] >= 8000)
+                if (!buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
                 {
-                    Notification.Problem problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem.NoResources);
-                    buildingData.m_problems = problem;
-                }
-                else
-                {
-                    if (buildingData.m_problems == Notification.Problem.None)
+                    RealConstructionThreading.ProcessBuildingConstruction(buildingID, ref buildingData, ref frameData);
+                    if (MainDataStore.constructionResourceBuffer[buildingID] >= 8000)
                     {
-                        Notification.Problem problem = Notification.AddProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                        Notification.Problem problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem.NoResources);
                         buildingData.m_problems = problem;
+                    }
+                    else
+                    {
+                        if (buildingData.m_problems == Notification.Problem.None)
+                        {
+                            Notification.Problem problem = Notification.AddProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                            buildingData.m_problems = problem;
+                        }
                     }
                 }
             }

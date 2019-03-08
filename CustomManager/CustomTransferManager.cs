@@ -148,16 +148,22 @@ namespace RealConstruction.CustomManager
             }
 
             int frameIndex = (int)(Singleton<SimulationManager>.instance.m_currentFrameIndex & 255u);
-            if (frameIndex == 2)
+            if (frameIndex == 205)
             {
                 //construction resource matchoffer
                 MatchOffers((TransferReason)110);
             } 
-            else if (frameIndex == 4)
+            else if (frameIndex == 213)
             {
                 //operation resource matchoffer
                 MatchOffers((TransferReason)111);
             }
+        }
+
+        private static bool CanUseNewMatchOffers(ushort buildingID)
+        {
+            //For RealConstruction Mod, always use new matchoffers
+            return true;
         }
 
         private static void MatchOffers(TransferReason material)
@@ -173,12 +179,23 @@ namespace RealConstruction.CustomManager
                     int outgoingCount = _outgoingCount[offerIdex];
                     int incomingIdex = 0;
                     int outgoingIdex = 0;
-                    while (incomingIdex < incomingCount || outgoingIdex < outgoingCount)
+                    int oldPriority = priority;
+                    //For RealConstruction, We only satisify incoming building
+                    //while (incomingIdex < incomingCount || outgoingIdex < outgoingCount)
+                    while (incomingIdex < incomingCount && outgoingIdex < outgoingCount)
                     {
                         //use incomingOffer to match outgoingOffer
                         if (incomingIdex < incomingCount)
                         {
                             TransferOffer incomingOffer = _incomingOffers[offerIdex * 256 + incomingIdex];
+                            // NON-STOCK CODE START
+                            bool canUseNewMatchOffers = CanUseNewMatchOffers(incomingOffer.Building);
+                            Vector3 incomingPositionNew = Vector3.zero;
+                            if (canUseNewMatchOffers)
+                            {
+                                incomingPositionNew = Singleton<BuildingManager>.instance.m_buildings.m_buffer[incomingOffer.Building].m_position;
+                            }
+                            // NON-STOCK CODE END
                             Vector3 incomingPosition = incomingOffer.Position;
                             int incomingOfferAmount = incomingOffer.Amount;
                             do
@@ -188,6 +205,19 @@ namespace RealConstruction.CustomManager
                                 int validPriority = -1;
                                 int validOutgoingIdex = -1;
                                 float distanceOffsetPre = -1f;
+                                // NON-STOCK CODE START
+                                float currentShortestDistance = -1f;
+                                if (canUseNewMatchOffers)
+                                {
+                                    priority = 7;
+                                    incomingPriority = 0;
+                                }
+                                else
+                                {
+                                    priority = oldPriority;
+                                    incomingPriority = Mathf.Max(0, 2 - priority);
+                                }
+                                // NON-STOCK CODE END
                                 int outgoingIdexInsideIncoming = outgoingIdex;
                                 for (int incomingPriorityInside = priority; incomingPriorityInside >= incomingPriority; incomingPriorityInside--)
                                 {
@@ -196,7 +226,8 @@ namespace RealConstruction.CustomManager
                                     //To let incomingPriorityInsideFloat!=0
                                     float incomingPriorityInsideFloat = (float)incomingPriorityInside + 0.1f;
                                     //Higher priority will get more chance to match
-                                    if (distanceOffsetPre >= incomingPriorityInsideFloat)
+                                    //UseNewMatchOffers to find the shortest transfer building
+                                    if ((distanceOffsetPre >= incomingPriorityInsideFloat) && !canUseNewMatchOffers)
                                     {
                                         break;
                                     }
@@ -207,13 +238,28 @@ namespace RealConstruction.CustomManager
                                         if (incomingOffer.m_object != outgoingOfferPre.m_object && (!outgoingOfferPre.Exclude || incomingPriorityInside >= incomingPriorityExclude))
                                         {
                                             float incomingOutgoingDistance = Vector3.SqrMagnitude(outgoingOfferPre.Position - incomingPosition);
+                                            // NON-STOCK CODE START
+                                            Vector3 outgoingPositionNew = Vector3.zero;
+                                            float incomingOutgoingDistanceNew = 0;
+                                            if (canUseNewMatchOffers)
+                                            {
+                                                outgoingPositionNew = Singleton<BuildingManager>.instance.m_buildings.m_buffer[outgoingOfferPre.Building].m_position;
+                                                incomingOutgoingDistanceNew = Vector3.SqrMagnitude(outgoingPositionNew - incomingPositionNew);
+                                                if ((incomingOutgoingDistanceNew < currentShortestDistance) || currentShortestDistance == -1)
+                                                {
+                                                    validPriority = incomingPriorityInside;
+                                                    validOutgoingIdex = i;
+                                                    currentShortestDistance = incomingOutgoingDistanceNew;
+                                                }
+                                            }
+                                            // NON-STOCK CODE END
                                             float distanceOffset = (!(distanceMultiplier < 0f)) ? (incomingPriorityInsideFloat / (1f + incomingOutgoingDistance * distanceMultiplier)) : (incomingPriorityInsideFloat - incomingPriorityInsideFloat / (1f - incomingOutgoingDistance * distanceMultiplier));
-                                            if (distanceOffset > distanceOffsetPre)
+                                            if ((distanceOffset > distanceOffsetPre) && !canUseNewMatchOffers)
                                             {
                                                 validPriority = incomingPriorityInside;
                                                 validOutgoingIdex = i;
                                                 distanceOffsetPre = distanceOffset;
-                                                if (incomingOutgoingDistance < maxDistance)
+                                                if ((incomingOutgoingDistance < maxDistance))
                                                 {
                                                     break;
                                                 }
@@ -270,11 +316,20 @@ namespace RealConstruction.CustomManager
                                 incomingIdex++;
                             }
                         }
+                        //For RealConstruction, We only satisify incoming building
                         //use outgoingOffer to match incomingOffer
-                        if (outgoingIdex < outgoingCount)
+                        /*if (outgoingIdex < outgoingCount)
                         {
                             TransferOffer outgoingOffer = _outgoingOffers[offerIdex * 256 + outgoingIdex];
-                            Vector3 outgoingOfferPosition = outgoingOffer.Position;
+                            // NON-STOCK CODE START
+                            bool canUseNewMatchOffers = CanUseNewMatchOffers(outgoingOffer.Building);
+                            Vector3 outgoingPositionNew = Vector3.zero;
+                            if (canUseNewMatchOffers)
+                            {
+                                outgoingPositionNew = Singleton<BuildingManager>.instance.m_buildings.m_buffer[outgoingOffer.Building].m_position;
+                            }
+                            // NON-STOCK CODE END
+                            Vector3 outgoingPosition = outgoingOffer.Position;
                             int outgoingOfferAmount = outgoingOffer.Amount;
                             do
                             {
@@ -283,6 +338,9 @@ namespace RealConstruction.CustomManager
                                 int validPriority = -1;
                                 int validIncomingIdex = -1;
                                 float distanceOffsetPre = -1f;
+                                // NON-STOCK CODE START
+                                float currentShortestDistance = -1f;
+                                // NON-STOCK CODE END
                                 int incomingIdexInsideOutgoing = incomingIdex;
                                 for (int outgoingPriorityInside = priority; outgoingPriorityInside >= outgoingPriority; outgoingPriorityInside--)
                                 {
@@ -291,7 +349,7 @@ namespace RealConstruction.CustomManager
                                     //To let outgoingPriorityInsideFloat!=0
                                     float outgoingPriorityInsideFloat = (float)outgoingPriorityInside + 0.1f;
                                     //Higher priority will get more chance to match
-                                    if (distanceOffsetPre >= outgoingPriorityInsideFloat)
+                                    if ((distanceOffsetPre >= outgoingPriorityInsideFloat) && !canUseNewMatchOffers)
                                     {
                                         break;
                                     }
@@ -300,9 +358,24 @@ namespace RealConstruction.CustomManager
                                         TransferOffer incomingOfferPre = _incomingOffers[incomingIdexWithPriority * 256 + j];
                                         if (outgoingOffer.m_object != incomingOfferPre.m_object && (!incomingOfferPre.Exclude || outgoingPriorityInside >= outgoingPriorityExclude))
                                         {
-                                            float incomingOutgoingDistance = Vector3.SqrMagnitude(incomingOfferPre.Position - outgoingOfferPosition);
+                                            float incomingOutgoingDistance = Vector3.SqrMagnitude(incomingOfferPre.Position - outgoingPosition);
+                                            // NON-STOCK CODE START
+                                            Vector3 incomingPositionNew = Vector3.zero;
+                                            float incomingOutgoingDistanceNew = 0;
+                                            if (canUseNewMatchOffers)
+                                            {
+                                                incomingPositionNew = Singleton<BuildingManager>.instance.m_buildings.m_buffer[incomingOfferPre.Building].m_position;
+                                                incomingOutgoingDistanceNew = Vector3.SqrMagnitude(outgoingPositionNew - incomingPositionNew);
+                                                if ((incomingOutgoingDistanceNew < currentShortestDistance) || currentShortestDistance == -1)
+                                                {
+                                                    validPriority = outgoingPriorityInside;
+                                                    validIncomingIdex = j;
+                                                    currentShortestDistance = incomingOutgoingDistanceNew;
+                                                }
+                                            }
+                                            // NON-STOCK CODE END
                                             float distanceOffset = (!(distanceMultiplier < 0f)) ? (outgoingPriorityInsideFloat / (1f + incomingOutgoingDistance * distanceMultiplier)) : (outgoingPriorityInsideFloat - outgoingPriorityInsideFloat / (1f - incomingOutgoingDistance * distanceMultiplier));
-                                            if (distanceOffset > distanceOffsetPre)
+                                            if ((distanceOffset > distanceOffsetPre) && !canUseNewMatchOffers)
                                             {
                                                 validPriority = outgoingPriorityInside;
                                                 validIncomingIdex = j;
@@ -363,7 +436,7 @@ namespace RealConstruction.CustomManager
                                 _outgoingOffers[offerIdex * 256 + outgoingIdex] = outgoingOffer;
                                 outgoingIdex++;
                             }
-                        }
+                        }*/
                     }
                 }
                 for (int k = 0; k < 8; k++)

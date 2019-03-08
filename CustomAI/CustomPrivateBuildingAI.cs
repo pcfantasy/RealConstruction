@@ -17,6 +17,7 @@ namespace RealConstruction.CustomAI
             base.SimulationStep(buildingID, ref buildingData, ref frameData);
             // NON-STOCK CODE START
             // Update problems
+            RealConstructionThreading.ProcessBuildingConstruction(buildingID, ref buildingData, ref frameData);
             if (!buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
             {
                 if (MainDataStore.constructionResourceBuffer[buildingID] >= 8000)
@@ -32,6 +33,11 @@ namespace RealConstruction.CustomAI
                         buildingData.m_problems = problem;
                     }
                 }
+            }
+            else
+            {
+                Notification.Problem problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                buildingData.m_problems = problem;
             }
             /// NON-STOCK CODE END
             if ((buildingData.m_levelUpProgress == 255 || (buildingData.m_flags & Building.Flags.Collapsed) == Building.Flags.None) && buildingData.m_fireIntensity == 0 && Singleton<SimulationManager>.instance.m_randomizer.Int32(10u) == 0)

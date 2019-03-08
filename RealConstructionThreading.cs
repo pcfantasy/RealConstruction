@@ -68,36 +68,13 @@ namespace RealConstruction
                         if (instance.m_buildings.m_buffer[i].m_flags.IsFlagSet(Building.Flags.Created) && (!instance.m_buildings.m_buffer[i].m_flags.IsFlagSet(Building.Flags.Deleted)))
                         {
                             MainDataStore.isBuildingReleased[i] = false;
-                            if (!instance.m_buildings.m_buffer[i].m_flags.IsFlagSet(Building.Flags.Untouchable))
+                            if (IsSpecialBuilding((ushort)i))
                             {
-                                if (!(instance.m_buildings.m_buffer[i].Info.m_buildingAI is OutsideConnectionAI) && !((instance.m_buildings.m_buffer[i].Info.m_buildingAI is DecorationBuildingAI)) && !(instance.m_buildings.m_buffer[i].Info.m_buildingAI is WildlifeSpawnPointAI))
+                                if (instance.m_buildings.m_buffer[i].m_flags.IsFlagSet(Building.Flags.Completed))
                                 {
-                                    if (!(instance.m_buildings.m_buffer[i].Info.m_buildingAI is ExtractingDummyAI) && !(instance.m_buildings.m_buffer[i].Info.m_buildingAI is DummyBuildingAI) && !((instance.m_buildings.m_buffer[i].Info.m_buildingAI is PowerPoleAI)) && !(instance.m_buildings.m_buffer[i].Info.m_buildingAI is WaterJunctionAI))
-                                    {
-                                        if (!(instance.m_buildings.m_buffer[i].Info.m_buildingAI is IntersectionAI) && !((instance.m_buildings.m_buffer[i].Info.m_buildingAI is CableCarPylonAI)) && !(instance.m_buildings.m_buffer[i].Info.m_buildingAI is MonorailPylonAI))
-                                        {
-                                            if (canConstruction((ushort)i, ref instance.m_buildings.m_buffer[i]))
-                                            {
-                                                ProcessBuildingConstruction((ushort)i, ref instance.m_buildings.m_buffer[i]);
-                                            }
-
-                                            if (canOperation((ushort)i, ref instance.m_buildings.m_buffer[i]))
-                                            {
-                                                ProcessPlayerBuildingOperation((ushort)i, ref instance.m_buildings.m_buffer[i]);
-                                            }
-
-                                            if (IsSpecialBuilding((ushort)i))
-                                            {
-                                                if (instance.m_buildings.m_buffer[i].m_flags.IsFlagSet(Building.Flags.Completed))
-                                                {
-                                                    ProcessCityResourceDepartmentBuildingGoods((ushort)i, instance.m_buildings.m_buffer[i]);
-                                                    ProcessCityResourceDepartmentBuildingOutgoing((ushort)i, instance.m_buildings.m_buffer[i]);
-                                                    ProcessCityResourceDepartmentBuildingIncoming((ushort)i, instance.m_buildings.m_buffer[i]);
-                                                }
-                                            }
-                                        }
-                                    }
-
+                                    ProcessCityResourceDepartmentBuildingGoods((ushort)i, instance.m_buildings.m_buffer[i]);
+                                    ProcessCityResourceDepartmentBuildingOutgoing((ushort)i, instance.m_buildings.m_buffer[i]);
+                                    ProcessCityResourceDepartmentBuildingIncoming((ushort)i, instance.m_buildings.m_buffer[i]);
                                 }
                             }
                         }
@@ -214,111 +191,17 @@ namespace RealConstruction
             {
                 return true;
             }
-
             return false;
         }
 
-        public static bool canConstruction(ushort buildingID, ref Building buildingData)
-        {
-            if (IsSpecialBuilding(buildingID))
-            {
-                return false;
-            }
-            if (buildingData.Info.m_class.m_service == ItemClass.Service.Residential || buildingData.Info.m_class.m_service == ItemClass.Service.Commercial || buildingData.Info.m_class.m_service == ItemClass.Service.Industrial || buildingData.Info.m_class.m_service == ItemClass.Service.Office)
-            {
-                return true;
-            } else if (buildingData.Info.m_class.m_service == ItemClass.Service.Road || buildingData.Info.m_class.m_service == ItemClass.Service.PoliceDepartment || buildingData.Info.m_class.m_service == ItemClass.Service.Electricity)
-            {
-                PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
-                return AI.RequireRoadAccess();
-            }
-            else if (buildingData.Info.m_class.m_service == ItemClass.Service.PlayerIndustry)
-            {
-                return true;
-            }
-            else if ( buildingData.Info.m_class.m_service == ItemClass.Service.PublicTransport || buildingData.Info.m_class.m_service == ItemClass.Service.Water)
-            {
-                PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
-                return AI.RequireRoadAccess();
-            }
-            else if (buildingData.Info.m_class.m_service == ItemClass.Service.HealthCare || buildingData.Info.m_class.m_service == ItemClass.Service.Garbage || buildingData.Info.m_class.m_service == ItemClass.Service.Education)
-            {
-                PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
-                return AI.RequireRoadAccess();
-            }
-            else if (buildingData.Info.m_class.m_service == ItemClass.Service.FireDepartment || buildingData.Info.m_class.m_service == ItemClass.Service.Disaster || buildingData.Info.m_class.m_service == ItemClass.Service.Beautification)
-            {
-                if (buildingData.Info.m_buildingAI is ParkBuildingAI)
-                {
-                    return false;
-                }
-                PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
-                return AI.RequireRoadAccess();
-            }
-            else if (buildingData.Info.m_class.m_service == ItemClass.Service.Monument)
-            {
-                PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
-                return AI.RequireRoadAccess();
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public static bool canOperation(ushort buildingID, ref Building buildingData)
-        {
-            if (IsSpecialBuilding(buildingID))
-            {
-                return false;
-            }
-            else if (buildingData.Info.m_class.m_service == ItemClass.Service.Road || buildingData.Info.m_class.m_service == ItemClass.Service.PoliceDepartment || buildingData.Info.m_class.m_service == ItemClass.Service.Electricity)
-            {
-                PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
-                return AI.RequireRoadAccess();
-            }
-            else if (buildingData.Info.m_class.m_service == ItemClass.Service.PlayerIndustry || buildingData.Info.m_class.m_service == ItemClass.Service.PublicTransport || buildingData.Info.m_class.m_service == ItemClass.Service.Water)
-            {
-                PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
-                return AI.RequireRoadAccess();
-            }
-            else if (buildingData.Info.m_class.m_service == ItemClass.Service.HealthCare || buildingData.Info.m_class.m_service == ItemClass.Service.Garbage || buildingData.Info.m_class.m_service == ItemClass.Service.Education)
-            {
-                PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
-                return AI.RequireRoadAccess();
-            }
-            else if (buildingData.Info.m_class.m_service == ItemClass.Service.FireDepartment || buildingData.Info.m_class.m_service == ItemClass.Service.Beautification)
-            {
-                if (buildingData.Info.m_buildingAI is ParkBuildingAI)
-                {
-                    return false;
-                }
-                PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
-                return AI.RequireRoadAccess();
-            }
-            else if (buildingData.Info.m_class.m_service == ItemClass.Service.Monument)
-            {
-                PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
-                return AI.RequireRoadAccess();
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-
-        void ProcessBuildingConstruction(ushort buildingID, ref Building buildingData)
+        public static void ProcessBuildingConstruction(ushort buildingID, ref Building buildingData, ref Building.Frame frameData)
         {
             if (MainDataStore.constructionResourceBuffer[buildingID] < 8000 && (!IsSpecialBuilding(buildingID)))
             {
                 System.Random rand = new System.Random();
                 if (buildingData.m_flags.IsFlagSet(Building.Flags.Created) && (!buildingData.m_flags.IsFlagSet(Building.Flags.Completed)) && (!buildingData.m_flags.IsFlagSet(Building.Flags.Deleted)))
                 {
-                    buildingData.m_frame0.m_constructState = 10;
-                    buildingData.m_frame1.m_constructState = 10;
-                    buildingData.m_frame2.m_constructState = 10;
-                    buildingData.m_frame3.m_constructState = 10;
+                    frameData.m_constructState = 10;
                     int num27 = 0;
                     int num28 = 0;
                     int num29 = 0;
@@ -342,7 +225,7 @@ namespace RealConstruction
                     if (num34 > 0)
                     {
                         TransferManager.TransferOffer offer = default(TransferManager.TransferOffer);
-                        offer.Priority = rand.Next(7) + 1;
+                        offer.Priority = rand.Next(8);
                         if ((buildingData.Info.m_class.m_service != ItemClass.Service.Residential) && (buildingData.Info.m_class.m_service != ItemClass.Service.Industrial) && (buildingData.Info.m_class.m_service != ItemClass.Service.Commercial) && (buildingData.Info.m_class.m_service != ItemClass.Service.Office))
                         {
                             offer.Priority = 7;
@@ -364,7 +247,7 @@ namespace RealConstruction
             }
         }
 
-        void ProcessPlayerBuildingOperation(ushort buildingID, ref Building buildingData)
+        public static void ProcessPlayerBuildingOperation(ushort buildingID, ref Building buildingData)
         {
             if (buildingData.m_fireIntensity == 0 && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
             {
@@ -387,11 +270,11 @@ namespace RealConstruction
                     buildingData.m_tempImport = (byte)Mathf.Clamp(value, (int)buildingData.m_tempImport, 255);
                 }
 
-                num34 = 8000 - MainDataStore.operationResourceBuffer[buildingID] - num29;
+                num34 = 24000 - MainDataStore.operationResourceBuffer[buildingID] - num29;
                 if (num34 > 0)
                 {
                     TransferManager.TransferOffer offer = default(TransferManager.TransferOffer);
-                    offer.Priority = num34 / 1000;
+                    offer.Priority = num34 / 3000;
                     if (offer.Priority > 7)
                     {
                         offer.Priority = 7;
@@ -456,7 +339,7 @@ namespace RealConstruction
                 if (customBuffer >= 8000 && num27 < num36)
                 {
                     TransferManager.TransferOffer offer2 = default(TransferManager.TransferOffer);
-                    offer2.Priority = rand.Next(7) + 1;
+                    offer2.Priority = rand.Next(8);
                     offer2.Building = buildingID;
                     offer2.Position = buildingData.m_position;
                     offer2.Amount = Mathf.Min(customBuffer / 8000, num36 - num27);
@@ -480,7 +363,7 @@ namespace RealConstruction
                 if (customBuffer >= 8000 && num27 < num36)
                 {
                     TransferManager.TransferOffer offer2 = default(TransferManager.TransferOffer);
-                    offer2.Priority = rand.Next(7) + 1;
+                    offer2.Priority = rand.Next(8);
                     offer2.Building = buildingID;
                     offer2.Position = buildingData.m_position;
                     offer2.Amount = Mathf.Min((customBuffer) / 8000, num36 - num27);
@@ -615,7 +498,7 @@ namespace RealConstruction
             }
         }
 
-        protected void CalculateGuestVehicles(ushort buildingID, ref Building data, TransferManager.TransferReason material, ref int count, ref int cargo, ref int capacity, ref int outside)
+        public static void CalculateGuestVehicles(ushort buildingID, ref Building data, TransferManager.TransferReason material, ref int count, ref int cargo, ref int capacity, ref int outside)
         {
             VehicleManager instance = Singleton<VehicleManager>.instance;
             ushort num = data.m_guestVehicles;
@@ -645,7 +528,7 @@ namespace RealConstruction
             }
         }
 
-        protected void CalculateOwnVehicles(ushort buildingID, ref Building data, TransferManager.TransferReason material, ref int count, ref int cargo, ref int capacity, ref int outside)
+        public static void CalculateOwnVehicles(ushort buildingID, ref Building data, TransferManager.TransferReason material, ref int count, ref int cargo, ref int capacity, ref int outside)
         {
             VehicleManager instance = Singleton<VehicleManager>.instance;
             ushort num = data.m_ownVehicles;

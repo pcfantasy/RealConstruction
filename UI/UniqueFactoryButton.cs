@@ -75,22 +75,25 @@ namespace RealConstruction.UI
             {
                 base.Show();
                 PBButton.text = Language.Strings[12];
-                if (MainDataStore.isBuildingLackOfResource[MainDataStore.last_buildingid] && refeshOnce)
+                if (refeshOnce)
                 {
-                    if (PBButton.textColor == Color.red)
+                    if (MainDataStore.isBuildingLackOfResource[MainDataStore.last_buildingid])
                     {
-                        PBButton.textColor = Color.white;
+                        if (PBButton.textColor == Color.red)
+                        {
+                            PBButton.textColor = Color.white;
+                        }
+                        else
+                        {
+                            refeshOnce = false;
+                            PBButton.textColor = Color.red;
+                        }
                     }
                     else
                     {
                         refeshOnce = false;
-                        PBButton.textColor = Color.red;
+                        PBButton.textColor = Color.white;
                     }
-                }
-                else
-                {
-                    refeshOnce = false;
-                    PBButton.textColor = Color.white;
                 }
             }
             else

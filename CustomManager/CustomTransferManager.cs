@@ -166,6 +166,16 @@ namespace RealConstruction.CustomManager
             return true;
         }
 
+        private static byte MatchOffersMode(TransferReason material)
+        {
+            //For RealConstruction Mod, always use incoming first mode
+            //incoming first mode 0
+            //outgoing first mode 1
+            //balanced mode 2
+            return 0;
+        }
+
+
         private static void MatchOffers(TransferReason material)
         {
             if (material != TransferReason.None)
@@ -180,12 +190,22 @@ namespace RealConstruction.CustomManager
                     int incomingIdex = 0;
                     int outgoingIdex = 0;
                     int oldPriority = priority;
-                    //For RealConstruction, We only satisify incoming building
-                    //while (incomingIdex < incomingCount || outgoingIdex < outgoingCount)
-                    while (incomingIdex < incomingCount && outgoingIdex < outgoingCount)
+                    // NON-STOCK CODE START
+                    byte matchOffersMode = MatchOffersMode(material);
+                    bool isLoopValid = false;
+                    if (matchOffersMode == 2)
+                    {
+                        isLoopValid = (incomingIdex < incomingCount || outgoingIdex < outgoingCount);
+                    }
+                    else
+                    {
+                        isLoopValid = (incomingIdex < incomingCount && outgoingIdex < outgoingCount);
+                    }
+                    // NON-STOCK CODE END
+                    while (isLoopValid)
                     {
                         //use incomingOffer to match outgoingOffer
-                        if (incomingIdex < incomingCount)
+                        if (incomingIdex < incomingCount && (matchOffersMode != 1))
                         {
                             TransferOffer incomingOffer = _incomingOffers[offerIdex * 256 + incomingIdex];
                             // NON-STOCK CODE START
@@ -201,10 +221,6 @@ namespace RealConstruction.CustomManager
                             do
                             {
                                 int incomingPriority = Mathf.Max(0, 2 - priority);
-                                int incomingPriorityExclude = (!incomingOffer.Exclude) ? incomingPriority : Mathf.Max(0, 3 - priority);
-                                int validPriority = -1;
-                                int validOutgoingIdex = -1;
-                                float distanceOffsetPre = -1f;
                                 // NON-STOCK CODE START
                                 float currentShortestDistance = -1f;
                                 if (canUseNewMatchOffers)
@@ -218,6 +234,10 @@ namespace RealConstruction.CustomManager
                                     incomingPriority = Mathf.Max(0, 2 - priority);
                                 }
                                 // NON-STOCK CODE END
+                                int incomingPriorityExclude = (!incomingOffer.Exclude) ? incomingPriority : Mathf.Max(0, 3 - priority);
+                                int validPriority = -1;
+                                int validOutgoingIdex = -1;
+                                float distanceOffsetPre = -1f;
                                 int outgoingIdexInsideIncoming = outgoingIdex;
                                 for (int incomingPriorityInside = priority; incomingPriorityInside >= incomingPriority; incomingPriorityInside--)
                                 {
@@ -318,7 +338,7 @@ namespace RealConstruction.CustomManager
                         }
                         //For RealConstruction, We only satisify incoming building
                         //use outgoingOffer to match incomingOffer
-                        /*if (outgoingIdex < outgoingCount)
+                        if (outgoingIdex < outgoingCount && (matchOffersMode != 0))
                         {
                             TransferOffer outgoingOffer = _outgoingOffers[offerIdex * 256 + outgoingIdex];
                             // NON-STOCK CODE START
@@ -334,13 +354,23 @@ namespace RealConstruction.CustomManager
                             do
                             {
                                 int outgoingPriority = Mathf.Max(0, 2 - priority);
+                                // NON-STOCK CODE START
+                                float currentShortestDistance = -1f;
+                                if (canUseNewMatchOffers)
+                                {
+                                    priority = 7;
+                                    outgoingPriority = 0;
+                                }
+                                else
+                                {
+                                    priority = oldPriority;
+                                    outgoingPriority = Mathf.Max(0, 2 - priority);
+                                }
+                                // NON-STOCK CODE END
                                 int outgoingPriorityExclude = (!outgoingOffer.Exclude) ? outgoingPriority : Mathf.Max(0, 3 - priority);
                                 int validPriority = -1;
                                 int validIncomingIdex = -1;
                                 float distanceOffsetPre = -1f;
-                                // NON-STOCK CODE START
-                                float currentShortestDistance = -1f;
-                                // NON-STOCK CODE END
                                 int incomingIdexInsideOutgoing = incomingIdex;
                                 for (int outgoingPriorityInside = priority; outgoingPriorityInside >= outgoingPriority; outgoingPriorityInside--)
                                 {
@@ -436,7 +466,16 @@ namespace RealConstruction.CustomManager
                                 _outgoingOffers[offerIdex * 256 + outgoingIdex] = outgoingOffer;
                                 outgoingIdex++;
                             }
-                        }*/
+                        }
+                        
+                        if (matchOffersMode == 2)
+                        {
+                            isLoopValid = (incomingIdex < incomingCount || outgoingIdex < outgoingCount);
+                        }
+                        else
+                        {
+                            isLoopValid = (incomingIdex < incomingCount && outgoingIdex < outgoingCount);
+                        }
                     }
                 }
                 for (int k = 0; k < 8; k++)

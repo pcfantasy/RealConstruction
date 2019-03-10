@@ -270,7 +270,7 @@ namespace RealConstruction
                     buildingData.m_tempImport = (byte)Mathf.Clamp(value, (int)buildingData.m_tempImport, 255);
                 }
 
-                num34 = 24000 - MainDataStore.operationResourceBuffer[buildingID] - num29;
+                num34 = 14000 - MainDataStore.operationResourceBuffer[buildingID] - num29;
                 if (num34 > 0)
                 {
                     TransferManager.TransferOffer offer = default(TransferManager.TransferOffer);
@@ -292,23 +292,23 @@ namespace RealConstruction
         {
             if (buildingData.m_fireIntensity == 0 && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
             {
-                if (MainDataStore.lumberBuffer[buildingID] > 20 && MainDataStore.coalBuffer[buildingID] > 20 && MainDataStore.constructionResourceBuffer[buildingID] < 64000)
+                if (MainDataStore.lumberBuffer[buildingID] > 30 && MainDataStore.coalBuffer[buildingID] > 30 && MainDataStore.constructionResourceBuffer[buildingID] < 64000)
                 {
                     if (MainDataStore.buildingFlag1[buildingID] == 0 || MainDataStore.buildingFlag1[buildingID] == 1)
                     {
-                        MainDataStore.lumberBuffer[buildingID] -= 20;
-                        MainDataStore.coalBuffer[buildingID] -= 20;
-                        MainDataStore.constructionResourceBuffer[buildingID] += 400;
+                        MainDataStore.lumberBuffer[buildingID] -= 30;
+                        MainDataStore.coalBuffer[buildingID] -= 30;
+                        MainDataStore.constructionResourceBuffer[buildingID] += 600;
                     }
                 }
 
-                if (MainDataStore.petrolBuffer[buildingID] > 20 && MainDataStore.foodBuffer[buildingID] > 20 && MainDataStore.operationResourceBuffer[buildingID] < 64000)
+                if (MainDataStore.petrolBuffer[buildingID] > 30 && MainDataStore.foodBuffer[buildingID] > 30 && MainDataStore.operationResourceBuffer[buildingID] < 64000)
                 {
                     if (MainDataStore.buildingFlag1[buildingID] == 0 || MainDataStore.buildingFlag1[buildingID] == 2)
                     {
-                        MainDataStore.petrolBuffer[buildingID] -= 20;
-                        MainDataStore.foodBuffer[buildingID] -= 20;
-                        MainDataStore.operationResourceBuffer[buildingID] += 400;
+                        MainDataStore.petrolBuffer[buildingID] -= 30;
+                        MainDataStore.foodBuffer[buildingID] -= 30;
+                        MainDataStore.operationResourceBuffer[buildingID] += 600;
                     }
                 }
             }

@@ -18,7 +18,7 @@ namespace RealConstruction
 
         public string Name
         {
-            get { return "RealConstruction"; }
+            get { return "Real Construction"; }
         }
 
         public string Description

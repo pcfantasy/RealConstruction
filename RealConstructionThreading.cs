@@ -270,11 +270,19 @@ namespace RealConstruction
                     buildingData.m_tempImport = (byte)Mathf.Clamp(value, (int)buildingData.m_tempImport, 255);
                 }
 
-                num34 = 14000 - MainDataStore.operationResourceBuffer[buildingID] - num29;
+                num34 = 15000 - MainDataStore.operationResourceBuffer[buildingID] - num29;
                 if (num34 > 0)
                 {
                     TransferManager.TransferOffer offer = default(TransferManager.TransferOffer);
-                    offer.Priority = num34 / 3000;
+                    //Higher priority for Electricity and Water sevice.
+                    if (buildingData.Info.m_class.m_service == ItemClass.Service.Water || buildingData.Info.m_class.m_service == ItemClass.Service.Electricity)
+                    {
+                        offer.Priority = num34 / 1000;
+                    }
+                    else
+                    {
+                        offer.Priority = num34 / 3000;
+                    }
                     if (offer.Priority > 7)
                     {
                         offer.Priority = 7;

@@ -275,7 +275,7 @@ namespace RealConstruction
                 {
                     TransferManager.TransferOffer offer = default(TransferManager.TransferOffer);
                     //Higher priority for Electricity and Water sevice.
-                    if (buildingData.Info.m_class.m_service == ItemClass.Service.Water || buildingData.Info.m_class.m_service == ItemClass.Service.Electricity)
+                    if (buildingData.Info.m_class.m_service == ItemClass.Service.Water || buildingData.Info.m_class.m_service == ItemClass.Service.Electricity || buildingData.Info.m_class.m_service == ItemClass.Service.Garbage)
                     {
                         offer.Priority = num34 / 1000;
                     }
@@ -300,23 +300,23 @@ namespace RealConstruction
         {
             if (buildingData.m_fireIntensity == 0 && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
             {
-                if (MainDataStore.lumberBuffer[buildingID] > 30 && MainDataStore.coalBuffer[buildingID] > 30 && MainDataStore.constructionResourceBuffer[buildingID] < 64000)
+                if (MainDataStore.lumberBuffer[buildingID] > 40 && MainDataStore.coalBuffer[buildingID] > 40 && MainDataStore.constructionResourceBuffer[buildingID] < 64000)
                 {
                     if (MainDataStore.buildingFlag1[buildingID] == 0 || MainDataStore.buildingFlag1[buildingID] == 1)
                     {
-                        MainDataStore.lumberBuffer[buildingID] -= 30;
-                        MainDataStore.coalBuffer[buildingID] -= 30;
-                        MainDataStore.constructionResourceBuffer[buildingID] += 600;
+                        MainDataStore.lumberBuffer[buildingID] -= 40;
+                        MainDataStore.coalBuffer[buildingID] -= 40;
+                        MainDataStore.constructionResourceBuffer[buildingID] += 800;
                     }
                 }
 
-                if (MainDataStore.petrolBuffer[buildingID] > 30 && MainDataStore.foodBuffer[buildingID] > 30 && MainDataStore.operationResourceBuffer[buildingID] < 64000)
+                if (MainDataStore.petrolBuffer[buildingID] > 40 && MainDataStore.foodBuffer[buildingID] > 40 && MainDataStore.operationResourceBuffer[buildingID] < 64000)
                 {
                     if (MainDataStore.buildingFlag1[buildingID] == 0 || MainDataStore.buildingFlag1[buildingID] == 2)
                     {
-                        MainDataStore.petrolBuffer[buildingID] -= 30;
-                        MainDataStore.foodBuffer[buildingID] -= 30;
-                        MainDataStore.operationResourceBuffer[buildingID] += 600;
+                        MainDataStore.petrolBuffer[buildingID] -= 40;
+                        MainDataStore.foodBuffer[buildingID] -= 40;
+                        MainDataStore.operationResourceBuffer[buildingID] += 800;
                     }
                 }
             }

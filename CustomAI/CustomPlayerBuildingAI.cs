@@ -93,14 +93,16 @@ namespace RealConstruction.CustomAI
                 {
                     MainDataStore.operationResourceBuffer[buildingID] = 0;
                     MainDataStore.isBuildingLackOfResource[buildingID] = true;
-                    if (buildingData.m_problems == Notification.Problem.None)
+                    if (RealConstruction.debugMode)
                     {
-                        Notification.Problem problem = Notification.AddProblems(buildingData.m_problems, Notification.Problem.NoResources);
-                        buildingData.m_problems = problem;
+                        if (buildingData.m_problems == Notification.Problem.None)
+                        {
+                            Notification.Problem problem = Notification.AddProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                            buildingData.m_problems = problem;
+                        }
                     }
                 }
             }
-
 
             if (CanConstruction(buildingID, ref buildingData))
             {
@@ -114,10 +116,13 @@ namespace RealConstruction.CustomAI
                     }
                     else
                     {
-                        if (buildingData.m_problems == Notification.Problem.None)
+                        if (RealConstruction.debugMode)
                         {
-                            Notification.Problem problem = Notification.AddProblems(buildingData.m_problems, Notification.Problem.NoResources);
-                            buildingData.m_problems = problem;
+                            if (buildingData.m_problems == Notification.Problem.None)
+                            {
+                                Notification.Problem problem = Notification.AddProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                                buildingData.m_problems = problem;
+                            }
                         }
                     }
                 }

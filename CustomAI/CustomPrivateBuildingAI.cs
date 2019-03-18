@@ -27,10 +27,13 @@ namespace RealConstruction.CustomAI
                 }
                 else
                 {
-                    if (buildingData.m_problems == Notification.Problem.None)
+                    if (RealConstruction.debugMode)
                     {
-                        Notification.Problem problem = Notification.AddProblems(buildingData.m_problems, Notification.Problem.NoResources);
-                        buildingData.m_problems = problem;
+                        if (buildingData.m_problems == Notification.Problem.None)
+                        {
+                            Notification.Problem problem = Notification.AddProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                            buildingData.m_problems = problem;
+                        }
                     }
                 }
             }

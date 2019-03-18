@@ -26,6 +26,8 @@ namespace RealConstruction.Util
             "Generate Both Resources",
             "Generate Construction Resource",
             "Generate Operation Resource",
+            "Debug Mode",
+            "Show lack of resource icon on building which is lack of construction or operation resource"
         };
 
 
@@ -48,6 +50,8 @@ namespace RealConstruction.Util
             "生成两种资源",
             "生成建筑资源",
             "生成运营资源",
+            "调试模式",
+            "对缺建筑或者运营材料的建筑显示缺少资源图标提示"
         };
 
 

@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using System.IO;
 
 namespace RealConstruction
 {
@@ -33,28 +34,24 @@ namespace RealConstruction
         }
 
         public static List<Detour> Detours { get; set; }
-
         public static bool DetourInited = false;
-
         public static bool isGuiRunning = false;
         public static bool isRealCityRunning = false;
         public static bool isRealGasStationRunning = false;
-
         public static UIPanel playerBuildingInfo;
         public static UIPanel uniqueFactoryInfo;
         public static UIPanel wareHouseInfo;
-
         public static UniqueFactoryUI guiPanel2;
         public static WareHouseUI guiPanel3;
         public static PlayerBuildingUI guiPanel4;
-
         public static PlayerBuildingButton PBMenuPanel;
         public static UniqueFactoryButton UBMenuPanel;
         public static WarehouseButton WBMenuPanel;
-
         public static GameObject PlayerbuildingWindowGameObject;
         public static GameObject UniqueFactoryWindowGameObject;
         public static GameObject WareHouseWindowGameObject;
+        public static string m_atlasName = "RealConstruction";
+        public static bool m_atlasLoaded;
 
         public override void OnCreated(ILoading loading)
         {
@@ -82,7 +79,6 @@ namespace RealConstruction
             }
         }
 
-
         public override void OnLevelUnloading()
         {
             base.OnLevelUnloading();
@@ -106,9 +102,24 @@ namespace RealConstruction
             base.OnReleased();
         }
 
+        private static void LoadSprites()
+        {
+            if (SpriteUtilities.GetAtlas(m_atlasName) != null) return;
+
+            m_atlasLoaded = SpriteUtilities.InitialiseAtlas(Path.Combine(RealConstruction.AsmPath, "Icon/RealConstruction.png"), m_atlasName);
+            if (m_atlasLoaded)
+            {
+                var spriteSuccess = true;
+                spriteSuccess = SpriteUtilities.AddSpriteToAtlas(new Rect(new Vector2(1, 1), new Vector2(1507, 1494)), "Pic", m_atlasName)
+                             && spriteSuccess;
+                if (!spriteSuccess) DebugLog.LogToFileOnly("Some sprites haven't been loaded. This is abnormal; you should probably report this to the mod creator.");
+            }
+            else DebugLog.LogToFileOnly("The texture atlas (provides custom icons) has not loaded. All icons have reverted to text prompts.");
+        }
 
         public static void SetupGui()
         {
+            LoadSprites();
             SetupPlayerBuidingGui();
             SetupPlayerBuildingButton();
             SetupWareHouseGui();
@@ -238,7 +249,6 @@ namespace RealConstruction
                 PBMenuPanel = (playerBuildingInfo.AddUIComponent(typeof(PlayerBuildingButton)) as PlayerBuildingButton);
             }
             PBMenuPanel.RefPanel = playerBuildingInfo;
-            PBMenuPanel.Alignment = UIAlignAnchor.TopLeft;
             PBMenuPanel.Show();
         }
 
@@ -249,7 +259,6 @@ namespace RealConstruction
                 UBMenuPanel = (uniqueFactoryInfo.AddUIComponent(typeof(UniqueFactoryButton)) as UniqueFactoryButton);
             }
             UBMenuPanel.RefPanel = uniqueFactoryInfo;
-            UBMenuPanel.Alignment = UIAlignAnchor.TopLeft;
             UBMenuPanel.Show();
         }
 
@@ -260,7 +269,6 @@ namespace RealConstruction
                 WBMenuPanel = (wareHouseInfo.AddUIComponent(typeof(WarehouseButton)) as WarehouseButton);
             }
             WBMenuPanel.RefPanel = wareHouseInfo;
-            WBMenuPanel.Alignment = UIAlignAnchor.TopLeft;
             WBMenuPanel.Show();
         }
 

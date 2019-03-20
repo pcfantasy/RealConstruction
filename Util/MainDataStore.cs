@@ -12,18 +12,12 @@ namespace RealConstruction.Util
         public static ushort[] lumberBuffer = new ushort[49152];
         public static ushort[] coalBuffer = new ushort[49152];
         public static ushort[] petrolBuffer = new ushort[49152];
-
         public static ushort[] constructionResourceBuffer = new ushort[49152];
         public static ushort[] operationResourceBuffer = new ushort[49152];
-
         public static bool[] isBuildingReleased = new bool[49152];
         public static bool[] isBuildingLackOfResource = new bool[49152];
-        public static byte[] buildingFlag1 = new byte[49152];
-
-
-        public static ushort last_buildingid = 0;
-        public static byte lastLanguage = 0;
-
+        public static byte[] resourceCategory = new byte[49152];
+        public static ushort lastBuildingID = 0;
         public static byte[] saveData = new byte[835584];
 
         public static void DataInit()
@@ -37,7 +31,7 @@ namespace RealConstruction.Util
                 constructionResourceBuffer[i] = 0;
                 operationResourceBuffer[i] = 0;
                 isBuildingReleased[i] = false;
-                buildingFlag1[i] = 0;
+                resourceCategory[i] = 0;
                 isBuildingLackOfResource[i] = false;
             }
         }
@@ -51,7 +45,7 @@ namespace RealConstruction.Util
             SaveAndRestore.save_ushorts(ref i, petrolBuffer, ref saveData);
             SaveAndRestore.save_ushorts(ref i, constructionResourceBuffer, ref saveData);
             SaveAndRestore.save_ushorts(ref i, operationResourceBuffer, ref saveData);
-            SaveAndRestore.save_bytes(ref i, buildingFlag1, ref saveData);
+            SaveAndRestore.save_bytes(ref i, resourceCategory, ref saveData);
         }
 
         public static void load()
@@ -63,8 +57,7 @@ namespace RealConstruction.Util
             petrolBuffer = SaveAndRestore.load_ushorts(ref i, saveData, foodBuffer.Length);
             constructionResourceBuffer = SaveAndRestore.load_ushorts(ref i, saveData, foodBuffer.Length);
             operationResourceBuffer = SaveAndRestore.load_ushorts(ref i, saveData, foodBuffer.Length);
-            buildingFlag1 = SaveAndRestore.load_bytes(ref i, saveData, buildingFlag1.Length);
+            resourceCategory = SaveAndRestore.load_bytes(ref i, saveData, resourceCategory.Length);
         }
-
     }
 }

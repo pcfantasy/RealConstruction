@@ -13,15 +13,9 @@ namespace RealConstruction.UI
     public class WarehouseButton : UIPanel
     {
         public static UIButton PBButton;
-
         private ItemClass.Availability CurrentMode;
-
         public static WarehouseButton instance;
-
-        public UIAlignAnchor Alignment;
-
         public UIPanel RefPanel;
-
         public static bool refeshOnce = false;
 
         public static void PlayerBuildingUIToggle()
@@ -29,7 +23,7 @@ namespace RealConstruction.UI
             if (!Loader.guiPanel3.isVisible)
             {
                 WareHouseUI.refeshOnce = true;
-                MainDataStore.last_buildingid = WorldInfoPanel.GetCurrentInstanceID().Building;
+                MainDataStore.lastBuildingID = WorldInfoPanel.GetCurrentInstanceID().Building;
                 Loader.guiPanel3.Show();
             }
             else
@@ -44,9 +38,6 @@ namespace RealConstruction.UI
             base.name = "PlayerBuildingUIPanel";
             base.width = 200f;
             base.height = 15f;
-            //this.MoveBackward();
-            //base.backgroundSprite = "MenuPanel";
-            //base.autoLayout = true;
             base.opacity = 1f;
             this.CurrentMode = Singleton<ToolManager>.instance.m_properties.m_mode;
             PBButton = base.AddUIComponent<UIButton>();
@@ -57,11 +48,23 @@ namespace RealConstruction.UI
             PBButton.playAudioEvents = true;
             PBButton.name = "PBButton";
             PBButton.tooltipBox = aView.defaultTooltipBox;
-            PBButton.text = Language.Strings[12];
-            PBButton.textScale = 0.9f;
-            PBButton.size = new Vector2(200f, 15f);
+            this.relativePosition = new Vector3(90f, 0f);
+            if (Loader.m_atlasLoaded)
+            {
+                UISprite internalSprite = PBButton.AddUIComponent<UISprite>();
+                internalSprite.atlas = SpriteUtilities.GetAtlas(Loader.m_atlasName);
+                internalSprite.spriteName = "Pic";
+                internalSprite.relativePosition = new Vector3(0, 0);
+                internalSprite.width = internalSprite.height = 40f;
+                PBButton.size = new Vector2(40f, 40f);
+            }
+            else
+            {
+                PBButton.text = Localization.Get("REALCONSTRUCTION_UI");
+                PBButton.textScale = 0.9f;
+                PBButton.size = new Vector2(100f, 15f);
+            }
             PBButton.relativePosition = new Vector3(0f, 0f);
-            base.AlignTo(this.RefPanel, this.Alignment);
             PBButton.eventClick += delegate (UIComponent component, UIMouseEventParameter eventParam)
             {
                 PlayerBuildingUIToggle();
@@ -70,30 +73,13 @@ namespace RealConstruction.UI
 
         public override void Update()
         {
-            MainDataStore.last_buildingid = WorldInfoPanel.GetCurrentInstanceID().Building;
+            MainDataStore.lastBuildingID = WorldInfoPanel.GetCurrentInstanceID().Building;
             if (Loader.isGuiRunning)
             {
                 base.Show();
-                PBButton.text = Language.Strings[12];
-                if (refeshOnce)
+                if (!Loader.m_atlasLoaded)
                 {
-                    if (MainDataStore.isBuildingLackOfResource[MainDataStore.last_buildingid])
-                    {
-                        if (PBButton.textColor == Color.red)
-                        {
-                            PBButton.textColor = Color.white;
-                        }
-                        else
-                        {
-                            PBButton.textColor = Color.red;
-                        }
-                        refeshOnce = false;
-                    }
-                    else
-                    {
-                        refeshOnce = false;
-                        PBButton.textColor = Color.white;
-                    }
+                    PBButton.text = Localization.Get("REALCONSTRUCTION_UI");
                 }
             }
             else

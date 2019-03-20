@@ -13,17 +13,11 @@ namespace RealConstruction.UI
     public class UniqueFactoryUI : UIPanel
     {
         public static readonly string cacheName = "UniqueFactoryUI";
-
         private static readonly float SPACING = 15f;
-
         private Dictionary<string, UILabel> _valuesControlContainer = new Dictionary<string, UILabel>(16);
-
         public UniqueFactoryWorldInfoPanel baseBuildingWindow;
-
         public static bool refeshOnce = false;
-
-
-        private UILabel Operation1;
+        private UILabel operationResourceLeft;
 
         public override void Update()
         {
@@ -56,13 +50,12 @@ namespace RealConstruction.UI
             base.Hide();
         }
 
-
         private void ShowOnGui()
         {
-            this.Operation1 = base.AddUIComponent<UILabel>();
-            this.Operation1.text = Language.Strings[8];
-            this.Operation1.relativePosition = new Vector3(SPACING, 50f); ;
-            this.Operation1.autoSize = true;
+            this.operationResourceLeft = base.AddUIComponent<UILabel>();
+            this.operationResourceLeft.text = Localization.Get("OPERATION_RESOURCE_LEFT");
+            this.operationResourceLeft.relativePosition = new Vector3(SPACING, 50f); ;
+            this.operationResourceLeft.autoSize = true;
         }
 
         private void RefreshDisplayData()
@@ -70,17 +63,17 @@ namespace RealConstruction.UI
             uint currentFrameIndex = Singleton<SimulationManager>.instance.m_currentFrameIndex;
             uint num2 = currentFrameIndex & 255u;
 
-            if (refeshOnce || (MainDataStore.last_buildingid != WorldInfoPanel.GetCurrentInstanceID().Building))
+            if (refeshOnce || (MainDataStore.lastBuildingID != WorldInfoPanel.GetCurrentInstanceID().Building))
             {
                 if (base.isVisible)
                 {
-                    MainDataStore.last_buildingid = WorldInfoPanel.GetCurrentInstanceID().Building;
-                    Building buildingData = Singleton<BuildingManager>.instance.m_buildings.m_buffer[MainDataStore.last_buildingid];
-                    this.Operation1.text = string.Format(Language.Strings[8] + " [{0}]", MainDataStore.operationResourceBuffer[MainDataStore.last_buildingid]);
+                    MainDataStore.lastBuildingID = WorldInfoPanel.GetCurrentInstanceID().Building;
+                    Building buildingData = Singleton<BuildingManager>.instance.m_buildings.m_buffer[MainDataStore.lastBuildingID];
+                    this.operationResourceLeft.text = string.Format(Localization.Get("OPERATION_RESOURCE_LEFT") + " [{0}]", MainDataStore.operationResourceBuffer[MainDataStore.lastBuildingID]);
                     refeshOnce = false;
                     this.BringToFront();
 
-                    if (!CustomPlayerBuildingAI.CanOperation(MainDataStore.last_buildingid, ref buildingData) && !RealConstructionThreading.IsSpecialBuilding(MainDataStore.last_buildingid))
+                    if (!CustomPlayerBuildingAI.CanOperation(MainDataStore.lastBuildingID, ref buildingData) && !RealConstructionThreading.IsSpecialBuilding(MainDataStore.lastBuildingID))
                     {
                         this.Hide();
                     }
@@ -90,8 +83,6 @@ namespace RealConstruction.UI
                     this.Hide();
                 }
             }
-
         }
-
     }
 }

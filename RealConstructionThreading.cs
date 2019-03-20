@@ -22,7 +22,6 @@ namespace RealConstruction
     {
         public static bool isFirstTime = true;
 
-
         public override void OnBeforeSimulationFrame()
         {
             base.OnBeforeSimulationFrame();
@@ -30,14 +29,10 @@ namespace RealConstruction
             {
                 if (RealConstruction.IsEnabled)
                 {
-                    //Check language
-                    CheckLanguage();
                     CheckDetour();
                 }
             }
-
         }
-
 
         public override void OnAfterSimulationFrame()
         {
@@ -91,7 +86,6 @@ namespace RealConstruction
             }
         }
 
-
         public void DetourAfterLoad()
         {
             //This is for Detour RealCity method
@@ -124,7 +118,6 @@ namespace RealConstruction
                 }
             }
         }
-
 
         public void CheckDetour()
         {
@@ -163,23 +156,6 @@ namespace RealConstruction
                         UIView.library.ShowModal<ExceptionPanel>("ExceptionPanel").SetMessage("Incompatibility Issue", text, true);
                     }
                 }
-            }
-        }
-
-
-        public void CheckLanguage()
-        {
-            if (SingletonLite<LocaleManager>.instance.language.Contains("zh") && (MainDataStore.lastLanguage == 1))
-            {
-            }
-            else if (!SingletonLite<LocaleManager>.instance.language.Contains("zh") && (MainDataStore.lastLanguage != 1))
-            {
-            }
-            else
-            {
-                MainDataStore.lastLanguage = (byte)(SingletonLite<LocaleManager>.instance.language.Contains("zh") ? 1 : 0);
-                Language.LanguageSwitch(MainDataStore.lastLanguage);
-                PlayerBuildingUI.refeshOnce = true;
             }
         }
 
@@ -302,7 +278,7 @@ namespace RealConstruction
             {
                 if (MainDataStore.lumberBuffer[buildingID] > 40 && MainDataStore.coalBuffer[buildingID] > 40 && MainDataStore.constructionResourceBuffer[buildingID] < 64000)
                 {
-                    if (MainDataStore.buildingFlag1[buildingID] == 0 || MainDataStore.buildingFlag1[buildingID] == 1)
+                    if (MainDataStore.resourceCategory[buildingID] == 0 || MainDataStore.resourceCategory[buildingID] == 1)
                     {
                         MainDataStore.lumberBuffer[buildingID] -= 40;
                         MainDataStore.coalBuffer[buildingID] -= 40;
@@ -312,7 +288,7 @@ namespace RealConstruction
 
                 if (MainDataStore.petrolBuffer[buildingID] > 40 && MainDataStore.foodBuffer[buildingID] > 40 && MainDataStore.operationResourceBuffer[buildingID] < 64000)
                 {
-                    if (MainDataStore.buildingFlag1[buildingID] == 0 || MainDataStore.buildingFlag1[buildingID] == 2)
+                    if (MainDataStore.resourceCategory[buildingID] == 0 || MainDataStore.resourceCategory[buildingID] == 2)
                     {
                         MainDataStore.petrolBuffer[buildingID] -= 40;
                         MainDataStore.foodBuffer[buildingID] -= 40;
@@ -381,9 +357,7 @@ namespace RealConstruction
             }
         }
 
-
-
-        void ProcessCityResourceDepartmentBuildingIncoming(ushort buildingID, Building buildingData)
+        public void ProcessCityResourceDepartmentBuildingIncoming(ushort buildingID, Building buildingData)
         {
             int num27 = 0;
             int num28 = 0;
@@ -391,9 +365,8 @@ namespace RealConstruction
             int value = 0;
             int num34 = 0;
             TransferManager.TransferReason incomingTransferReason = default(TransferManager.TransferReason);
-
             //Foods
-            if (MainDataStore.buildingFlag1[buildingID] == 0 || MainDataStore.buildingFlag1[buildingID] == 2)
+            if (MainDataStore.resourceCategory[buildingID] == 0 || MainDataStore.resourceCategory[buildingID] == 2)
             {
                 incomingTransferReason = TransferManager.TransferReason.Food;
                 if (incomingTransferReason != TransferManager.TransferReason.None)
@@ -416,7 +389,6 @@ namespace RealConstruction
                         Singleton<TransferManager>.instance.AddIncomingOffer(incomingTransferReason, offer);
                     }
                 }
-
                 //Petrol
                 incomingTransferReason = TransferManager.TransferReason.Petrol;
                 num27 = 0;
@@ -445,9 +417,8 @@ namespace RealConstruction
                     }
                 }
             }
-
             //Coal
-            if (MainDataStore.buildingFlag1[buildingID] == 0 || MainDataStore.buildingFlag1[buildingID] == 1)
+            if (MainDataStore.resourceCategory[buildingID] == 0 || MainDataStore.resourceCategory[buildingID] == 1)
             {
                 incomingTransferReason = TransferManager.TransferReason.Coal;
                 num27 = 0;

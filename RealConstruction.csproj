@@ -64,10 +64,11 @@
     <Compile Include="UI\UniqueFactoryUI.cs" />
     <Compile Include="UI\UniqueFactoryButton.cs" />
     <Compile Include="UI\WarehouseButton.cs" />
+    <Compile Include="Util\SpriteUtilities.cs" />
     <Compile Include="Util\DebugLog.cs" />
-    <Compile Include="Util\Language.cs" />
     <Compile Include="Loader.cs" />
     <Compile Include="CustomAI\CustomPlayerBuildingAI.cs" />
+    <Compile Include="Util\Localization.cs" />
     <Compile Include="Util\MainDataStore.cs" />
     <Compile Include="UI\PlayerBuildingButton.cs" />
     <Compile Include="UI\PlayerBuildingUI.cs" />
@@ -77,9 +78,21 @@
     <Compile Include="Util\RedirectionHelper.cs" />
     <Compile Include="Util\SaveAndRestore.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Icon\RealConstruction.png" />
+    <Content Include="Locales\en.txt" />
+    <Content Include="Locales\zh.txt" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "C:\Users\Administrator\Desktop\Other Mod\RealConstruction\RealConstruction\bin\Release\RealConstruction.dll"  "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\RealConstruction.dll"</PostBuildEvent>
+    <PostBuildEvent>copy "C:\Users\Administrator\Desktop\Other Mod\RealConstruction\RealConstruction\bin\Release\RealConstruction.dll"  "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\RealConstruction.dll"
+rd /q /s "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Locales"
+mkdir "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Locales"
+copy "C:\Users\Administrator\Desktop\Other Mod\RealConstruction\RealConstruction\Locales\*.txt" "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Locales"
+rd /q /s "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"
+mkdir "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"
+copy "C:\Users\Administrator\Desktop\Other Mod\RealConstruction\RealConstruction\Icon\*.png" "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

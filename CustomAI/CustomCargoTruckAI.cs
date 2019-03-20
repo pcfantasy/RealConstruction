@@ -255,7 +255,7 @@ namespace RealConstruction.CustomAI
                     TransferManager.TransferReason transferType = (TransferManager.TransferReason)data.m_transferType;
                     if (transferType == (TransferManager.TransferReason)112)
                     {
-                        return Language.Strings[11];
+                        return Localization.Get("GOING_FOR_FUEL_TO");
                     }
                     return ColossalFramework.Globalization.Locale.Get("VEHICLE_STATUS_CARGOTRUCK_RETURN");
                 }
@@ -273,7 +273,7 @@ namespace RealConstruction.CustomAI
                         target = InstanceID.Empty;
                         if (transferType == (TransferManager.TransferReason)112)
                         {
-                            return Language.Strings[11];
+                            return Localization.Get("GOING_FOR_FUEL_TO");
                         }
                         return ColossalFramework.Globalization.Locale.Get("VEHICLE_STATUS_CARGOTRUCK_EXPORT", transferType.ToString());
                     }
@@ -283,7 +283,7 @@ namespace RealConstruction.CustomAI
                         target.Building = targetBuilding;
                         if (transferType == (TransferManager.TransferReason)112)
                         {
-                            return Language.Strings[11];
+                            return Localization.Get("GOING_FOR_FUEL_TO");
                         }
                         return ColossalFramework.Globalization.Locale.Get("VEHICLE_STATUS_CARGOTRUCK_IMPORT", transferType.ToString());
                     }
@@ -291,15 +291,15 @@ namespace RealConstruction.CustomAI
                     target.Building = targetBuilding;
                     if (transferType == (TransferManager.TransferReason)110)
                     {
-                        return Language.Strings[9];
+                        return Localization.Get("TRANSFER_CONSTRUCTION_RESOURCE_TO");
                     }
                     else if (transferType == (TransferManager.TransferReason)111)
                     {
-                        return Language.Strings[10];
+                        return Localization.Get("TRANSFER_OPERATION_RESOURCE_TO");
                     }
                     else if (transferType == (TransferManager.TransferReason)112)
                     {
-                        return Language.Strings[11];
+                        return Localization.Get("GOING_FOR_FUEL_TO");
                     }
                     else
                     {

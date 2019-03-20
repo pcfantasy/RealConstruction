@@ -1,5 +1,6 @@
 ﻿using ColossalFramework;
 using ColossalFramework.Globalization;
+using ColossalFramework.Plugins;
 using ColossalFramework.UI;
 using ICities;
 using RealConstruction.Util;
@@ -18,6 +19,38 @@ namespace RealConstruction
         public static bool IsEnabled = false;
         public static int language_idex = 0;
         public static bool debugMode = false;
+        public static string AsmPath
+        {
+            get
+            {
+                return RealConstruction.PluginInfo.modPath;
+            }
+        }
+
+        private static PluginManager.PluginInfo PluginInfo
+        {
+            get
+            {
+                PluginManager instance = Singleton<PluginManager>.instance;
+                IEnumerable<PluginManager.PluginInfo> pluginsInfo = instance.GetPluginsInfo();
+                foreach (PluginManager.PluginInfo current in pluginsInfo)
+                {
+                    try
+                    {
+                        IUserMod[] instances = current.GetInstances<IUserMod>();
+                        bool flag = !(instances.FirstOrDefault<IUserMod>() is RealConstruction);
+                        if (!flag)
+                        {
+                            return current;
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+                throw new Exception("Could not find assembly");
+            }
+        }
 
         public string Name
         {
@@ -34,13 +67,11 @@ namespace RealConstruction
             IsEnabled = true;
             FileStream fs = File.Create("RealConstruction.txt");
             fs.Close();
-            Language.LanguageSwitch((byte)language_idex);
         }
 
         public void OnDisabled()
         {
             IsEnabled = false;
-            Language.LanguageSwitch((byte)language_idex);
         }
 
         public static void SaveSetting()
@@ -78,17 +109,8 @@ namespace RealConstruction
         public void OnSettingsUI(UIHelperBase helper)
         {
             LoadSetting();
-            if (SingletonLite<LocaleManager>.instance.language.Contains("zh"))
-            {
-                Language.LanguageSwitch(1);
-            }
-            else
-            {
-                Language.LanguageSwitch(0);
-            }
-
-            UIHelperBase group1 = helper.AddGroup(Language.Strings[16]);
-            group1.AddCheckbox(Language.Strings[17], debugMode, (index) => debugModeEnable(index));
+            UIHelperBase group = helper.AddGroup(Localization.Get("DEBUG_MODE"));
+            group.AddCheckbox(Localization.Get("SHOW_LACK_OF_RESOURCE"), debugMode, (index) => debugModeEnable(index));
             SaveSetting();
         }
 

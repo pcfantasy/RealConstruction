@@ -22,8 +22,6 @@ namespace RealConstruction.CustomAI
             offer.Building = buildingID;
             Singleton<TransferManager>.instance.RemoveOutgoingOffer((TransferManager.TransferReason)110, offer);
             Singleton<TransferManager>.instance.RemoveOutgoingOffer((TransferManager.TransferReason)111, offer);
-            Singleton<TransferManager>.instance.RemoveOutgoingOffer((TransferManager.TransferReason)112, offer);
-            DebugLog.LogToFileOnly("HarmonyDetours CommonBuildingAIReleaseBuildingPostfix");
         }
     }
 }

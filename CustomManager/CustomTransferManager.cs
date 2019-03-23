@@ -1,6 +1,7 @@
 ﻿using ColossalFramework;
 using ColossalFramework.Plugins;
 using RealConstruction.CustomAI;
+using RealConstruction.NewAI;
 using RealConstruction.Util;
 using System;
 using System.Collections.Generic;
@@ -83,7 +84,7 @@ namespace RealConstruction.CustomManager
                 ushort building = offerOut.Building;
                 BuildingInfo info3 = buildings.m_buffer[(int)building].Info;
                 offerIn.Amount = delta;
-                if (RealConstructionThreading.IsSpecialBuilding(building))
+                if (ResourceBuildingAI.IsSpecialBuilding(building))
                 {
                     StartSpecialBuildingTransfer(building, ref buildings.m_buffer[(int)building], material, offerIn);
                 }

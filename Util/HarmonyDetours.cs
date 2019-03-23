@@ -14,11 +14,11 @@ namespace RealConstruction.Util
             var fullMethodName = string.Format("{0}.{1}", method.ReflectedType?.Name ?? "(null)", method.Name);
             if (harmony.GetPatchInfo(method)?.Owners?.Contains(harmony.Id) == true)
             {
-                Debug.LogWarningFormat("Harmony patches already present for {0}", fullMethodName);
+                DebugLog.LogToFileOnly("Harmony patches already present for {0}" + fullMethodName.ToString());
             }
             else
             {
-                Debug.LogFormat("Patching {0}...", fullMethodName);
+                DebugLog.LogToFileOnly("Patching {0}..." + fullMethodName.ToString());
                 harmony.Patch(method, prefix, postfix);
             }
         }
@@ -28,12 +28,12 @@ namespace RealConstruction.Util
             var fullMethodName = string.Format("{0}.{1}", method.ReflectedType?.Name ?? "(null)", method.Name);
             if (prefix != null)
             {
-                Debug.LogFormat("UnPatching Prefix{0}...", fullMethodName);
+                DebugLog.LogToFileOnly("UnPatching Prefix{0}..." + fullMethodName.ToString());
                 harmony.Unpatch(method, HarmonyPatchType.Prefix);
             }
             if (postfix != null)
             {
-                Debug.LogFormat("UnPatching Postfix{0}...", fullMethodName);
+                DebugLog.LogToFileOnly("UnPatching Postfix{0}..." + fullMethodName.ToString());
                 harmony.Unpatch(method, HarmonyPatchType.Postfix);
             }
         }
@@ -59,7 +59,7 @@ namespace RealConstruction.Util
             harmony.ConditionalPatch(playerBuildingAISimulationStep,
                 null,
                 new HarmonyMethod(playerBuildingAISimulationStepPostFix));
-            Debug.Log("Harmony patches applied");
+            DebugLog.LogToFileOnly("Harmony patches applied");
         }
 
         public static void DeApply()
@@ -82,7 +82,7 @@ namespace RealConstruction.Util
             harmony.ConditionalUnPatch(playerBuildingAISimulationStep,
                 null,
                 new HarmonyMethod(playerBuildingAISimulationStepPostFix));
-            Debug.Log("Harmony patches DeApplied");
+            DebugLog.LogToFileOnly("Harmony patches DeApplied");
         }
     }
 }

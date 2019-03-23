@@ -1,5 +1,7 @@
 ﻿using ColossalFramework;
+using RealConstruction.NewAI;
 using RealConstruction.Util;
+using UnityEngine;
 
 namespace RealConstruction.CustomAI
 {
@@ -8,7 +10,7 @@ namespace RealConstruction.CustomAI
         public static void PrivateBuildingAISimulationStepPostFix(ushort buildingID, ref Building buildingData, ref Building.Frame frameData)
         {
             // Update problems
-            RealConstructionThreading.ProcessBuildingConstruction(buildingID, ref buildingData, ref frameData);
+            ConstructionAI.ProcessBuildingConstruction(buildingID, ref buildingData, ref frameData);
             if (!buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
             {
                 if (MainDataStore.constructionResourceBuffer[buildingID] >= 8000)

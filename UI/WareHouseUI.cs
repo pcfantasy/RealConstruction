@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using RealConstruction.Util;
 using RealConstruction.CustomAI;
+using RealConstruction.NewAI;
 
 namespace RealConstruction.UI
 {
@@ -74,7 +75,7 @@ namespace RealConstruction.UI
                     refeshOnce = false;
                     this.BringToFront();
 
-                    if (!CustomPlayerBuildingAI.CanOperation(MainDataStore.lastBuildingID, ref buildingData) && !RealConstructionThreading.IsSpecialBuilding(MainDataStore.lastBuildingID))
+                    if (!CustomPlayerBuildingAI.CanOperation(MainDataStore.lastBuildingID, ref buildingData) && !ResourceBuildingAI.IsSpecialBuilding(MainDataStore.lastBuildingID))
                     {
                         this.Hide();
                     }

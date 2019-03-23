@@ -64,10 +64,14 @@
     <Compile Include="CustomAI\CustomCommonBuildingAI.cs" />
     <Compile Include="CustomAI\CustomPrivateBuildingAI.cs" />
     <Compile Include="CustomManager\CustomTransferManager.cs" />
+    <Compile Include="NewAI\ConstructionAI.cs" />
+    <Compile Include="NewAI\OperationAI.cs" />
+    <Compile Include="NewAI\ResourceBuildingAI.cs" />
     <Compile Include="UI\WareHouseUI.cs" />
     <Compile Include="UI\UniqueFactoryUI.cs" />
     <Compile Include="UI\UniqueFactoryButton.cs" />
     <Compile Include="UI\WarehouseButton.cs" />
+    <Compile Include="Util\CaculationVehicle.cs" />
     <Compile Include="Util\HarmonyDetours.cs" />
     <Compile Include="Util\SpriteUtilities.cs" />
     <Compile Include="Util\DebugLog.cs" />

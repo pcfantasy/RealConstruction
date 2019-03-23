@@ -1,5 +1,8 @@
 ﻿using ColossalFramework;
+using RealConstruction.NewAI;
 using RealConstruction.Util;
+using System;
+using UnityEngine;
 
 namespace RealConstruction.CustomAI
 {
@@ -36,7 +39,7 @@ namespace RealConstruction.CustomAI
 
         public static bool CanOperation(ushort buildingID, ref Building buildingData)
         {
-            if (RealConstructionThreading.IsSpecialBuilding(buildingID))
+            if (ResourceBuildingAI.IsSpecialBuilding(buildingID))
             {
                 return false;
             }
@@ -53,7 +56,7 @@ namespace RealConstruction.CustomAI
 
         public static bool CanConstruction(ushort buildingID, ref Building buildingData)
         {
-            if (RealConstructionThreading.IsSpecialBuilding(buildingID))
+            if (ResourceBuildingAI.IsSpecialBuilding(buildingID))
             {
                 return false;
             }
@@ -74,7 +77,7 @@ namespace RealConstruction.CustomAI
             // Update problems
             if (CanOperation(buildingID, ref buildingData) && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
             {
-                RealConstructionThreading.ProcessPlayerBuildingOperation(buildingID, ref buildingData);
+                OperationAI.ProcessPlayerBuildingOperation(buildingID, ref buildingData);
                 if (MainDataStore.operationResourceBuffer[buildingID] > 100)
                 {
                     MainDataStore.isBuildingLackOfResource[buildingID] = false;
@@ -101,7 +104,7 @@ namespace RealConstruction.CustomAI
             {
                 if (!buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
                 {
-                    RealConstructionThreading.ProcessBuildingConstruction(buildingID, ref buildingData, ref frameData);
+                    ConstructionAI.ProcessBuildingConstruction(buildingID, ref buildingData, ref frameData);
                     if (MainDataStore.constructionResourceBuffer[buildingID] >= 8000)
                     {
                         Notification.Problem problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem.NoResources);
@@ -120,7 +123,17 @@ namespace RealConstruction.CustomAI
                     }
                 }
             }
-        }
 
+            //
+            if (ResourceBuildingAI.IsSpecialBuilding((ushort)buildingID))
+            {
+                if (buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
+                {
+                    ResourceBuildingAI.ProcessCityResourceDepartmentBuildingGoods(buildingID, ref buildingData);
+                    ResourceBuildingAI.ProcessCityResourceDepartmentBuildingOutgoing(buildingID, ref buildingData);
+                    ResourceBuildingAI.ProcessCityResourceDepartmentBuildingIncoming(buildingID, ref buildingData);
+                }
+            }
+        }
     }
 }

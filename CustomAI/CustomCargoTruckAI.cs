@@ -1,5 +1,6 @@
 ﻿using ColossalFramework;
 using ColossalFramework.Math;
+using RealConstruction.NewAI;
 using RealConstruction.Util;
 using System;
 using System.Collections.Generic;
@@ -121,7 +122,7 @@ namespace RealConstruction.CustomAI
             CargoTruckAI AI = data.Info.m_vehicleAI as CargoTruckAI;
             int num = Mathf.Min(0, (int)data.m_transferSize - AI.m_cargoCapacity);
             //new added begin
-            if (RealConstructionThreading.IsSpecialBuilding(sourceBuilding))
+            if (ResourceBuildingAI.IsSpecialBuilding(sourceBuilding))
             {
                 if ((TransferManager.TransferReason)data.m_transferType == (TransferManager.TransferReason)110)
                 {
@@ -173,7 +174,7 @@ namespace RealConstruction.CustomAI
                     }
                     else
                     {
-                        if (RealConstructionThreading.IsSpecialBuilding(vehicleData.m_targetBuilding) == true)
+                        if (ResourceBuildingAI.IsSpecialBuilding(vehicleData.m_targetBuilding) == true)
                         {
                             switch ((TransferManager.TransferReason)vehicleData.m_transferType)
                             {

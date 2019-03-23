@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using RealConstruction.Util;
 using RealConstruction.CustomAI;
+using RealConstruction.NewAI;
 
 namespace RealConstruction.UI
 {
@@ -296,7 +297,7 @@ namespace RealConstruction.UI
                     MainDataStore.lastBuildingID = WorldInfoPanel.GetCurrentInstanceID().Building;
                     Building buildingData = Singleton<BuildingManager>.instance.m_buildings.m_buffer[MainDataStore.lastBuildingID];
 
-                    if (RealConstructionThreading.IsSpecialBuilding(MainDataStore.lastBuildingID) == true)
+                    if (ResourceBuildingAI.IsSpecialBuilding(MainDataStore.lastBuildingID) == true)
                     {
                         this.food.text = string.Format(Localization.Get("FOOD_STORED") + " [{0}]", MainDataStore.foodBuffer[MainDataStore.lastBuildingID]);
                         this.lumber.text = string.Format(Localization.Get("LUMBER_STORED") + " [{0}]", MainDataStore.lumberBuffer[MainDataStore.lastBuildingID]);
@@ -332,7 +333,7 @@ namespace RealConstruction.UI
                     PlayerBuildingUI.refeshOnce = false;
                     this.BringToFront();
 
-                    if (!CustomPlayerBuildingAI.CanOperation(MainDataStore.lastBuildingID, ref buildingData) && !RealConstructionThreading.IsSpecialBuilding(MainDataStore.lastBuildingID))
+                    if (!CustomPlayerBuildingAI.CanOperation(MainDataStore.lastBuildingID, ref buildingData) && !ResourceBuildingAI.IsSpecialBuilding(MainDataStore.lastBuildingID))
                     {
                         this.Hide();
                     }

@@ -20,15 +20,15 @@ namespace RealConstruction.UI
 
         public static void PlayerBuildingUIToggle()
         {
-            if (!Loader.guiPanel4.isVisible)
+            if (!Loader.playerBuildingPanel.isVisible)
             {
                 PlayerBuildingUI.refeshOnce = true;
                 MainDataStore.lastBuildingID = WorldInfoPanel.GetCurrentInstanceID().Building;
-                Loader.guiPanel4.Show();
+                Loader.playerBuildingPanel.Show();
             }
             else
             {
-                Loader.guiPanel4.Hide();
+                Loader.playerBuildingPanel.Hide();
             }
         }
 

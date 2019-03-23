@@ -243,7 +243,6 @@ namespace RealConstruction.CustomAI
             }
         }
 
-
         public override string GetLocalizedStatus(ushort vehicleID, ref Vehicle data, out InstanceID target)
         {
             if ((data.m_flags & Vehicle.Flags.TransferToTarget) != 0)
@@ -310,6 +309,5 @@ namespace RealConstruction.CustomAI
             target = InstanceID.Empty;
             return ColossalFramework.Globalization.Locale.Get("VEHICLE_STATUS_CONFUSED");
         }
-
     }
 }

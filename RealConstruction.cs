@@ -19,38 +19,6 @@ namespace RealConstruction
         public static bool IsEnabled = false;
         public static int language_idex = 0;
         public static bool debugMode = false;
-        public static string AsmPath
-        {
-            get
-            {
-                return RealConstruction.PluginInfo.modPath;
-            }
-        }
-
-        private static PluginManager.PluginInfo PluginInfo
-        {
-            get
-            {
-                PluginManager instance = Singleton<PluginManager>.instance;
-                IEnumerable<PluginManager.PluginInfo> pluginsInfo = instance.GetPluginsInfo();
-                foreach (PluginManager.PluginInfo current in pluginsInfo)
-                {
-                    try
-                    {
-                        IUserMod[] instances = current.GetInstances<IUserMod>();
-                        bool flag = !(instances.FirstOrDefault<IUserMod>() is RealConstruction);
-                        if (!flag)
-                        {
-                            return current;
-                        }
-                    }
-                    catch
-                    {
-                    }
-                }
-                throw new Exception("Could not find assembly");
-            }
-        }
 
         public string Name
         {

@@ -73,14 +73,14 @@ namespace RealConstruction
                                 }
                             }
                         }
-                        else
+                        /*else
                         {
                             if (!MainDataStore.isBuildingReleased[i])
                             {
                                 MainDataStore.isBuildingReleased[i] = true;
                                 CustomCommonBuildingAI.CustomReleaseBuilding((ushort)i);
                             }
-                        }
+                        }*/
                     }
                 }
             }

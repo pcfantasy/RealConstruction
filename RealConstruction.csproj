@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RealConstruction</RootNamespace>
     <AssemblyName>RealConstruction</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,6 +32,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>..\..\0Harmony.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>F:\SteamLibrary\steamapps\common\Cities_Skylines\Cities_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
@@ -64,6 +68,7 @@
     <Compile Include="UI\UniqueFactoryUI.cs" />
     <Compile Include="UI\UniqueFactoryButton.cs" />
     <Compile Include="UI\WarehouseButton.cs" />
+    <Compile Include="Util\HarmonyDetours.cs" />
     <Compile Include="Util\SpriteUtilities.cs" />
     <Compile Include="Util\DebugLog.cs" />
     <Compile Include="Loader.cs" />
@@ -90,6 +95,7 @@
 rd /q /s "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Locales"
 mkdir "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Locales"
 copy "C:\Users\Administrator\Desktop\Other Mod\RealConstruction\RealConstruction\Locales\*.txt" "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Locales"
+copy "C:\Users\Administrator\Desktop\Other Mod\RealConstruction\RealConstruction\bin\Release\0Harmony.dll"  "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\0Harmony.dll"
 rd /q /s "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"
 mkdir "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"
 copy "C:\Users\Administrator\Desktop\Other Mod\RealConstruction\RealConstruction\Icon\*.png" "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"</PostBuildEvent>

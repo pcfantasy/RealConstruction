@@ -1,10 +1,12 @@
 **Read Me File for Real Construction mod**
 ===
 
-*##Mod folder lits##:*
-*.vs - contain the extentions in which use to the access the project on Windows Visual Studio application
+*Mod folder lits:*
+---
 
-*bin - self explainatory
+* .vs - contain the extentions in which use to the access the project on Windows Visual Studio application
+
+* bin - self explainatory
 
 * Custom AI - constains modified cs files in which change the behavior of the game AI mechanic. Ranging from citizens AI to the vehicles AI
 
@@ -23,7 +25,8 @@
 * Util - sto cs helper files
 
 
-*##Mod file lits##:*
+*Mod file lits:*
+---
 
 * Loader - provide the game instruction of how to load the mod
 
@@ -36,14 +39,16 @@
 * RealConstructionThreading - provide instruction for cpu threading usage
 
 
-*##Author and collaborators:*
+*Author and collaborators:*
+---
 
-Author: pcfantasy
+Author: **pcfantasy**
 
-Collaborators: Pourov(Sagiluv1)
+Collaborators: **Pourov(Sagiluv1)**
 
 
 *Update logs:*
+---
 
 * 20/03/2019;
 	1. Increase resource building production speed a little

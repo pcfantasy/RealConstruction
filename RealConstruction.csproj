@@ -60,6 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomAI\CustomCarAI.cs" />
     <Compile Include="CustomAI\CustomCargoTruckAI.cs" />
     <Compile Include="CustomAI\CustomCommonBuildingAI.cs" />
     <Compile Include="CustomAI\CustomPrivateBuildingAI.cs" />

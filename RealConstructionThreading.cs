@@ -118,7 +118,7 @@ namespace RealConstruction
                     DebugLog.LogToFileOnly(string.Format("ThreadingExtension.OnBeforeSimulationFrame: First frame detected. Detours checked. Result: {0} missing detours", list.Count));
                     if (list.Count > 0)
                     {
-                        string error = "RealConstruction detected an incompatibility with another mod! You can continue playing but it's NOT recommended. RealConstruction will not work as expected. See RealConstruction.log for technical details.";
+                        string error = "RealConstruction detected an incompatibility with another mod! You can continue playing but it's NOT recommended. RealConstruction will not work as expected. Send RealConstruction.txt to Author.";
                         DebugLog.LogToFileOnly(error);
                         string text = "The following methods were overriden by another mod:";
                         foreach (string current2 in list)
@@ -127,6 +127,13 @@ namespace RealConstruction
                         }
                         DebugLog.LogToFileOnly(text);
                         UIView.library.ShowModal<ExceptionPanel>("ExceptionPanel").SetMessage("Incompatibility Issue", text, true);
+                    }
+
+                    if (!Loader.HarmonyDetourInited)
+                    {
+                        string error = "RealConstruction HarmonyDetourInit is failed, Send RealConstruction.txt to Author.";
+                        DebugLog.LogToFileOnly(error);
+                        UIView.library.ShowModal<ExceptionPanel>("ExceptionPanel").SetMessage("Incompatibility Issue", error, true);
                     }
                 }
             }

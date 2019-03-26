@@ -19,6 +19,9 @@ namespace RealConstruction.Util
         public static byte[] resourceCategory = new byte[49152];
         public static ushort lastBuildingID = 0;
         public static byte[] saveData = new byte[835584];
+        public static ushort[,] canNotConnectedBuildingID = new ushort[49152, 8];
+        public static byte[] refreshCanNotConnectedBuildingIDCount = new byte[49152];
+        public static byte[] canNotConnectedBuildingIDCount = new byte[49152];
 
         public static void DataInit()
         {

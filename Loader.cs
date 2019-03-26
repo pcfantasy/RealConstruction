@@ -70,11 +70,24 @@ namespace RealConstruction
                     InitDetour();
                     HarmonyInitDetour();
                     SetupGui();
-                    //RealConstruction.LoadSetting();
+                    RealConstruction.LoadSetting();
                     if (mode == LoadMode.NewGame)
                     {
                         DebugLog.LogToFileOnly("New Game");
                     }
+                }
+            }
+        }
+
+        public void DataInit()
+        {
+            for (int i = 0; i < 49152; i++)
+            {
+                MainDataStore.refreshCanNotConnectedBuildingIDCount[i] = 0;
+                MainDataStore.canNotConnectedBuildingIDCount[i] = 0;
+                for (int j = 0; j < 8; j++)
+                {
+                    MainDataStore.canNotConnectedBuildingID[i, j] = 0;
                 }
             }
         }
@@ -110,7 +123,7 @@ namespace RealConstruction
             if (m_atlasLoaded)
             {
                 var spriteSuccess = true;
-                spriteSuccess = SpriteUtilities.AddSpriteToAtlas(new Rect(new Vector2(1, 1), new Vector2(1507, 1494)), "Pic", m_atlasName)
+                spriteSuccess = SpriteUtilities.AddSpriteToAtlas(new Rect(new Vector2(1, 1), new Vector2(151, 151)), "Pic", m_atlasName)
                              && spriteSuccess;
                 if (!spriteSuccess) DebugLog.LogToFileOnly("Some sprites haven't been loaded. This is abnormal; you should probably report this to the mod creator.");
             }
@@ -120,13 +133,16 @@ namespace RealConstruction
         public static void SetupGui()
         {
             LoadSprites();
-            SetupPlayerBuidingGui();
-            SetupPlayerBuildingButton();
-            SetupWareHouseGui();
-            SetupWareHouseButton();
-            SetupUniqueFactoryGui();
-            SetupUniqueFactoryButton();
-            Loader.isGuiRunning = true;
+            if (m_atlasLoaded)
+            {
+                SetupPlayerBuidingGui();
+                SetupPlayerBuildingButton();
+                SetupWareHouseGui();
+                SetupWareHouseButton();
+                SetupUniqueFactoryGui();
+                SetupUniqueFactoryButton();
+                Loader.isGuiRunning = true;
+            }
         }
 
         public static void RemoveGui()
@@ -247,7 +263,6 @@ namespace RealConstruction
             {
                 PBMenuPanel = (playerBuildingInfo.AddUIComponent(typeof(PlayerBuildingButton)) as PlayerBuildingButton);
             }
-            PBMenuPanel.RefPanel = playerBuildingInfo;
             PBMenuPanel.Show();
         }
 
@@ -257,7 +272,6 @@ namespace RealConstruction
             {
                 UBMenuPanel = (uniqueFactoryInfo.AddUIComponent(typeof(UniqueFactoryButton)) as UniqueFactoryButton);
             }
-            UBMenuPanel.RefPanel = uniqueFactoryInfo;
             UBMenuPanel.Show();
         }
 
@@ -267,7 +281,6 @@ namespace RealConstruction
             {
                 WBMenuPanel = (wareHouseInfo.AddUIComponent(typeof(WarehouseButton)) as WarehouseButton);
             }
-            WBMenuPanel.RefPanel = wareHouseInfo;
             WBMenuPanel.Show();
         }
 
@@ -325,7 +338,6 @@ namespace RealConstruction
             {
                 DebugLog.LogToFileOnly("Init harmony detours");
                 HarmonyDetours.Apply();
-                HarmonyDetourInited = true;
             }
         }
 
@@ -335,7 +347,6 @@ namespace RealConstruction
             {
                 DebugLog.LogToFileOnly("Revert harmony detours");
                 HarmonyDetours.DeApply();
-                HarmonyDetourInited = false;
             }
         }
 

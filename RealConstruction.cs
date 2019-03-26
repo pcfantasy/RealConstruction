@@ -17,8 +17,8 @@ namespace RealConstruction
     public class RealConstruction : IUserMod
     {
         public static bool IsEnabled = false;
-        public static int language_idex = 0;
         public static bool debugMode = false;
+        public static bool fixUnRouteTransfer = false;
 
         public string Name
         {
@@ -48,6 +48,7 @@ namespace RealConstruction
             FileStream fs = File.Create("RealConstruction_setting.txt");
             StreamWriter streamWriter = new StreamWriter(fs);
             streamWriter.WriteLine(debugMode);
+            streamWriter.WriteLine(fixUnRouteTransfer);
             streamWriter.Flush();
             fs.Close();
         }
@@ -60,13 +61,23 @@ namespace RealConstruction
                 StreamReader sr = new StreamReader(fs);
                 string strLine = sr.ReadLine();
 
-                if (strLine == "False")
+                if (strLine == "true")
                 {
-                    debugMode = false;
+                    debugMode = true;
                 }
                 else
                 {
-                    debugMode = true;
+                    debugMode = false;
+                }
+
+                strLine = sr.ReadLine();
+                if (strLine == "True")
+                {
+                    fixUnRouteTransfer = true;
+                }
+                else
+                {
+                    fixUnRouteTransfer = false;
                 }
 
                 sr.Close();
@@ -79,12 +90,20 @@ namespace RealConstruction
             LoadSetting();
             UIHelperBase group = helper.AddGroup(Localization.Get("DEBUG_MODE"));
             group.AddCheckbox(Localization.Get("SHOW_LACK_OF_RESOURCE"), debugMode, (index) => debugModeEnable(index));
+            UIHelperBase group1 = helper.AddGroup(Localization.Get("FIX_UNROUTED_TRANSFER_MATCH_DESCRIPTION"));
+            group1.AddCheckbox(Localization.Get("FIX_UNROUTED_TRANSFER_MATCH_ENALBE"), fixUnRouteTransfer, (index) => fixUnRouteTransferEnable(index));
             SaveSetting();
         }
 
         public void debugModeEnable(bool index)
         {
             debugMode = index;
+            SaveSetting();
+        }
+
+        public void fixUnRouteTransferEnable(bool index)
+        {
+            fixUnRouteTransfer = index;
             SaveSetting();
         }
     }

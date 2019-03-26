@@ -66,7 +66,7 @@ namespace RealConstruction.NewAI
 
             if (buildingData.m_fireIntensity == 0 && outgoingTransferReason != TransferManager.TransferReason.None && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
             {
-                int num36 = 10;
+                int num36 = 20;
                 int customBuffer = MainDataStore.constructionResourceBuffer[buildingID];
                 if (customBuffer >= 8000 && num27 < num36)
                 {
@@ -90,7 +90,7 @@ namespace RealConstruction.NewAI
 
             if (buildingData.m_fireIntensity == 0 && outgoingTransferReason != TransferManager.TransferReason.None && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
             {
-                int num36 = 10;
+                int num36 = 20;
                 int customBuffer = MainDataStore.operationResourceBuffer[buildingID];
                 if (customBuffer >= 8000 && num27 < num36)
                 {

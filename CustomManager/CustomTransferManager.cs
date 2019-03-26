@@ -99,6 +99,106 @@ namespace RealConstruction.CustomManager
             }
         }
 
+        private static bool IsUnRoutedMatch(TransferOffer offerIn, TransferOffer offerOut, TransferReason material)
+        {
+            if (!RealConstruction.fixUnRouteTransfer)
+            {
+                return false;
+            }
+
+            bool active = offerIn.Active;
+            bool active2 = offerOut.Active;
+            VehicleManager instance1 = Singleton<VehicleManager>.instance;
+            BuildingManager instance = Singleton<BuildingManager>.instance;
+            if (active && offerIn.Vehicle != 0)
+            {
+                ushort targetBuilding = 0;
+                ushort sourceBuilding = instance1.m_vehicles.m_buffer[offerIn.Vehicle].m_sourceBuilding;
+                targetBuilding = offerOut.Building;
+
+                if ((targetBuilding != 0) && (sourceBuilding != 0))
+                {
+                    for (int j = 0; j < MainDataStore.canNotConnectedBuildingIDCount[targetBuilding]; j++)
+                    {
+                        if (MainDataStore.canNotConnectedBuildingID[targetBuilding, j] == sourceBuilding)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+                //info.m_vehicleAI.StartTransfer(vehicle, ref vehicles.m_buffer[(int)vehicle], material, offerOut);
+            }
+            else if (active2 && offerOut.Vehicle != 0)
+            {
+                ushort targetBuilding = 0;
+                ushort sourceBuilding = instance1.m_vehicles.m_buffer[offerOut.Vehicle].m_sourceBuilding;
+                targetBuilding = offerIn.Building;
+
+                if ((targetBuilding != 0) && (sourceBuilding != 0))
+                {
+                    for (int j = 0; j < MainDataStore.canNotConnectedBuildingIDCount[targetBuilding]; j++)
+                    {
+                        if (MainDataStore.canNotConnectedBuildingID[targetBuilding, j] == sourceBuilding)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+                //info2.m_vehicleAI.StartTransfer(vehicle2, ref vehicles2.m_buffer[(int)vehicle2], material, offerIn);
+            }
+            else if (active && offerIn.Citizen != 0u)
+            {
+                DebugLog.LogToFileOnly("Error: No such case active && offerIn.Citizen != 0u");
+                return false;
+            }
+            else if (active2 && offerOut.Citizen != 0u)
+            {
+                DebugLog.LogToFileOnly("Error: No such case active && offerOut.Citizen != 0u");
+                return false;
+            }
+            else if (active2 && offerOut.Building != 0)
+            {
+                ushort targetBuilding = 0;
+                ushort sourceBuilding = offerOut.Building;
+                targetBuilding = offerIn.Building;
+
+                if ((targetBuilding != 0) && (sourceBuilding != 0))
+                {
+                    for (int j = 0; j < MainDataStore.canNotConnectedBuildingIDCount[targetBuilding]; j++)
+                    {
+                        if (MainDataStore.canNotConnectedBuildingID[targetBuilding, j] == sourceBuilding)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+                //info3.m_buildingAI.StartTransfer(building, ref buildings.m_buffer[(int)building], material, offerIn);
+            }
+            else if (active && offerIn.Building != 0)
+            {
+                ushort targetBuilding = 0;
+                ushort sourceBuilding = offerIn.Building;
+                targetBuilding = offerOut.Building;
+
+                if ((targetBuilding != 0) && (sourceBuilding != 0))
+                {
+                    for (int j = 0; j < MainDataStore.canNotConnectedBuildingIDCount[targetBuilding]; j++)
+                    {
+                        if (MainDataStore.canNotConnectedBuildingID[targetBuilding, j] == sourceBuilding)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+                //info4.m_buildingAI.StartTransfer(building2, ref buildings2.m_buffer[(int)building2], material, offerOut);
+            }
+            return false;
+        }
+
         private static void Init()
         {
             var inst = Singleton<TransferManager>.instance;
@@ -282,9 +382,12 @@ namespace RealConstruction.CustomManager
                                                 incomingOutgoingDistanceNew = Vector3.SqrMagnitude(outgoingPositionNew - incomingPositionNew);
                                                 if ((incomingOutgoingDistanceNew < currentShortestDistance) || currentShortestDistance == -1)
                                                 {
-                                                    validPriority = incomingPriorityInside;
-                                                    validOutgoingIdex = i;
-                                                    currentShortestDistance = incomingOutgoingDistanceNew;
+                                                    if (!IsUnRoutedMatch(incomingOffer, outgoingOfferPre, material))
+                                                    {
+                                                        validPriority = incomingPriorityInside;
+                                                        validOutgoingIdex = i;
+                                                        currentShortestDistance = incomingOutgoingDistanceNew;
+                                                    }
                                                 }
                                             }
                                             // NON-STOCK CODE END
@@ -433,9 +536,12 @@ namespace RealConstruction.CustomManager
                                                 incomingOutgoingDistanceNew = Vector3.SqrMagnitude(outgoingPositionNew - incomingPositionNew);
                                                 if ((incomingOutgoingDistanceNew < currentShortestDistance) || currentShortestDistance == -1)
                                                 {
-                                                    validPriority = outgoingPriorityInside;
-                                                    validIncomingIdex = j;
-                                                    currentShortestDistance = incomingOutgoingDistanceNew;
+                                                    if (!IsUnRoutedMatch(incomingOfferPre, outgoingOffer, material))
+                                                    {
+                                                        validPriority = outgoingPriorityInside;
+                                                        validIncomingIdex = j;
+                                                        currentShortestDistance = incomingOutgoingDistanceNew;
+                                                    }
                                                 }
                                             }
                                             // NON-STOCK CODE END

@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>..\..\0Harmony.dll</HintPath>
+      <HintPath>..\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>F:\SteamLibrary\steamapps\common\Cities_Skylines\Cities_Data\Managed\Assembly-CSharp.dll</HintPath>
@@ -96,14 +96,14 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "C:\Users\Administrator\Desktop\Other Mod\RealConstruction\RealConstruction\bin\Release\RealConstruction.dll"  "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\RealConstruction.dll"
+    <PostBuildEvent>copy "D:\Mod\RealConstruction\bin\Release\RealConstruction.dll"  "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\RealConstruction.dll"
 rd /q /s "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Locales"
 mkdir "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Locales"
-copy "C:\Users\Administrator\Desktop\Other Mod\RealConstruction\RealConstruction\Locales\*.txt" "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Locales"
-copy "C:\Users\Administrator\Desktop\Other Mod\RealConstruction\RealConstruction\bin\Release\0Harmony.dll"  "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\0Harmony.dll"
+copy "D:\Mod\RealConstruction\Locales\*.txt" "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Locales"
+copy "D:\Mod\RealConstruction\bin\Release\0Harmony.dll"  "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\0Harmony.dll"
 rd /q /s "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"
 mkdir "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"
-copy "C:\Users\Administrator\Desktop\Other Mod\RealConstruction\RealConstruction\Icon\*.png" "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"</PostBuildEvent>
+copy "D:\Mod\RealConstruction\Icon\*.png" "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

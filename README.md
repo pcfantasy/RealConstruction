@@ -51,8 +51,8 @@
 	The mod have tier priority service functions as well. Meaning certain facilities will always get resources priority over others. While some will required resources at critical needs. An example, a park may get operating resources before a commercial building because its resource level is at zero while the commercial building may have a low amount of resource.
 
 * Part IV:
-	The mod require another mod called resource building. This facility is an absolute must or else the city will not function without it. This facility at default can spawn up to 10 vehicles at a time. It produce both the construction and operation resources to facilitate growth in the village, town, etc. **Do keep in mind the ocerall RealCity mods aim to function under a population of 66,000. Anything higher might begin to negate other aspect of the monds itself.**
-		* Sub Part IV: Tenatively the author will create a function(s), which will dicdate if said facility needs to spawn more than ten vehicles in order to accomidate increasing orders that may surpass the default vehicles amount.
+	The mod require another mod called resource building. This facility is an absolute must or else the city will not function without it. This facility at default can spawn up to 10 vehicles at a time. It produce both the construction and operation resources to facilitate growth in the village, town, etc. **Do keep in mind the ocerall RealCity mods aim to function under a population of 66,000. Anything higher might begin to negate other aspect of the monds itself.** 
+	* Sub Part IV: Tenatively the author will create a function(s), which will dicdate if said facility needs to spawn more than ten vehicles in order to accomidate increasing orders that may surpass the default vehicles amount.
 
 
 *Author and collaborators:*

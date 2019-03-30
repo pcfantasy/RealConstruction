@@ -38,6 +38,21 @@
 
 * RealConstructionThreading - provide instruction for cpu threading usage
 
+*Mod Description:*
+---
+
+Part I <br This mod major point is to ensure that any facilities; be it residential, commercial, unique, etc. Ensure that each item recieved materials to be constructed or the item will not be available for use. Also certain facilities do required materials in order to remain at peak efficient service(s). If they do not, the facility will remain active but will perfomed assign duty or duties poorly.
+/>
+
+Part II <br Due to the game engine limitation certain facilities are exampt from the needs of requiring resources for both construction and operation. Majority of this facilities does not required road connection in order to function. Thus because this mod heavely depends on the roads to deliver resources throughout and about, these facilities are being exempt.
+/>
+
+Part III <br The mod have tier priority service functions as well. Meaning certain facilities will always get resources priority over others. While some will required resources at critical needs. An example, a park may get operating resources before a commercial building because its resource level is at zero while the commercial building may have a low amount of resource.
+/>
+
+Part IV <br The mod require another mod called resource building. This facility is an absolute must or else the city will not function without it. This facility at default can spawn up to 10 vehicles at a time. It produce both the construction and operation resources to facilitate growth in the village, town, etc. **Do keep in mind the ocerall RealCity mods aim to function under a population of 66,000. Anything higher might begin to negate other aspect of the monds itself.**
+* Tenatively the author will create a function(s), which will dicdate if said facility needs to spawn more than ten vehicles in order to accomidate increasing orders that may surpass the default vehicles amount.
+
 
 *Author and collaborators:*
 ---

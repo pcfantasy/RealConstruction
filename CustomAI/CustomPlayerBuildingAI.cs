@@ -47,6 +47,14 @@ namespace RealConstruction.CustomAI
             {
                 return false;
             }
+            else if (buildingData.Info.m_class.m_service == ItemClass.Service.Beautification)
+            {
+                return false;
+            }
+            else if ((buildingData.Info.m_class.m_service == ItemClass.Service.PlayerIndustry) && !(buildingData.Info.m_buildingAI is MainIndustryBuildingAI))
+            {
+                return false;
+            }
             else
             {
                 PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
@@ -98,6 +106,10 @@ namespace RealConstruction.CustomAI
                         }
                     }
                 }
+            }
+            else
+            {
+                MainDataStore.isBuildingLackOfResource[buildingID] = false;
             }
 
             if (CanConstruction(buildingID, ref buildingData))

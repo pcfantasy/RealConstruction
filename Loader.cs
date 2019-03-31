@@ -100,6 +100,7 @@ namespace RealConstruction
                 if (RealConstruction.IsEnabled)
                 {
                     RevertDetour();
+                    HarmonyRevertDetour();
                     RealConstructionThreading.isFirstTime = true;
                     if (Loader.isGuiRunning)
                     {

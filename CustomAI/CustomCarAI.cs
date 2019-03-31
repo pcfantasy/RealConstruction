@@ -18,7 +18,8 @@ namespace RealConstruction.CustomAI
         {
             switch (material)
             {
-                case (TransferManager.TransferReason)112:
+                case (TransferManager.TransferReason)110:
+                case (TransferManager.TransferReason)111:
                     return true;
                 default: return false;
             }

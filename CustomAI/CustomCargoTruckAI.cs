@@ -142,17 +142,35 @@ namespace RealConstruction.CustomAI
         public static float GetResourcePrice(TransferManager.TransferReason material)
         {
             //Need to sync with RealCity mod
-            switch (material)
+            if (RealConstructionThreading.reduceVehicle)
             {
-                case TransferManager.TransferReason.Petrol:
-                    return 3f;
-                case TransferManager.TransferReason.Food:
-                    return 1.5f;
-                case TransferManager.TransferReason.Lumber:
-                    return 2f;
-                case TransferManager.TransferReason.Coal:
-                    return 2.5f;
-                default: DebugLog.LogToFileOnly("Error: Unknow material in realconstruction = " + material.ToString()); return 0f;
+                switch (material)
+                {
+                    case TransferManager.TransferReason.Petrol:
+                        return 3f;
+                    case TransferManager.TransferReason.Food:
+                        return 1.5f;
+                    case TransferManager.TransferReason.Lumber:
+                        return 2f;
+                    case TransferManager.TransferReason.Coal:
+                        return 2.5f;
+                    default: DebugLog.LogToFileOnly("Error: Unknow material in RealConstruction = " + material.ToString()); return 0f;
+                }
+            }
+            else
+            {
+                switch (material)
+                {
+                    case TransferManager.TransferReason.Petrol:
+                        return 3f * RealConstructionThreading.reduceCargoDiv;
+                    case TransferManager.TransferReason.Food:
+                        return 1.5f * RealConstructionThreading.reduceCargoDiv;
+                    case TransferManager.TransferReason.Lumber:
+                        return 2f * RealConstructionThreading.reduceCargoDiv;
+                    case TransferManager.TransferReason.Coal:
+                        return 2.5f * RealConstructionThreading.reduceCargoDiv;
+                    default: DebugLog.LogToFileOnly("Error: Unknow material in RealConstruction = " + material.ToString()); return 0f;
+                }
             }
         }
 

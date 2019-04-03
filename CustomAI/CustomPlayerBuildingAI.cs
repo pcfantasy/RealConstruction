@@ -51,10 +51,6 @@ namespace RealConstruction.CustomAI
             {
                 return false;
             }
-            else if ((buildingData.Info.m_class.m_service == ItemClass.Service.PlayerIndustry) && !(buildingData.Info.m_buildingAI is MainIndustryBuildingAI))
-            {
-                return false;
-            }
             else
             {
                 PlayerBuildingAI AI = buildingData.Info.m_buildingAI as PlayerBuildingAI;
@@ -89,7 +85,33 @@ namespace RealConstruction.CustomAI
                 if (MainDataStore.operationResourceBuffer[buildingID] > 100)
                 {
                     MainDataStore.isBuildingLackOfResource[buildingID] = false;
-                    MainDataStore.operationResourceBuffer[buildingID] -= 100;
+                    if (buildingData.Info.m_class.m_service == ItemClass.Service.PlayerIndustry)
+                    {
+                        if (buildingData.Info.m_class.m_subService == ItemClass.SubService.PlayerIndustryFarming)
+                        {
+                            MainDataStore.operationResourceBuffer[buildingID] -= 10;
+                        }
+                        else if (buildingData.Info.m_class.m_subService == ItemClass.SubService.PlayerIndustryForestry)
+                        {
+                            MainDataStore.operationResourceBuffer[buildingID] -= 20;
+                        }
+                        else if (buildingData.Info.m_class.m_subService == ItemClass.SubService.PlayerIndustryOre)
+                        {
+                            MainDataStore.operationResourceBuffer[buildingID] -= 30;
+                        }
+                        else if (buildingData.Info.m_class.m_subService == ItemClass.SubService.PlayerIndustryOil)
+                        {
+                            MainDataStore.operationResourceBuffer[buildingID] -= 40;
+                        }
+                        else
+                        {
+                            MainDataStore.operationResourceBuffer[buildingID] -= 50;
+                        }
+                    }
+                    else
+                    {
+                        MainDataStore.operationResourceBuffer[buildingID] -= 100;
+                    }
                     Notification.Problem problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem.NoResources);
                     buildingData.m_problems = problem;
                 }

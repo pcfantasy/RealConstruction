@@ -21,6 +21,15 @@ namespace RealConstruction
     public class RealConstructionThreading : ThreadingExtensionBase
     {
         public static bool isFirstTime = true;
+        public static FieldInfo _reduceVehicle = null;
+        public static Assembly RealCity = null;
+        public static Type RealCityClass = null;
+        public static object RealCityInstance = null;
+        public static bool reduceVehicle = false;
+        public static Type MainDataStoreClass = null;
+        public static object MainDataStoreInstance = null;
+        public static FieldInfo _reduceCargoDiv = null;
+        public static int reduceCargoDiv = 1;
 
         public override void OnBeforeSimulationFrame()
         {
@@ -52,6 +61,28 @@ namespace RealConstruction
                         WarehouseButton.refeshOnce = true;
                         WareHouseUI.refeshOnce = true;
                         PlayerBuildingButton.refeshOnce = true;
+                        if (!isFirstTime)
+                        {
+                            if (Loader.isRealCityRunning)
+                            {
+                                reduceVehicle = (bool)_reduceVehicle.GetValue(RealCityInstance);
+                                if (reduceVehicle)
+                                {
+                                    reduceCargoDiv = (int)_reduceCargoDiv.GetValue(MainDataStoreInstance);
+                                }
+                                else
+                                {
+                                    reduceCargoDiv = 1;
+                                }
+                            }
+                            else
+                            {
+                                reduceVehicle = false;
+                                reduceCargoDiv = 1;
+                            }
+                            //DebugLog.LogToFileOnly("Info: reduceVehicle = " + reduceVehicle.ToString());
+                            //DebugLog.LogToFileOnly("Info: reduceCargoDiv = " + reduceCargoDiv.ToString());
+                        }
                     }
                     //CustomSimulationStepImpl for 110 111 TransferReason
                     CustomTransferManager.CustomSimulationStepImpl();
@@ -67,12 +98,18 @@ namespace RealConstruction
 
             if (Loader.isRealCityRunning)
             {
-                Assembly as1 = Assembly.Load("RealCity");
+                RealCity = Assembly.Load("RealCity");
+                RealCityClass = RealCity.GetType("RealCity.RealCity");
+                RealCityInstance = Activator.CreateInstance(RealCityClass);
+                _reduceVehicle = RealCityClass.GetField("reduceVehicle", BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
+                MainDataStoreClass = RealCity.GetType("RealCity.Util.MainDataStore");
+                MainDataStoreInstance = Activator.CreateInstance(MainDataStoreClass);
+                _reduceCargoDiv = MainDataStoreClass.GetField("reduceCargoDiv", BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
                 //1
                 DebugLog.LogToFileOnly("Detour RealCityCargoTruckAI::CargoTruckAIArriveAtTargetForRealConstruction calls");
                 try
                 {
-                    Loader.Detours.Add(new Loader.Detour(as1.GetType("RealCity.CustomAI.RealCityCargoTruckAI").GetMethod("CargoTruckAIArriveAtTargetForRealConstruction", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null),
+                    Loader.Detours.Add(new Loader.Detour(RealCity.GetType("RealCity.CustomAI.RealCityCargoTruckAI").GetMethod("CargoTruckAIArriveAtTargetForRealConstruction", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null),
                                            typeof(CustomCargoTruckAI).GetMethod("CargoTruckAIArriveAtTargetForRealConstruction", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null)));
                 }
                 catch (Exception)

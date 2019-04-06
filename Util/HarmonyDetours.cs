@@ -71,7 +71,7 @@ namespace RealConstruction.Util
             harmony.ConditionalPatch(carAIPathfindSuccess,
                 null,
                 new HarmonyMethod(carAIPathfindSuccessPostFix));
-            Loader.HarmonyDetourInited = true;
+            Loader.HarmonyDetourFailed = false;
             DebugLog.LogToFileOnly("Harmony patches applied");
         }
 
@@ -107,7 +107,6 @@ namespace RealConstruction.Util
             harmony.ConditionalUnPatch(carAIPathfindSuccess,
                 null,
                 new HarmonyMethod(carAIPathfindSuccessPostFix));
-            Loader.HarmonyDetourInited = false;
             DebugLog.LogToFileOnly("Harmony patches DeApplied");
         }
     }

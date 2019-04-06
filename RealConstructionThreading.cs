@@ -131,7 +131,7 @@ namespace RealConstruction
 
         public void CheckDetour()
         {
-            if (isFirstTime && Loader.DetourInited)
+            if (isFirstTime && Loader.DetourInited && Loader.HarmonyDetourInited)
             {
                 isFirstTime = false;
                 DetourAfterLoad();
@@ -166,7 +166,7 @@ namespace RealConstruction
                         UIView.library.ShowModal<ExceptionPanel>("ExceptionPanel").SetMessage("Incompatibility Issue", text, true);
                     }
 
-                    if (!Loader.HarmonyDetourInited)
+                    if (Loader.HarmonyDetourFailed)
                     {
                         string error = "RealConstruction HarmonyDetourInit is failed, Send RealConstruction.txt to Author.";
                         DebugLog.LogToFileOnly(error);

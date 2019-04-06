@@ -34,6 +34,7 @@ namespace RealConstruction
         public static List<Detour> Detours { get; set; }
         public static bool DetourInited = false;
         public static bool HarmonyDetourInited = false;
+        public static bool HarmonyDetourFailed = true;
         public static bool isGuiRunning = false;
         public static bool isRealCityRunning = false;
         public static bool isRealGasStationRunning = false;
@@ -339,6 +340,7 @@ namespace RealConstruction
             {
                 DebugLog.LogToFileOnly("Init harmony detours");
                 HarmonyDetours.Apply();
+                HarmonyDetourInited = true;
             }
         }
 
@@ -348,6 +350,8 @@ namespace RealConstruction
             {
                 DebugLog.LogToFileOnly("Revert harmony detours");
                 HarmonyDetours.DeApply();
+                HarmonyDetourFailed = true;
+                HarmonyDetourInited = false;
             }
         }
 

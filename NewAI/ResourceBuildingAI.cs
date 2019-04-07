@@ -23,24 +23,25 @@ namespace RealConstruction.NewAI
 
         public static void ProcessCityResourceDepartmentBuildingGoods(ushort buildingID, ref Building buildingData)
         {
+            int materialConsumption = 40 / RealConstructionThreading.reduceCargoDiv;
             if (buildingData.m_fireIntensity == 0 && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
             {
-                if (MainDataStore.lumberBuffer[buildingID] > 40 && MainDataStore.coalBuffer[buildingID] > 40 && MainDataStore.constructionResourceBuffer[buildingID] < 64000)
+                if (MainDataStore.lumberBuffer[buildingID] > materialConsumption && MainDataStore.coalBuffer[buildingID] > materialConsumption && MainDataStore.constructionResourceBuffer[buildingID] < 64000)
                 {
                     if (MainDataStore.resourceCategory[buildingID] == 0 || MainDataStore.resourceCategory[buildingID] == 1)
                     {
-                        MainDataStore.lumberBuffer[buildingID] -= 40;
-                        MainDataStore.coalBuffer[buildingID] -= 40;
+                        MainDataStore.lumberBuffer[buildingID] -= (ushort)materialConsumption;
+                        MainDataStore.coalBuffer[buildingID] -= (ushort)materialConsumption;
                         MainDataStore.constructionResourceBuffer[buildingID] += 800;
                     }
                 }
 
-                if (MainDataStore.petrolBuffer[buildingID] > 40 && MainDataStore.foodBuffer[buildingID] > 40 && MainDataStore.operationResourceBuffer[buildingID] < 64000)
+                if (MainDataStore.petrolBuffer[buildingID] > materialConsumption && MainDataStore.foodBuffer[buildingID] > materialConsumption && MainDataStore.operationResourceBuffer[buildingID] < 64000)
                 {
                     if (MainDataStore.resourceCategory[buildingID] == 0 || MainDataStore.resourceCategory[buildingID] == 2)
                     {
-                        MainDataStore.petrolBuffer[buildingID] -= 40;
-                        MainDataStore.foodBuffer[buildingID] -= 40;
+                        MainDataStore.petrolBuffer[buildingID] -= (ushort)materialConsumption;
+                        MainDataStore.foodBuffer[buildingID] -= (ushort)materialConsumption;
                         MainDataStore.operationResourceBuffer[buildingID] += 800;
                     }
                 }

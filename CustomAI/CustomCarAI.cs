@@ -36,7 +36,7 @@ namespace RealConstruction.CustomAI
                         if (data.m_sourceBuilding != 0)
                         {
                             bool alreadyHaveFailedBuilding = false;
-                            for (int j = 0; j < MainDataStore.canNotConnectedBuildingIDCount[vehicleID]; j++)
+                            for (int j = 0; j < MainDataStore.canNotConnectedBuildingIDCount[data.m_targetBuilding]; j++)
                             {
                                 if (MainDataStore.canNotConnectedBuildingID[data.m_targetBuilding, j] == data.m_sourceBuilding)
                                 {
@@ -49,7 +49,7 @@ namespace RealConstruction.CustomAI
                             {
                                 if (MainDataStore.canNotConnectedBuildingIDCount[data.m_targetBuilding] <= 8)
                                 {
-                                    MainDataStore.canNotConnectedBuildingID[data.m_targetBuilding, MainDataStore.canNotConnectedBuildingIDCount[vehicleID]] = data.m_sourceBuilding;
+                                    MainDataStore.canNotConnectedBuildingID[data.m_targetBuilding, MainDataStore.canNotConnectedBuildingIDCount[data.m_targetBuilding]] = data.m_sourceBuilding;
                                     MainDataStore.canNotConnectedBuildingIDCount[data.m_targetBuilding]++;
                                 }
                                 else
@@ -76,14 +76,12 @@ namespace RealConstruction.CustomAI
                 {
                     if (MainDataStore.canNotConnectedBuildingIDCount[data.m_targetBuilding] != 0)
                     {
-                        if (MainDataStore.refreshCanNotConnectedBuildingIDCount[data.m_targetBuilding] > 32)
+                        if (MainDataStore.refreshCanNotConnectedBuildingIDCount[data.m_targetBuilding] > 64)
                         {
-                            if (data.m_sourceBuilding != 0)
-                            {
-                                //After several times we can refresh fail building list.
-                                MainDataStore.canNotConnectedBuildingIDCount[data.m_targetBuilding]--;
-                                MainDataStore.canNotConnectedBuildingID[data.m_targetBuilding, MainDataStore.canNotConnectedBuildingIDCount[data.m_targetBuilding]] = 0;
-                            }
+                            //After several times we can refresh fail building list.
+                            MainDataStore.canNotConnectedBuildingIDCount[data.m_targetBuilding]--;
+                            MainDataStore.canNotConnectedBuildingID[data.m_targetBuilding, MainDataStore.canNotConnectedBuildingIDCount[data.m_targetBuilding]] = 0;
+                            MainDataStore.refreshCanNotConnectedBuildingIDCount[data.m_targetBuilding] = 0;
                         }
                         else
                         {

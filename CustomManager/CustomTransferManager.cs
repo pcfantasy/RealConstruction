@@ -265,7 +265,6 @@ namespace RealConstruction.CustomManager
             return 0;
         }
 
-
         private static void MatchOffers(TransferReason material)
         {
             if (!_init)

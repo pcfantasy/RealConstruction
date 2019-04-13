@@ -99,6 +99,31 @@ namespace RealConstruction.CustomManager
             }
         }
 
+        public static void ForgetFailedBuilding(ushort targetBuilding, int idex)
+        {
+            if (RealConstruction.fixUnRouteTransfer)
+            {
+                if (targetBuilding != 0)
+                {
+                    if (MainDataStore.canNotConnectedBuildingIDCount[targetBuilding] != 0)
+                    {
+                        if (MainDataStore.refreshCanNotConnectedBuildingIDCount[targetBuilding] > 64)
+                        {
+                            //After several times we can refresh fail building list.
+                            MainDataStore.canNotConnectedBuildingIDCount[targetBuilding]--;
+                            MainDataStore.canNotConnectedBuildingID[targetBuilding, idex] = MainDataStore.canNotConnectedBuildingID[targetBuilding, MainDataStore.canNotConnectedBuildingIDCount[targetBuilding]];
+                            MainDataStore.canNotConnectedBuildingID[targetBuilding, MainDataStore.canNotConnectedBuildingIDCount[targetBuilding]] = 0;
+                            MainDataStore.refreshCanNotConnectedBuildingIDCount[targetBuilding] = 0;
+                        }
+                        else
+                        {
+                            MainDataStore.refreshCanNotConnectedBuildingIDCount[targetBuilding]++;
+                        }
+                    }
+                }
+            }
+        }
+
         private static bool IsUnRoutedMatch(TransferOffer offerIn, TransferOffer offerOut, TransferReason material)
         {
             if (!RealConstruction.fixUnRouteTransfer)
@@ -122,6 +147,7 @@ namespace RealConstruction.CustomManager
                     {
                         if (MainDataStore.canNotConnectedBuildingID[targetBuilding, j] == sourceBuilding)
                         {
+                            ForgetFailedBuilding(targetBuilding, j);
                             return true;
                         }
                     }
@@ -141,6 +167,7 @@ namespace RealConstruction.CustomManager
                     {
                         if (MainDataStore.canNotConnectedBuildingID[targetBuilding, j] == sourceBuilding)
                         {
+                            ForgetFailedBuilding(targetBuilding, j);
                             return true;
                         }
                     }
@@ -170,6 +197,7 @@ namespace RealConstruction.CustomManager
                     {
                         if (MainDataStore.canNotConnectedBuildingID[targetBuilding, j] == sourceBuilding)
                         {
+                            ForgetFailedBuilding(targetBuilding, j);
                             return true;
                         }
                     }
@@ -189,6 +217,7 @@ namespace RealConstruction.CustomManager
                     {
                         if (MainDataStore.canNotConnectedBuildingID[targetBuilding, j] == sourceBuilding)
                         {
+                            ForgetFailedBuilding(targetBuilding, j);
                             return true;
                         }
                     }

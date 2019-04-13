@@ -67,34 +67,5 @@ namespace RealConstruction.CustomAI
                 }
             }
         }
-
-        public static void ForgetFailedBuilding(ushort vehicleID, ref Vehicle data)
-        {
-            if (RealConstruction.fixUnRouteTransfer)
-            {
-                if (data.m_targetBuilding != 0)
-                {
-                    if (MainDataStore.canNotConnectedBuildingIDCount[data.m_targetBuilding] != 0)
-                    {
-                        if (MainDataStore.refreshCanNotConnectedBuildingIDCount[data.m_targetBuilding] > 64)
-                        {
-                            //After several times we can refresh fail building list.
-                            MainDataStore.canNotConnectedBuildingIDCount[data.m_targetBuilding]--;
-                            MainDataStore.canNotConnectedBuildingID[data.m_targetBuilding, MainDataStore.canNotConnectedBuildingIDCount[data.m_targetBuilding]] = 0;
-                            MainDataStore.refreshCanNotConnectedBuildingIDCount[data.m_targetBuilding] = 0;
-                        }
-                        else
-                        {
-                            MainDataStore.refreshCanNotConnectedBuildingIDCount[data.m_targetBuilding]++;
-                        }
-                    }
-                }
-            }
-        }
-
-        public static void CarAIPathfindSuccessPostFix(ushort vehicleID, ref Vehicle data)
-        {
-            ForgetFailedBuilding(vehicleID, ref data);
-        }
     }
 }

@@ -65,12 +65,6 @@ namespace RealConstruction.Util
             harmony.ConditionalPatch(carAIPathfindFailure,
                 null,
                 new HarmonyMethod(carAIPathfindFailurePostFix));
-            //5
-            var carAIPathfindSuccess = typeof(CarAI).GetMethod("PathfindSuccess", BindingFlags.NonPublic | BindingFlags.Instance);
-            var carAIPathfindSuccessPostFix = typeof(CustomCarAI).GetMethod("CarAIPathfindSuccessPostFix");
-            harmony.ConditionalPatch(carAIPathfindSuccess,
-                null,
-                new HarmonyMethod(carAIPathfindSuccessPostFix));
             Loader.HarmonyDetourFailed = false;
             DebugLog.LogToFileOnly("Harmony patches applied");
         }
@@ -101,12 +95,6 @@ namespace RealConstruction.Util
             harmony.ConditionalUnPatch(carAIPathfindFailure,
                 null,
                 new HarmonyMethod(carAIPathfindFailurePostFix));
-            //5
-            var carAIPathfindSuccess = typeof(CarAI).GetMethod("PathfindSuccess", BindingFlags.NonPublic | BindingFlags.Instance);
-            var carAIPathfindSuccessPostFix = typeof(CustomCarAI).GetMethod("CarAIPathfindSuccessPostFix");
-            harmony.ConditionalUnPatch(carAIPathfindSuccess,
-                null,
-                new HarmonyMethod(carAIPathfindSuccessPostFix));
             DebugLog.LogToFileOnly("Harmony patches DeApplied");
         }
     }

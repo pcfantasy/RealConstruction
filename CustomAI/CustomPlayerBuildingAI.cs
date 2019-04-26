@@ -75,6 +75,15 @@ namespace RealConstruction.CustomAI
             }
         }
 
+        public static bool CanRemoveNoResource(ushort buildingID, ref Building buildingData)
+        {
+            if (buildingData.Info.m_buildingAI is ProcessingFacilityAI || buildingData.Info.m_buildingAI is UniqueFactoryAI || buildingData.Info.m_class.m_service == ItemClass.Service.Electricity || buildingData.Info.m_class.m_service == ItemClass.Service.Water || buildingData.Info.m_buildingAI is ShelterAI)
+            {
+                return false;
+            }
+            return true;
+        }
+
         // PlayerBuildingAI
         public static void PlayerBuildingAISimulationStepPostFix(ushort buildingID, ref Building buildingData, ref Building.Frame frameData)
         {
@@ -112,8 +121,12 @@ namespace RealConstruction.CustomAI
                     {
                         MainDataStore.operationResourceBuffer[buildingID] -= 100;
                     }
-                    Notification.Problem problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem.NoResources);
-                    buildingData.m_problems = problem;
+
+                    if (CanRemoveNoResource(buildingID, ref buildingData))
+                    {
+                        Notification.Problem problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                        buildingData.m_problems = problem;
+                    }
                 }
                 else
                 {
@@ -127,10 +140,23 @@ namespace RealConstruction.CustomAI
                             buildingData.m_problems = problem;
                         }
                     }
+                    else
+                    {
+                        if (CanRemoveNoResource(buildingID, ref buildingData))
+                        {
+                            Notification.Problem problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                            buildingData.m_problems = problem;
+                        }
+                    }
                 }
             }
             else
             {
+                if (CanRemoveNoResource(buildingID, ref buildingData))
+                {
+                    Notification.Problem problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                    buildingData.m_problems = problem;
+                }
                 MainDataStore.isBuildingLackOfResource[buildingID] = false;
             }
 

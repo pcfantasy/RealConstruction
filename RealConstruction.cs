@@ -61,7 +61,7 @@ namespace RealConstruction
                 StreamReader sr = new StreamReader(fs);
                 string strLine = sr.ReadLine();
 
-                if (strLine == "true")
+                if (strLine == "True")
                 {
                     debugMode = true;
                 }

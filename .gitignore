@@ -3,3 +3,8 @@
 .vs/RealConstruction/v14/.suo
 *.cache
 *.xml
+.vs/RealConstruction/v16/.suo
+.vs/RealConstruction/v16/Server/sqlite3/db.lock
+.vs/RealConstruction/v16/Server/sqlite3/storage.ide
+.vs/RealConstruction/v16/Server/sqlite3/storage.ide-shm
+.vs/RealConstruction/v16/Server/sqlite3/storage.ide-wal

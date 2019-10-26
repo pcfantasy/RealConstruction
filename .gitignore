@@ -8,3 +8,7 @@
 .vs/RealConstruction/v16/Server/sqlite3/storage.ide
 .vs/RealConstruction/v16/Server/sqlite3/storage.ide-shm
 .vs/RealConstruction/v16/Server/sqlite3/storage.ide-wal
+*.json
+*.props
+*.targets
+*.CopyComplete

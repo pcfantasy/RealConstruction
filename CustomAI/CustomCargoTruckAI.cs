@@ -14,26 +14,8 @@ namespace RealConstruction.CustomAI
 {
     public class CustomCargoTruckAI: CargoTruckAI
     {
-        public void CargoTruckAIArriveAtTargetForRealGasStationPre(ushort vehicleID, ref Vehicle data)
-        {
-            DebugLog.LogToFileOnly("Error: Should be detour by RealGasStation @ CargoTruckAIArriveAtTargetForRealGasStationPre");
-        }
-
-        public void CargoTruckAIArriveAtTargetForRealGasStationPost(ushort vehicleID, ref Vehicle data)
-        {
-            DebugLog.LogToFileOnly("Error: Should be detour by RealGasStation @ CargoTruckAIArriveAtTargetForRealGasStationPost");
-        }
-
         private bool ArriveAtTarget(ushort vehicleID, ref Vehicle data)
         {
-            // NON-STOCK CODE START
-            // 112 means fuel demand, see more in RealGasStation mod
-            if (data.m_transferType == 112 && Loader.isRealGasStationRunning)
-            {
-                CargoTruckAIArriveAtTargetForRealGasStationPre(vehicleID, ref data);
-                return true;
-            }
-            /// NON-STOCK CODE END ///
             if (data.m_targetBuilding == 0)
             {
                 return true;
@@ -43,10 +25,6 @@ namespace RealConstruction.CustomAI
             {
                 // NON-STOCK CODE START
                 CargoTruckAIArriveAtTargetForRealConstruction(vehicleID, ref data);
-                if (Loader.isRealGasStationRunning)
-                {
-                    CargoTruckAIArriveAtTargetForRealGasStationPost(vehicleID, ref data);
-                }
                 /// NON-STOCK CODE END ///
                 num = (int)data.m_transferSize;
             }
@@ -116,7 +94,6 @@ namespace RealConstruction.CustomAI
             return false;
         }
 
-
         public static void CargoTruckAISetSourceForRealConstruction(ushort vehicleID, ref Vehicle data, ushort sourceBuilding)
         {
             CargoTruckAI AI = data.Info.m_vehicleAI as CargoTruckAI;
@@ -174,7 +151,7 @@ namespace RealConstruction.CustomAI
             }
         }
 
-        public void CargoTruckAIArriveAtTargetForRealConstruction(ushort vehicleID, ref Vehicle vehicleData)
+        public static void CargoTruckAIArriveAtTargetForRealConstruction(ushort vehicleID, ref Vehicle vehicleData)
         {
             BuildingManager instance = Singleton<BuildingManager>.instance;
             if (vehicleData.m_targetBuilding != 0)

@@ -23,6 +23,7 @@ namespace RealConstruction
         public static bool isFirstTime = true;
         public static FieldInfo _reduceVehicle = null;
         public static Assembly RealCity = null;
+        public static Assembly RealGasStation = null;
         public static Type RealCityClass = null;
         public static object RealCityInstance = null;
         public static bool reduceVehicle = false;
@@ -105,12 +106,33 @@ namespace RealConstruction
                 MainDataStoreClass = RealCity.GetType("RealCity.Util.MainDataStore");
                 MainDataStoreInstance = Activator.CreateInstance(MainDataStoreClass);
                 _reduceCargoDiv = MainDataStoreClass.GetField("reduceCargoDiv", BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
+            }
+
+
+            if (Loader.isRealGasStationRunning)
+            {
+                RealGasStation = Assembly.Load("RealGasStation");
+                //1
+                DebugLog.LogToFileOnly("Detour CustomCargoTruckAI::CargoTruckAIArriveAtTargetForRealConstruction calls");
+                try
+                {
+                    Loader.Detours.Add(new Loader.Detour(RealGasStation.GetType("RealGasStation.CustomAI.CustomCargoTruckAI").GetMethod("CargoTruckAIArriveAtTargetForRealConstruction", BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType()}, null),
+                                           typeof(CustomCargoTruckAI).GetMethod("CargoTruckAIArriveAtTargetForRealConstruction", BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType()}, null)));
+                }
+                catch (Exception)
+                {
+                    DebugLog.LogToFileOnly("Could not detour CustomCargoTruckAI::CargoTruckAIArriveAtTargetForRealConstruction");
+                    detourFailed = true;
+                }
+            }
+            else if (Loader.isRealCityRunning)
+            {
                 //1
                 DebugLog.LogToFileOnly("Detour RealCityCargoTruckAI::CargoTruckAIArriveAtTargetForRealConstruction calls");
                 try
                 {
-                    Loader.Detours.Add(new Loader.Detour(RealCity.GetType("RealCity.CustomAI.RealCityCargoTruckAI").GetMethod("CargoTruckAIArriveAtTargetForRealConstruction", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null),
-                                           typeof(CustomCargoTruckAI).GetMethod("CargoTruckAIArriveAtTargetForRealConstruction", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null)));
+                    Loader.Detours.Add(new Loader.Detour(RealCity.GetType("RealCity.CustomAI.RealCityCargoTruckAI").GetMethod("CargoTruckAIArriveAtTargetForRealConstruction", BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null),
+                                           typeof(CustomCargoTruckAI).GetMethod("CargoTruckAIArriveAtTargetForRealConstruction", BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null)));
                 }
                 catch (Exception)
                 {

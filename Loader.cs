@@ -403,9 +403,9 @@ namespace RealConstruction
 
                 isRealCityRunning = CheckRealCityIsLoaded();
                 isRealGasStationRunning = CheckRealGasStationIsLoaded();
-                if (isRealCityRunning)
+                if (isRealCityRunning || isRealGasStationRunning)
                 {
-                    DebugLog.LogToFileOnly("realCity is Running");
+                    DebugLog.LogToFileOnly("RealCity or RealGasStation is Running");
                 }
                 else
                 {

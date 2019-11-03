@@ -68,6 +68,7 @@
     <Compile Include="NewAI\ConstructionAI.cs" />
     <Compile Include="NewAI\OperationAI.cs" />
     <Compile Include="NewAI\ResourceBuildingAI.cs" />
+    <Compile Include="NewData\CustomDistrictPark.cs" />
     <Compile Include="UI\WareHouseUI.cs" />
     <Compile Include="UI\UniqueFactoryUI.cs" />
     <Compile Include="UI\UniqueFactoryButton.cs" />

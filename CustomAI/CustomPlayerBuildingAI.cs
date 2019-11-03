@@ -51,10 +51,6 @@ namespace RealConstruction.CustomAI
             {
                 return false;
             }
-            else if (buildingData.Info.m_buildingAI is MainCampusBuildingAI)
-            {
-                return false;
-            }
             else if (buildingData.Info.m_class.m_service == ItemClass.Service.Beautification)
             {
                 return false;
@@ -77,10 +73,6 @@ namespace RealConstruction.CustomAI
                 return false;
             }
             else if (buildingData.Info.m_buildingAI is CampusBuildingAI)
-            {
-                return false;
-            }
-            else if (buildingData.Info.m_buildingAI is MainCampusBuildingAI)
             {
                 return false;
             }

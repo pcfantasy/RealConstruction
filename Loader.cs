@@ -10,6 +10,7 @@ using System.Reflection;
 using UnityEngine;
 using System.IO;
 using ColossalFramework.Plugins;
+using RealConstruction.NewData;
 
 namespace RealConstruction
 {
@@ -398,6 +399,19 @@ namespace RealConstruction
                 catch (Exception)
                 {
                     DebugLog.LogToFileOnly("Could not detour PlayerBuildingAI::GetBudget");
+                    detourFailed = true;
+                }
+
+                //4
+                DebugLog.LogToFileOnly("Detour CustomDistrictPark::GetAcademicYearProgress calls");
+                try
+                {
+                    Detours.Add(new Detour(typeof(DistrictPark).GetMethod("GetAcademicYearProgress", BindingFlags.Public | BindingFlags.Instance), 
+                                           typeof(CustomDistrictPark).GetMethod("GetAcademicYearProgress", BindingFlags.Public | BindingFlags.Static)));
+                }
+                catch (Exception)
+                {
+                    DebugLog.LogToFileOnly("Could not redirect CustomDistrictPark::GetAcademicYearProgress");
                     detourFailed = true;
                 }
 

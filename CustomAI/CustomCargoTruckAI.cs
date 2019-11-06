@@ -223,7 +223,8 @@ namespace RealConstruction.CustomAI
                                     }
                                     break;
                                 default:
-                                    DebugLog.LogToFileOnly("Error: Unknow m_transferType in realconstruction = " + vehicleData.m_transferType.ToString()); break;
+                                    //DebugLog.LogToFileOnly("Error: Unknow m_transferType in realconstruction = " + vehicleData.m_transferType.ToString()); 
+                                    break;
                             }
                         }
                         else

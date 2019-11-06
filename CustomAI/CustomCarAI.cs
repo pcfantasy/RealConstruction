@@ -53,13 +53,16 @@ namespace RealConstruction.CustomAI
                                     MainDataStore.canNotConnectedBuildingIDCount[data.m_targetBuilding]++;
                                 }
                                 else
-                                { 
-                                    DebugLog.LogToFileOnly("Error: Max canNotConnectedBuildingIDCount 8 reached, Please check your roadnetwork");
-                                    var building1 = Singleton<BuildingManager>.instance.m_buildings.m_buffer[data.m_targetBuilding];
-                                    DebugLog.LogToFileOnly("DebugInfo: building m_class is " + building1.Info.m_class.ToString());
-                                    DebugLog.LogToFileOnly("DebugInfo: building name is " + building1.Info.name.ToString());
-                                    DebugLog.LogToFileOnly("DebugInfo: building id is " + data.m_targetBuilding.ToString());
-                                    DebugLog.LogToFileOnly("Error: Max canNotConnectedBuildingIDCount 8 reached, End");
+                                {
+                                    if (RealConstruction.debugMode)
+                                    {
+                                        DebugLog.LogToFileOnly("Error: Max canNotConnectedBuildingIDCount 8 reached, Please check your roadnetwork");
+                                        var building1 = Singleton<BuildingManager>.instance.m_buildings.m_buffer[data.m_targetBuilding];
+                                        DebugLog.LogToFileOnly("DebugInfo: building m_class is " + building1.Info.m_class.ToString());
+                                        DebugLog.LogToFileOnly("DebugInfo: building name is " + building1.Info.name.ToString());
+                                        DebugLog.LogToFileOnly("DebugInfo: building id is " + data.m_targetBuilding.ToString());
+                                        DebugLog.LogToFileOnly("Error: Max canNotConnectedBuildingIDCount 8 reached, End");
+                                    }
                                 }
                             }
                         }

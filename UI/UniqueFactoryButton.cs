@@ -13,18 +13,21 @@ namespace RealConstruction.UI
     public class UniqueFactoryButton : UIButton
     {
         public static bool refeshOnce = false;
-
-        public static void PlayerBuildingUIToggle()
+        private UIPanel playerBuildingInfo;
+        private UniqueFactoryUI uniqueFactoryUI;
+        private InstanceID BuildingID = InstanceID.Empty;
+        public void PlayerBuildingUIToggle()
         {
-            if (!Loader.uniqueFactoryPanel.isVisible)
+            if (!uniqueFactoryUI.isVisible && (BuildingID != InstanceID.Empty))
             {
                 UniqueFactoryUI.refeshOnce = true;
-                MainDataStore.lastBuildingID = WorldInfoPanel.GetCurrentInstanceID().Building;
-                Loader.uniqueFactoryPanel.Show();
+                uniqueFactoryUI.position = new Vector3(playerBuildingInfo.size.x, playerBuildingInfo.size.y);
+                uniqueFactoryUI.size = new Vector3(playerBuildingInfo.size.x, playerBuildingInfo.size.y);
+                uniqueFactoryUI.Show();
             }
             else
             {
-                Loader.uniqueFactoryPanel.Hide();
+                uniqueFactoryUI.Hide();
             }
         }
 
@@ -43,6 +46,16 @@ namespace RealConstruction.UI
             internalSprite.relativePosition = new Vector3(0, 0);
             internalSprite.width = internalSprite.height = 40f;
             base.size = new Vector2(40f, 40f);
+            //Setup UniqueFactoryUI
+            var buildingWindowGameObject = new GameObject("buildingWindowObject");
+            uniqueFactoryUI = (UniqueFactoryUI)buildingWindowGameObject.AddComponent(typeof(UniqueFactoryUI));
+            playerBuildingInfo = UIView.Find<UIPanel>("(Library) UniqueFactoryWorldInfoPanel");
+            if (playerBuildingInfo == null)
+            {
+                DebugLog.LogToFileOnly("UIPanel not found (update broke the mod!): (Library) UniqueFactoryWorldInfoPanel\nAvailable panels are:\n");
+            }
+            uniqueFactoryUI.transform.parent = playerBuildingInfo.transform;
+            uniqueFactoryUI.baseBuildingWindow = playerBuildingInfo.gameObject.transform.GetComponentInChildren<UniqueFactoryWorldInfoPanel>();
             base.eventClick += delegate (UIComponent component, UIMouseEventParameter eventParam)
             {
                 PlayerBuildingUIToggle();
@@ -51,9 +64,12 @@ namespace RealConstruction.UI
 
         public override void Update()
         {
-            MainDataStore.lastBuildingID = WorldInfoPanel.GetCurrentInstanceID().Building;
             if (Loader.isGuiRunning)
             {
+                if (WorldInfoPanel.GetCurrentInstanceID() != InstanceID.Empty)
+                {
+                    BuildingID = WorldInfoPanel.GetCurrentInstanceID();
+                }
                 base.Show();
             }
             else

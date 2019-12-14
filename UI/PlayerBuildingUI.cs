@@ -290,7 +290,7 @@ namespace RealConstruction.UI
             uint currentFrameIndex = Singleton<SimulationManager>.instance.m_currentFrameIndex;
             uint num2 = currentFrameIndex & 255u;
 
-            if (PlayerBuildingUI.refeshOnce || (MainDataStore.lastBuildingID != WorldInfoPanel.GetCurrentInstanceID().Building))
+            if (refeshOnce || (MainDataStore.lastBuildingID != WorldInfoPanel.GetCurrentInstanceID().Building))
             {
                 if (base.isVisible)
                 {
@@ -330,7 +330,7 @@ namespace RealConstruction.UI
                         construction.text = "";
                         operation.text = "";
                     }
-                    PlayerBuildingUI.refeshOnce = false;
+                    refeshOnce = false;
                     this.BringToFront();
 
                     if (!CustomPlayerBuildingAI.CanOperation(MainDataStore.lastBuildingID, ref buildingData) && !ResourceBuildingAI.IsSpecialBuilding(MainDataStore.lastBuildingID))

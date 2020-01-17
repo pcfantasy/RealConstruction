@@ -66,6 +66,10 @@ namespace RealConstruction.UI
         {
             if (Loader.isGuiRunning)
             {
+                if (WorldInfoPanel.GetCurrentInstanceID() != InstanceID.Empty)
+                {
+                    BuildingID = WorldInfoPanel.GetCurrentInstanceID();
+                }
                 base.Show();
             }
             else

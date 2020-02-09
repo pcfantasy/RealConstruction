@@ -119,19 +119,20 @@ namespace RealConstruction.CustomAI
         public static float GetResourcePrice(TransferManager.TransferReason material)
         {
             //Need to sync with RealCity mod
+            float num = 0f;
             if (RealConstructionThreading.reduceVehicle)
             {
                 switch (material)
                 {
                     case TransferManager.TransferReason.Petrol:
-                        return 3f;
+                        num = 3f; break;
                     case TransferManager.TransferReason.Food:
-                        return 1.5f;
+                        num = 1.5f; break;
                     case TransferManager.TransferReason.Lumber:
-                        return 2f;
+                        num = 2f; break;
                     case TransferManager.TransferReason.Coal:
-                        return 2.5f;
-                    default: DebugLog.LogToFileOnly("Error: Unknow material in RealConstruction = " + material.ToString()); return 0f;
+                        num = 2.5f; break;
+                    default: DebugLog.LogToFileOnly("Error: Unknow material in RealConstruction = " + material.ToString()); num = 0f; break;
                 }
             }
             else
@@ -139,16 +140,17 @@ namespace RealConstruction.CustomAI
                 switch (material)
                 {
                     case TransferManager.TransferReason.Petrol:
-                        return 3f * RealConstructionThreading.reduceCargoDiv;
+                        num = 3f * RealConstructionThreading.reduceCargoDiv; break;
                     case TransferManager.TransferReason.Food:
-                        return 1.5f * RealConstructionThreading.reduceCargoDiv;
+                        num = 1.5f * RealConstructionThreading.reduceCargoDiv; break;
                     case TransferManager.TransferReason.Lumber:
-                        return 2f * RealConstructionThreading.reduceCargoDiv;
+                        num = 2f * RealConstructionThreading.reduceCargoDiv; break;
                     case TransferManager.TransferReason.Coal:
-                        return 2.5f * RealConstructionThreading.reduceCargoDiv;
-                    default: DebugLog.LogToFileOnly("Error: Unknow material in RealConstruction = " + material.ToString()); return 0f;
+                        num = 2.5f * RealConstructionThreading.reduceCargoDiv; break;
+                    default: DebugLog.LogToFileOnly("Error: Unknow material in RealConstruction = " + material.ToString()); num = 0f; break;
                 }
             }
+            return (float)(UniqueFacultyAI.IncreaseByBonus(UniqueFacultyAI.FacultyBonus.Science, 100) / 100f) * num ;
         }
 
         public static void CargoTruckAIArriveAtTargetForRealConstruction(ushort vehicleID, ref Vehicle vehicleData)
@@ -249,7 +251,7 @@ namespace RealConstruction.CustomAI
                 {
                     target = InstanceID.Empty;
                     TransferManager.TransferReason transferType = (TransferManager.TransferReason)data.m_transferType;
-                    if (transferType == (TransferManager.TransferReason)112)
+                    if (transferType == (TransferManager.TransferReason)112 || transferType == (TransferManager.TransferReason)113)
                     {
                         return Localization.Get("GOING_FOR_FUEL_TO");
                     }
@@ -267,7 +269,7 @@ namespace RealConstruction.CustomAI
                     if ((data.m_flags & Vehicle.Flags.Exporting) != 0 || (flags & Building.Flags.IncomingOutgoing) != 0)
                     {
                         target = InstanceID.Empty;
-                        if (transferType == (TransferManager.TransferReason)112)
+                        if (transferType == (TransferManager.TransferReason)112 || transferType == (TransferManager.TransferReason)113)
                         {
                             return Localization.Get("GOING_FOR_FUEL_TO");
                         }
@@ -277,7 +279,7 @@ namespace RealConstruction.CustomAI
                     {
                         target = InstanceID.Empty;
                         target.Building = targetBuilding;
-                        if (transferType == (TransferManager.TransferReason)112)
+                        if (transferType == (TransferManager.TransferReason)112 || transferType == (TransferManager.TransferReason)113)
                         {
                             return Localization.Get("GOING_FOR_FUEL_TO");
                         }
@@ -293,7 +295,7 @@ namespace RealConstruction.CustomAI
                     {
                         return Localization.Get("TRANSFER_OPERATION_RESOURCE_TO");
                     }
-                    else if (transferType == (TransferManager.TransferReason)112)
+                    else if (transferType == (TransferManager.TransferReason)112 || transferType == (TransferManager.TransferReason)113)
                     {
                         return Localization.Get("GOING_FOR_FUEL_TO");
                     }

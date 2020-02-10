@@ -92,6 +92,7 @@
   <ItemGroup>
     <Content Include="Icon\RealConstruction.png" />
     <Content Include="Locales\en.txt" />
+    <Content Include="Locales\zh-cn.txt" />
     <Content Include="Locales\zh.txt" />
   </ItemGroup>
   <ItemGroup />

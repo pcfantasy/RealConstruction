@@ -94,6 +94,7 @@
     <Content Include="Locales\en.txt" />
     <Content Include="Locales\zh-cn.txt" />
     <Content Include="Locales\zh.txt" />
+    <Content Include="PreviewImage.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -105,7 +106,8 @@ copy "D:\Mod\RealConstruction\Locales\*.txt" "F:\SteamLibrary\steamapps\workshop
 copy "D:\Mod\RealConstruction\bin\Release\0Harmony.dll"  "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\0Harmony.dll"
 rd /q /s "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"
 mkdir "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"
-copy "D:\Mod\RealConstruction\Icon\*.png" "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"</PostBuildEvent>
+copy "D:\Mod\RealConstruction\Icon\*.png" "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"
+copy "D:\Mod\RealConstruction\PreviewImage.png"  "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\PreviewImage.png"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

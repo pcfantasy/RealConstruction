@@ -85,7 +85,7 @@ namespace RealConstruction.CustomAI
 
         public static bool CanRemoveNoResource(ushort buildingID, ref Building buildingData)
         {
-            if (buildingData.Info.m_buildingAI is ProcessingFacilityAI || buildingData.Info.m_buildingAI is UniqueFactoryAI || buildingData.Info.m_class.m_service == ItemClass.Service.Electricity || buildingData.Info.m_class.m_service == ItemClass.Service.Water || buildingData.Info.m_buildingAI is ShelterAI)
+            if (buildingData.Info.m_buildingAI is ProcessingFacilityAI || buildingData.Info.m_buildingAI is UniqueFactoryAI)
             {
                 return false;
             }

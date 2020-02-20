@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using ColossalFramework.Globalization;
 using System.Reflection;
@@ -15,6 +14,7 @@ using RealConstruction.Util;
 using RealConstruction.UI;
 using RealConstruction.CustomManager;
 using ColossalFramework.UI;
+using Harmony;
 
 namespace RealConstruction
 {
@@ -31,6 +31,7 @@ namespace RealConstruction
         public static object MainDataStoreInstance = null;
         public static FieldInfo _reduceCargoDiv = null;
         public static int reduceCargoDiv = 1;
+        public const int HarmonyPatchNum = 4;
 
         public override void OnBeforeSimulationFrame()
         {
@@ -193,6 +194,36 @@ namespace RealConstruction
                         string error = "RealConstruction HarmonyDetourInit is failed, Send RealConstruction.txt to Author.";
                         DebugLog.LogToFileOnly(error);
                         UIView.library.ShowModal<ExceptionPanel>("ExceptionPanel").SetMessage("Incompatibility Issue", error, true);
+                    }
+                    else
+                    {
+                        var harmony = HarmonyInstance.Create(HarmonyDetours.ID);
+                        var methods = harmony.GetPatchedMethods();
+                        int i = 0;
+                        foreach (var method in methods)
+                        {
+                            var info = harmony.GetPatchInfo(method);
+                            if (info.Owners?.Contains(harmony.Id) == true)
+                            {
+                                DebugLog.LogToFileOnly("Harmony patch method = " + method.Name.ToString());
+                                if (info.Prefixes.Count != 0)
+                                {
+                                    DebugLog.LogToFileOnly("Harmony patch method has PreFix");
+                                }
+                                if (info.Postfixes.Count != 0)
+                                {
+                                    DebugLog.LogToFileOnly("Harmony patch method has PostFix");
+                                }
+                                i++;
+                            }
+                        }
+
+                        if (i != HarmonyPatchNum)
+                        {
+                            string error = $"RealConstruction HarmonyDetour Patch Num is {i}, Right Num is {HarmonyPatchNum} Send RealConstruction.txt to Author.";
+                            DebugLog.LogToFileOnly(error);
+                            UIView.library.ShowModal<ExceptionPanel>("ExceptionPanel").SetMessage("Incompatibility Issue", error, true);
+                        }
                     }
                 }
             }

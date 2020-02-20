@@ -66,6 +66,7 @@
     <Compile Include="NewAI\ResourceBuildingAI.cs" />
     <Compile Include="NewData\CustomDistrictPark.cs" />
     <Compile Include="Patch\CarAIPathfindFailurePatch.cs" />
+    <Compile Include="Patch\CargoTruckAIArriveAtTargetPatch.cs" />
     <Compile Include="Patch\PrivateBuildingAISimulationStepPatch.cs" />
     <Compile Include="Patch\PlayerBuildingAISimulationStepPatch.cs" />
     <Compile Include="Patch\CommonBuildingAIReleaseBuildingPatch.cs" />

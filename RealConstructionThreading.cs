@@ -96,8 +96,6 @@ namespace RealConstruction
         {
             //This is for Detour RealCity method
             DebugLog.LogToFileOnly("Init DetourAfterLoad");
-            bool detourFailed = false;
-
             if (Loader.isRealCityRunning)
             {
                 RealCity = Assembly.Load("RealCity");
@@ -107,48 +105,6 @@ namespace RealConstruction
                 MainDataStoreClass = RealCity.GetType("RealCity.Util.MainDataStore");
                 MainDataStoreInstance = Activator.CreateInstance(MainDataStoreClass);
                 _reduceCargoDiv = MainDataStoreClass.GetField("reduceCargoDiv", BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
-            }
-
-
-            if (Loader.isRealGasStationRunning)
-            {
-                RealGasStation = Assembly.Load("RealGasStation");
-                //1
-                DebugLog.LogToFileOnly("Detour CustomCargoTruckAI::CargoTruckAIArriveAtTargetForRealConstruction calls");
-                try
-                {
-                    Loader.Detours.Add(new Loader.Detour(RealGasStation.GetType("RealGasStation.CustomAI.CustomCargoTruckAI").GetMethod("CargoTruckAIArriveAtTargetForRealConstruction", BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType()}, null),
-                                           typeof(CustomCargoTruckAI).GetMethod("CargoTruckAIArriveAtTargetForRealConstruction", BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType()}, null)));
-                }
-                catch (Exception)
-                {
-                    DebugLog.LogToFileOnly("Could not detour CustomCargoTruckAI::CargoTruckAIArriveAtTargetForRealConstruction");
-                    detourFailed = true;
-                }
-            }
-            else if (Loader.isRealCityRunning)
-            {
-                //1
-                DebugLog.LogToFileOnly("Detour RealCityCargoTruckAI::CargoTruckAIArriveAtTargetForRealConstruction calls");
-                try
-                {
-                    Loader.Detours.Add(new Loader.Detour(RealCity.GetType("RealCity.CustomAI.RealCityCargoTruckAI").GetMethod("CargoTruckAIArriveAtTargetForRealConstruction", BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null),
-                                           typeof(CustomCargoTruckAI).GetMethod("CargoTruckAIArriveAtTargetForRealConstruction", BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null)));
-                }
-                catch (Exception)
-                {
-                    DebugLog.LogToFileOnly("Could not detour RealCityCargoTruckAI::CargoTruckAIArriveAtTargetForRealConstruction");
-                    detourFailed = true;
-                }
-
-                if (detourFailed)
-                {
-                    DebugLog.LogToFileOnly("DetourAfterLoad failed");
-                }
-                else
-                {
-                    DebugLog.LogToFileOnly("DetourAfterLoad successful");
-                }
             }
         }
 

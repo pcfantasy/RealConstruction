@@ -38,7 +38,6 @@ namespace RealConstruction
         public static bool HarmonyDetourFailed = true;
         public static bool isGuiRunning = false;
         public static bool isRealCityRunning = false;
-        public static bool isRealGasStationRunning = false;
         public static PlayerBuildingButton PBMenuPanel;
         public static UniqueFactoryButton UBMenuPanel;
         public static WarehouseButton WBMenuPanel;
@@ -228,19 +227,6 @@ namespace RealConstruction
                 }
 
                 //2
-                DebugLog.LogToFileOnly("Detour CargoTruckAI::GetLocalizedStatus calls");
-                try
-                {
-                    Detours.Add(new Detour(typeof(CargoTruckAI).GetMethod("GetLocalizedStatus", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType(), typeof(InstanceID).MakeByRefType() }, null),
-                                           typeof(CustomCargoTruckAI).GetMethod("GetLocalizedStatus", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType(), typeof(InstanceID).MakeByRefType() }, null)));
-                }
-                catch (Exception)
-                {
-                    DebugLog.LogToFileOnly("Could not detour CargoTruckAI::GetLocalizedStatus");
-                    detourFailed = true;
-                }
-
-                //3
                 DebugLog.LogToFileOnly("Detour PlayerBuildingAI::GetBudget calls");
                 try
                 {
@@ -253,7 +239,7 @@ namespace RealConstruction
                     detourFailed = true;
                 }
 
-                //4
+                //3
                 DebugLog.LogToFileOnly("Detour CustomDistrictPark::GetAcademicYearProgress calls");
                 try
                 {
@@ -267,26 +253,6 @@ namespace RealConstruction
                 }
 
                 isRealCityRunning = CheckRealCityIsLoaded();
-                isRealGasStationRunning = CheckRealGasStationIsLoaded();
-                if (isRealCityRunning || isRealGasStationRunning)
-                {
-                    DebugLog.LogToFileOnly("RealCity or RealGasStation is Running");
-                }
-                else
-                {
-                    //5
-                    DebugLog.LogToFileOnly("Detour CargoTruckAI::ArriveAtTarget calls");
-                    try
-                    {
-                        Detours.Add(new Detour(typeof(CargoTruckAI).GetMethod("ArriveAtTarget", BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null),
-                                               typeof(CustomCargoTruckAI).GetMethod("ArriveAtTarget", BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null)));
-                    }
-                    catch (Exception)
-                    {
-                        DebugLog.LogToFileOnly("Could not detour CargoTruckAI::ArriveAtTarget");
-                        detourFailed = true;
-                    }
-                }
 
                 if (detourFailed)
                 {
@@ -351,12 +317,7 @@ namespace RealConstruction
 
         private bool CheckRealCityIsLoaded()
         {
-            return this.Check3rdPartyModLoaded("RealCity", true);
-        }
-
-        private bool CheckRealGasStationIsLoaded()
-        {
-            return this.Check3rdPartyModLoaded("RealGasStation", true);
+            return this.Check3rdPartyModLoaded("RealCity", false);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace RealConstruction.Patch
         {
             return typeof(CargoTruckAI).GetMethod("ArriveAtTarget", BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Vehicle).MakeByRefType() }, null);
         }
-        public static void Prefix(ref CargoTruckAI __instance, ushort vehicleID, ref Vehicle data, ref bool __result)
+        public static void Prefix(ushort vehicleID, ref Vehicle data)
         {
             if ((data.m_flags & Vehicle.Flags.TransferToTarget) != 0)
             {

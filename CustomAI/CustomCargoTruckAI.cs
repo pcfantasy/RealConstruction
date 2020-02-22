@@ -38,8 +38,8 @@ namespace RealConstruction.CustomAI
         public static float GetResourcePrice(TransferManager.TransferReason material)
         {
             //Need to sync with RealCity mod
-            float num = 0f;
-            if (RealConstructionThreading.reduceVehicle)
+            float num;
+            if (!RealConstructionThreading.reduceVehicle)
             {
                 switch (material)
                 {

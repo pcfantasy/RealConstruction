@@ -31,7 +31,7 @@ namespace RealConstruction
         public static object MainDataStoreInstance = null;
         public static FieldInfo _reduceCargoDiv = null;
         public static int reduceCargoDiv = 1;
-        public const int HarmonyPatchNum = 4;
+        public const int HarmonyPatchNum = 5;
 
         public override void OnBeforeSimulationFrame()
         {

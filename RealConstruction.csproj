@@ -59,7 +59,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomAI\CustomCargoTruckAI.cs" />
-    <Compile Include="CustomAI\CustomPrivateBuildingAI.cs" />
     <Compile Include="CustomManager\CustomTransferManager.cs" />
     <Compile Include="NewAI\ConstructionAI.cs" />
     <Compile Include="NewAI\OperationAI.cs" />

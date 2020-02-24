@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RealConstruction</RootNamespace>
     <AssemblyName>RealConstruction</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -51,24 +51,24 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
       <HintPath>F:\SteamLibrary\steamapps\common\Cities_Skylines\Cities_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomAI\CustomCarAI.cs" />
     <Compile Include="CustomAI\CustomCargoTruckAI.cs" />
-    <Compile Include="CustomAI\CustomCommonBuildingAI.cs" />
-    <Compile Include="CustomAI\CustomPrivateBuildingAI.cs" />
     <Compile Include="CustomManager\CustomTransferManager.cs" />
     <Compile Include="NewAI\ConstructionAI.cs" />
     <Compile Include="NewAI\OperationAI.cs" />
     <Compile Include="NewAI\ResourceBuildingAI.cs" />
     <Compile Include="NewData\CustomDistrictPark.cs" />
+    <Compile Include="Patch\CarAIPathfindFailurePatch.cs" />
+    <Compile Include="Patch\CargoTruckAIArriveAtTargetPatch.cs" />
+    <Compile Include="Patch\PrivateBuildingAISimulationStepPatch.cs" />
+    <Compile Include="Patch\PlayerBuildingAISimulationStepPatch.cs" />
+    <Compile Include="Patch\CommonBuildingAIReleaseBuildingPatch.cs" />
     <Compile Include="UI\WareHouseUI.cs" />
     <Compile Include="UI\UniqueFactoryUI.cs" />
     <Compile Include="UI\UniqueFactoryButton.cs" />

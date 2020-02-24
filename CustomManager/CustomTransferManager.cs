@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace RealConstruction.CustomManager
@@ -32,27 +31,24 @@ namespace RealConstruction.CustomManager
             if (vehicleInfo != null)
             {
                 Array16<Vehicle> vehicles = Singleton<VehicleManager>.instance.m_vehicles;
-                ushort num16;
-                if (Singleton<VehicleManager>.instance.CreateVehicle(out num16, ref Singleton<SimulationManager>.instance.m_randomizer, vehicleInfo, data.m_position, material, false, true))
+                if (Singleton<VehicleManager>.instance.CreateVehicle(out ushort vehicleID, ref Singleton<SimulationManager>.instance.m_randomizer, vehicleInfo, data.m_position, material, false, true))
                 {
-                    vehicleInfo.m_vehicleAI.SetSource(num16, ref vehicles.m_buffer[(int)num16], buildingID);
+                    vehicleInfo.m_vehicleAI.SetSource(vehicleID, ref vehicles.m_buffer[vehicleID], buildingID);
                     if (vehicleInfo.m_vehicleAI is CargoTruckAI)
                     {
                         CargoTruckAI AI = vehicleInfo.m_vehicleAI as CargoTruckAI;
-                        CustomCargoTruckAI.CargoTruckAISetSourceForRealConstruction(num16, ref vehicles.m_buffer[(int)num16], buildingID);
-                        vehicles.m_buffer[(int)num16].m_transferSize = (ushort)AI.m_cargoCapacity;
+                        CustomCargoTruckAI.CargoTruckAISetSourceForRealConstruction(vehicleID, ref vehicles.m_buffer[vehicleID], buildingID);
+                        vehicles.m_buffer[(int)vehicleID].m_transferSize = (ushort)AI.m_cargoCapacity;
                     }
                     else
                     {
                         DebugLog.LogToFileOnly("Error: vehicleInfo is not cargoTruckAI " + vehicleInfo.m_vehicleAI.ToString());
                     }
-                    vehicleInfo.m_vehicleAI.StartTransfer(num16, ref vehicles.m_buffer[(int)num16], material, offer);
+                    vehicleInfo.m_vehicleAI.StartTransfer(vehicleID, ref vehicles.m_buffer[vehicleID], material, offer);
                     ushort building4 = offer.Building;
                     if (building4 != 0)
                     {
-                        int amount;
-                        int num17;
-                        vehicleInfo.m_vehicleAI.GetSize(num16, ref vehicles.m_buffer[(int)num16], out amount, out num17);
+                        vehicleInfo.m_vehicleAI.GetSize(vehicleID, ref vehicles.m_buffer[vehicleID], out int _, out int _);
                     }
                 }
             }
@@ -60,42 +56,41 @@ namespace RealConstruction.CustomManager
 
         public static void StartTransfer(TransferManager.TransferReason material, TransferManager.TransferOffer offerOut, TransferManager.TransferOffer offerIn, int delta)
         {
-            bool active = offerIn.Active;
-            bool active2 = offerOut.Active;
-            if (active && offerIn.Vehicle != 0)
+            bool offerInActive = offerIn.Active;
+            bool offerOutActive = offerOut.Active;
+            if (offerInActive && offerIn.Vehicle != 0)
             {
-                DebugLog.LogToFileOnly("Error: active && offerIn.Vehicle");
+                DebugLog.LogToFileOnly("Error: offerInActive && offerIn.Vehicle");
             }
-            else if (active2 && offerOut.Vehicle != 0)
+            else if (offerOutActive && offerOut.Vehicle != 0)
             {
-                DebugLog.LogToFileOnly("Error: active2 && offerOut.Vehicle");
+                DebugLog.LogToFileOnly("Error: offerOutActive && offerOut.Vehicle");
             }
-            else if (active && offerIn.Citizen != 0u)
+            else if (offerInActive && offerIn.Citizen != 0u)
             {
-                DebugLog.LogToFileOnly("Error: active && offerIn.Citizen");
+                DebugLog.LogToFileOnly("Error: offerInActive && offerIn.Citizen");
             }
-            else if (active2 && offerOut.Citizen != 0u)
+            else if (offerOutActive && offerOut.Citizen != 0u)
             {
-                DebugLog.LogToFileOnly("Error: active2 && offerOut.Citizen");
+                DebugLog.LogToFileOnly("Error: offerOutActive && offerOut.Citizen");
             }
-            else if (active2 && offerOut.Building != 0)
+            else if (offerOutActive && offerOut.Building != 0)
             {
                 Array16<Building> buildings = Singleton<BuildingManager>.instance.m_buildings;
                 ushort building = offerOut.Building;
-                BuildingInfo info3 = buildings.m_buffer[(int)building].Info;
                 offerIn.Amount = delta;
                 if (ResourceBuildingAI.IsSpecialBuilding(building))
                 {
-                    StartSpecialBuildingTransfer(building, ref buildings.m_buffer[(int)building], material, offerIn);
+                    StartSpecialBuildingTransfer(building, ref buildings.m_buffer[building], material, offerIn);
                 }
                 else
                 {
-                    DebugLog.LogToFileOnly("Error: active2 && offerOut.Building");
+                    DebugLog.LogToFileOnly("Error: offerOutActive && offerOut.Building");
                 }
             }
-            else if (active && offerIn.Building != 0)
+            else if (offerInActive && offerIn.Building != 0)
             {
-                DebugLog.LogToFileOnly("Error: active && offerIn.Building");
+                DebugLog.LogToFileOnly("Error: offerInActive && offerIn.Building");
             }
         }
 
@@ -131,15 +126,13 @@ namespace RealConstruction.CustomManager
                 return false;
             }
 
-            bool active = offerIn.Active;
-            bool active2 = offerOut.Active;
-            VehicleManager instance1 = Singleton<VehicleManager>.instance;
-            BuildingManager instance = Singleton<BuildingManager>.instance;
-            if (active && offerIn.Vehicle != 0)
+            bool offerInActive = offerIn.Active;
+            bool offerOutActive = offerOut.Active;
+            VehicleManager instance = Singleton<VehicleManager>.instance;
+            if (offerInActive && offerIn.Vehicle != 0)
             {
-                ushort targetBuilding = 0;
-                ushort sourceBuilding = instance1.m_vehicles.m_buffer[offerIn.Vehicle].m_sourceBuilding;
-                targetBuilding = offerOut.Building;
+                ushort targetBuilding = offerOut.Building;
+                ushort sourceBuilding = instance.m_vehicles.m_buffer[offerIn.Vehicle].m_sourceBuilding;
 
                 if ((targetBuilding != 0) && (sourceBuilding != 0))
                 {
@@ -155,11 +148,10 @@ namespace RealConstruction.CustomManager
                 return false;
                 //info.m_vehicleAI.StartTransfer(vehicle, ref vehicles.m_buffer[(int)vehicle], material, offerOut);
             }
-            else if (active2 && offerOut.Vehicle != 0)
+            else if (offerOutActive && offerOut.Vehicle != 0)
             {
-                ushort targetBuilding = 0;
-                ushort sourceBuilding = instance1.m_vehicles.m_buffer[offerOut.Vehicle].m_sourceBuilding;
-                targetBuilding = offerIn.Building;
+                ushort targetBuilding = offerIn.Building;
+                ushort sourceBuilding = instance.m_vehicles.m_buffer[offerOut.Vehicle].m_sourceBuilding;
 
                 if ((targetBuilding != 0) && (sourceBuilding != 0))
                 {
@@ -175,21 +167,20 @@ namespace RealConstruction.CustomManager
                 return false;
                 //info2.m_vehicleAI.StartTransfer(vehicle2, ref vehicles2.m_buffer[(int)vehicle2], material, offerIn);
             }
-            else if (active && offerIn.Citizen != 0u)
+            else if (offerInActive && offerIn.Citizen != 0u)
             {
-                DebugLog.LogToFileOnly("Error: No such case active && offerIn.Citizen != 0u");
+                DebugLog.LogToFileOnly("Error: No such case offerInActive && offerIn.Citizen != 0u");
                 return false;
             }
-            else if (active2 && offerOut.Citizen != 0u)
+            else if (offerOutActive && offerOut.Citizen != 0u)
             {
-                DebugLog.LogToFileOnly("Error: No such case active && offerOut.Citizen != 0u");
+                DebugLog.LogToFileOnly("Error: No such case offerOutActive && offerOut.Citizen != 0u");
                 return false;
             }
-            else if (active2 && offerOut.Building != 0)
+            else if (offerOutActive && offerOut.Building != 0)
             {
-                ushort targetBuilding = 0;
+                ushort targetBuilding = offerIn.Building;
                 ushort sourceBuilding = offerOut.Building;
-                targetBuilding = offerIn.Building;
 
                 if ((targetBuilding != 0) && (sourceBuilding != 0))
                 {
@@ -203,13 +194,11 @@ namespace RealConstruction.CustomManager
                     }
                 }
                 return false;
-                //info3.m_buildingAI.StartTransfer(building, ref buildings.m_buffer[(int)building], material, offerIn);
             }
-            else if (active && offerIn.Building != 0)
+            else if (offerInActive && offerIn.Building != 0)
             {
-                ushort targetBuilding = 0;
+                ushort targetBuilding = offerOut.Building;
                 ushort sourceBuilding = offerIn.Building;
-                targetBuilding = offerOut.Building;
 
                 if ((targetBuilding != 0) && (sourceBuilding != 0))
                 {
@@ -223,7 +212,6 @@ namespace RealConstruction.CustomManager
                     }
                 }
                 return false;
-                //info4.m_buildingAI.StartTransfer(building2, ref buildings2.m_buffer[(int)building2], material, offerOut);
             }
             return false;
         }
@@ -287,9 +275,9 @@ namespace RealConstruction.CustomManager
 
         private static byte MatchOffersMode(TransferReason material)
         {
-            //For RealConstruction Mod, always use incoming first mode
-            //incoming first mode 0
-            //outgoing first mode 1
+            //For RealConstruction Mod, always use incoming only mode
+            //incoming only mode 0
+            //outgoing only mode 1
             //balanced mode 2
             return 0;
         }

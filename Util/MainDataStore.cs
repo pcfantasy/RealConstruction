@@ -16,7 +16,6 @@ namespace RealConstruction.Util
         public static bool[] isBuildingLackOfResource = new bool[49152];
         public static byte[] resourceCategory = new byte[49152];
         public static ushort lastBuildingID = 0;
-        public static byte[] saveData = new byte[835584];
         public static ushort[,] canNotConnectedBuildingID = new ushort[49152, 8];
         public static byte[] refreshCanNotConnectedBuildingIDCount = new byte[49152];
         public static byte[] canNotConnectedBuildingIDCount = new byte[49152];
@@ -37,28 +36,30 @@ namespace RealConstruction.Util
             }
         }
 
-        public static void save()
+        public static void Save(ref byte[] saveData)
         {
+            //835584
             int i = 0;
-            SaveAndRestore.save_ushorts(ref i, foodBuffer, ref saveData);
-            SaveAndRestore.save_ushorts(ref i, lumberBuffer, ref saveData);
-            SaveAndRestore.save_ushorts(ref i, coalBuffer, ref saveData);
-            SaveAndRestore.save_ushorts(ref i, petrolBuffer, ref saveData);
-            SaveAndRestore.save_ushorts(ref i, constructionResourceBuffer, ref saveData);
-            SaveAndRestore.save_ushorts(ref i, operationResourceBuffer, ref saveData);
-            SaveAndRestore.save_bytes(ref i, resourceCategory, ref saveData);
+            SaveAndRestore.SaveData(ref i, foodBuffer, ref saveData);
+            SaveAndRestore.SaveData(ref i, lumberBuffer, ref saveData);
+            SaveAndRestore.SaveData(ref i, coalBuffer, ref saveData);
+            SaveAndRestore.SaveData(ref i, petrolBuffer, ref saveData);
+            SaveAndRestore.SaveData(ref i, constructionResourceBuffer, ref saveData);
+            SaveAndRestore.SaveData(ref i, operationResourceBuffer, ref saveData);
+            SaveAndRestore.SaveData(ref i, resourceCategory, ref saveData);
         }
 
-        public static void load()
+        public static void Load(byte[] saveData)
         {
+            //835584
             int i = 0;
-            foodBuffer = SaveAndRestore.load_ushorts(ref i, saveData, foodBuffer.Length);
-            lumberBuffer = SaveAndRestore.load_ushorts(ref i, saveData, foodBuffer.Length);
-            coalBuffer = SaveAndRestore.load_ushorts(ref i, saveData, foodBuffer.Length);
-            petrolBuffer = SaveAndRestore.load_ushorts(ref i, saveData, foodBuffer.Length);
-            constructionResourceBuffer = SaveAndRestore.load_ushorts(ref i, saveData, foodBuffer.Length);
-            operationResourceBuffer = SaveAndRestore.load_ushorts(ref i, saveData, foodBuffer.Length);
-            resourceCategory = SaveAndRestore.load_bytes(ref i, saveData, resourceCategory.Length);
+            SaveAndRestore.LoadData(ref i, saveData, ref foodBuffer);
+            SaveAndRestore.LoadData(ref i, saveData, ref lumberBuffer);
+            SaveAndRestore.LoadData(ref i, saveData, ref coalBuffer);
+            SaveAndRestore.LoadData(ref i, saveData, ref petrolBuffer);
+            SaveAndRestore.LoadData(ref i, saveData, ref constructionResourceBuffer);
+            SaveAndRestore.LoadData(ref i, saveData, ref operationResourceBuffer);
+            SaveAndRestore.LoadData(ref i, saveData, ref resourceCategory);
         }
     }
 }

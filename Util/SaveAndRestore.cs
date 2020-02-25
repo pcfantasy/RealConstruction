@@ -8,118 +8,102 @@ namespace RealConstruction.Util
     { 
         private static ISerializableData _serializableData;
 
-        public static void save_bytes(ref int idex, byte[] item, ref byte[] container)
+        public static void SaveData(ref int idex, byte[] item, ref byte[] container)
         {
             int j;
             for (j = 0; j < item.Length; j++)
             {
                 container[idex + j] = item[j];
             }
-            idex = idex + item.Length;
+            idex += item.Length;
         }
 
-        public static byte[] load_bytes(ref int idex, byte[] container, int length)
+        public static void LoadData(ref int idex, byte[] container, ref byte[] item)
         {
-            byte[] tmp = new byte[length];
             int i;
             if (idex < container.Length)
             {
-                for (i = 0; i < length; i++)
+                for (i = 0; i < item.Length; i++)
                 {
-                    tmp[i] = container[idex];
-                    idex = idex + 1;
+                    item[i] = container[idex];
+                    idex++;
                 }
             }
             else
             {
-                for (i = 0; i < length; i++)
+                for (i = 0; i < item.Length; i++)
                 {
-                    idex = idex + 1;
+                    idex++;
                 }
                 DebugLog.LogToFileOnly("load data is too short, please check" + container.Length.ToString());
             }
-            return tmp;
         }
 
-        public static void save_ushorts(ref int idex, ushort[] item, ref byte[] container)
+        public static void SaveData(ref int idex, ushort[] item, ref byte[] container)
         {
             int i; int j;
-            byte[] temp_data;
+            byte[] bytes;
             for (j = 0; j < item.Length; j++)
             {
-                temp_data = BitConverter.GetBytes(item[j]);
-                for (i = 0; i < temp_data.Length; i++)
+                bytes = BitConverter.GetBytes(item[j]);
+                for (i = 0; i < bytes.Length; i++)
                 {
-                    container[idex + i] = temp_data[i];
+                    container[idex + i] = bytes[i];
                 }
-                idex = idex + temp_data.Length;
+                idex += bytes.Length;
             }
         }
 
-        public static ushort[] load_ushorts(ref int idex, byte[] container, int length)
+        public static void LoadData(ref int idex, byte[] container, ref ushort[] item)
         {
-            ushort[] tmp = new ushort[length];
             int i;
             if (idex < container.Length)
             {
-                for (i = 0; i < length; i++)
+                for (i = 0; i < item.Length; i++)
                 {
-                    tmp[i] = BitConverter.ToUInt16(container, idex);
-                    idex = idex + 2;
+                    item[i] = BitConverter.ToUInt16(container, idex);
+                    idex += 2;
                 }
             }
             else
             {
                 DebugLog.LogToFileOnly("load data is too short, please check" + container.Length.ToString());
-                for (i = 0; i < length; i++)
+                for (i = 0; i < item.Length; i++)
                 {
-                    idex = idex + 2;
+                    idex += 2;
                 }
             }
-            return tmp;
         }
-
-        public static void gather_saveData()
-        {
-            MainDataStore.save();
-        }
-
 
         public override void OnCreated(ISerializableData serializableData)
         {
             SaveAndRestore._serializableData = serializableData;
         }
 
-        public override void OnReleased()
-        {
-        }
-
         public override void OnSaveData()
         {
             if (Loader.CurrentLoadMode == LoadMode.LoadGame || Loader.CurrentLoadMode == LoadMode.NewGame)
             {
-                DebugLog.LogToFileOnly("startsave");
-                MainDataStore.saveData = new byte[835584];
-                gather_saveData();
-                SaveAndRestore._serializableData.SaveData("RealConstruction MainDataStore", MainDataStore.saveData);
+                DebugLog.LogToFileOnly("StartSave");
+                var saveData = new byte[835584];
+                MainDataStore.Save(ref saveData);
+                SaveAndRestore._serializableData.SaveData("RealConstruction MainDataStore", saveData);
             }
         }
 
         public override void OnLoadData()
         {
             MainDataStore.DataInit();
-            MainDataStore.saveData = new byte[835584];
-            DebugLog.LogToFileOnly("OnLoadData");
-            DebugLog.LogToFileOnly("startload");
+            DebugLog.LogToFileOnly("StartLoad");
 
-            MainDataStore.saveData = SaveAndRestore._serializableData.LoadData("RealConstruction MainDataStore");
-            if (MainDataStore.saveData == null)
+            var saveData = SaveAndRestore._serializableData.LoadData("RealConstruction MainDataStore");
+            if (saveData == null)
             {
                 DebugLog.LogToFileOnly("no RealConstruction MainDataStore save data, please check");
             }
             else
             {
-                MainDataStore.load();
+                MainDataStore.Load(saveData);
             }
         }
     }

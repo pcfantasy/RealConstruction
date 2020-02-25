@@ -86,7 +86,7 @@ namespace RealConstruction
                             //DebugLog.LogToFileOnly("Info: reduceCargoDiv = " + reduceCargoDiv.ToString());
                         }
                     }
-                    //CustomSimulationStepImpl for 110 111 TransferReason
+                    //CustomSimulationStepImpl for 210 211 TransferReason
                     CustomTransferManager.CustomSimulationStepImpl();
                 }
             }

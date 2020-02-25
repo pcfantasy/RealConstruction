@@ -37,7 +37,7 @@ namespace RealConstruction.Patch
                 {
                     if (buildingData.m_flags.IsFlagSet(Building.Flags.Created) && (!buildingData.m_flags.IsFlagSet(Building.Flags.Completed)) && (!buildingData.m_flags.IsFlagSet(Building.Flags.Deleted)))
                     {
-                        if (vehicleData.m_transferType == 110)
+                        if (vehicleData.m_transferType == 210)
                         {
                             vehicleData.m_transferSize = 0;
                             MainDataStore.constructionResourceBuffer[vehicleData.m_targetBuilding] = 8000;
@@ -105,7 +105,7 @@ namespace RealConstruction.Patch
                         }
                         else
                         {
-                            if (vehicleData.m_transferType == 111)
+                            if (vehicleData.m_transferType == 211)
                             {
                                 vehicleData.m_transferSize = 0;
                                 MainDataStore.operationResourceBuffer[vehicleData.m_targetBuilding] += 8000;

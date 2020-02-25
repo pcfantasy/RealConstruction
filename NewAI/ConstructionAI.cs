@@ -25,7 +25,7 @@ namespace RealConstruction.NewAI
                     int num34 = 0;
                     TransferManager.TransferReason incomingTransferReason = default(TransferManager.TransferReason);
                     //construction resource
-                    incomingTransferReason = (TransferManager.TransferReason)110;
+                    incomingTransferReason = (TransferManager.TransferReason)210;
                     num27 = 0;
                     num28 = 0;
                     num29 = 0;

@@ -25,8 +25,8 @@ namespace RealConstruction.Patch
         {
             switch (material)
             {
-                case (TransferManager.TransferReason)110:
-                case (TransferManager.TransferReason)111:
+                case (TransferManager.TransferReason)210:
+                case (TransferManager.TransferReason)211:
                     return true;
                 default: return false;
             }

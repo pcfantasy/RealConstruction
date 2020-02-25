@@ -20,11 +20,11 @@ namespace RealConstruction.CustomAI
             //new added begin
             if (ResourceBuildingAI.IsSpecialBuilding(sourceBuilding))
             {
-                if ((TransferManager.TransferReason)data.m_transferType == (TransferManager.TransferReason)210)
+                if ((TransferManager.TransferReason)data.m_transferType == (TransferManager.TransferReason)124)
                 {
                     MainDataStore.constructionResourceBuffer[sourceBuilding] -= 8000;
                 }
-                else if ((TransferManager.TransferReason)data.m_transferType == (TransferManager.TransferReason)211)
+                else if ((TransferManager.TransferReason)data.m_transferType == (TransferManager.TransferReason)125)
                 {
                     MainDataStore.operationResourceBuffer[sourceBuilding] -= 8000;
                 }

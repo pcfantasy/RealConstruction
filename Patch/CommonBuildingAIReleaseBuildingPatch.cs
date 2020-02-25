@@ -26,8 +26,8 @@ namespace RealConstruction.Patch
             MainDataStore.operationResourceBuffer[buildingID] = 0;
             TransferManager.TransferOffer offer = default(TransferManager.TransferOffer);
             offer.Building = buildingID;
-            Singleton<TransferManager>.instance.RemoveOutgoingOffer((TransferManager.TransferReason)210, offer);
-            Singleton<TransferManager>.instance.RemoveOutgoingOffer((TransferManager.TransferReason)211, offer);
+            Singleton<TransferManager>.instance.RemoveOutgoingOffer((TransferManager.TransferReason)124, offer);
+            Singleton<TransferManager>.instance.RemoveOutgoingOffer((TransferManager.TransferReason)125, offer);
         }
     }
 }

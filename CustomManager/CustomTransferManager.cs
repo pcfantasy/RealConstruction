@@ -18,11 +18,11 @@ namespace RealConstruction.CustomManager
         public static void StartSpecialBuildingTransfer(ushort buildingID, ref Building data, TransferManager.TransferReason material, TransferManager.TransferOffer offer)
         {
             VehicleInfo vehicleInfo = null;
-            if (material == (TransferManager.TransferReason)210)
+            if (material == (TransferManager.TransferReason)124)
             {
                 vehicleInfo = Singleton<VehicleManager>.instance.GetRandomVehicleInfo(ref Singleton<SimulationManager>.instance.m_randomizer, ItemClass.Service.Industrial, ItemClass.SubService.IndustrialForestry, ItemClass.Level.Level1);
             }
-            else if (material == (TransferManager.TransferReason)211)
+            else if (material == (TransferManager.TransferReason)125)
             {
                 vehicleInfo = Singleton<VehicleManager>.instance.GetRandomVehicleInfo(ref Singleton<SimulationManager>.instance.m_randomizer, ItemClass.Service.Industrial, ItemClass.SubService.IndustrialFarming, ItemClass.Level.Level1);
             }
@@ -258,12 +258,12 @@ namespace RealConstruction.CustomManager
             if (frameIndex == 229)
             {
                 //construction resource matchoffer
-                MatchOffers((TransferReason)210);
+                MatchOffers((TransferReason)124);
             } 
             else if (frameIndex == 213)
             {
                 //operation resource matchoffer
-                MatchOffers((TransferReason)211);
+                MatchOffers((TransferReason)125);
             }
         }
 

@@ -58,7 +58,7 @@ namespace RealConstruction.NewAI
 
             //constructionResource
             System.Random rand = new System.Random();
-            outgoingTransferReason = (TransferManager.TransferReason)210;
+            outgoingTransferReason = (TransferManager.TransferReason)124;
             if (outgoingTransferReason != TransferManager.TransferReason.None)
             {
                 CaculationVehicle.CustomCalculateOwnVehicles(buildingID, ref buildingData, outgoingTransferReason, ref num27, ref num28, ref num29, ref value);
@@ -82,7 +82,7 @@ namespace RealConstruction.NewAI
             }
 
             //operationResource
-            outgoingTransferReason = (TransferManager.TransferReason)211;
+            outgoingTransferReason = (TransferManager.TransferReason)125;
             if (outgoingTransferReason != TransferManager.TransferReason.None)
             {
                 CaculationVehicle.CustomCalculateOwnVehicles(buildingID, ref buildingData, outgoingTransferReason, ref num27, ref num28, ref num29, ref value);

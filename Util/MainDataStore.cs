@@ -12,8 +12,6 @@ namespace RealConstruction.Util
         public static ushort[] petrolBuffer = new ushort[49152];
         public static ushort[] constructionResourceBuffer = new ushort[49152];
         public static ushort[] operationResourceBuffer = new ushort[49152];
-        public static bool[] isBuildingReleased = new bool[49152];
-        public static bool[] isBuildingLackOfResource = new bool[49152];
         public static byte[] resourceCategory = new byte[49152];
         public static ushort lastBuildingID = 0;
         public static ushort[,] canNotConnectedBuildingID = new ushort[49152, 8];
@@ -30,15 +28,13 @@ namespace RealConstruction.Util
                 petrolBuffer[i] = 0;
                 constructionResourceBuffer[i] = 0;
                 operationResourceBuffer[i] = 0;
-                isBuildingReleased[i] = false;
                 resourceCategory[i] = 0;
-                isBuildingLackOfResource[i] = false;
             }
         }
 
         public static void Save(ref byte[] saveData)
         {
-            //835584
+            //638976
             int i = 0;
             SaveAndRestore.SaveData(ref i, foodBuffer, ref saveData);
             SaveAndRestore.SaveData(ref i, lumberBuffer, ref saveData);
@@ -51,7 +47,7 @@ namespace RealConstruction.Util
 
         public static void Load(byte[] saveData)
         {
-            //835584
+            //638976
             int i = 0;
             SaveAndRestore.LoadData(ref i, saveData, ref foodBuffer);
             SaveAndRestore.LoadData(ref i, saveData, ref lumberBuffer);

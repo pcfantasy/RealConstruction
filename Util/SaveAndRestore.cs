@@ -85,7 +85,7 @@ namespace RealConstruction.Util
             if (Loader.CurrentLoadMode == LoadMode.LoadGame || Loader.CurrentLoadMode == LoadMode.NewGame)
             {
                 DebugLog.LogToFileOnly("StartSave");
-                var saveData = new byte[835584];
+                var saveData = new byte[638976];
                 MainDataStore.Save(ref saveData);
                 SaveAndRestore._serializableData.SaveData("RealConstruction MainDataStore", saveData);
             }

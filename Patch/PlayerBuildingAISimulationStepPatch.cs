@@ -26,7 +26,6 @@ namespace RealConstruction.Patch
                 OperationAI.ProcessPlayerBuildingOperation(buildingID, ref buildingData);
                 if (MainDataStore.operationResourceBuffer[buildingID] > 100)
                 {
-                    MainDataStore.isBuildingLackOfResource[buildingID] = false;
                     if (buildingData.Info.m_class.m_service == ItemClass.Service.PlayerIndustry)
                     {
                         if (buildingData.Info.m_class.m_subService == ItemClass.SubService.PlayerIndustryFarming)
@@ -64,7 +63,6 @@ namespace RealConstruction.Patch
                 else
                 {
                     MainDataStore.operationResourceBuffer[buildingID] = 0;
-                    MainDataStore.isBuildingLackOfResource[buildingID] = true;
                     if (RealConstruction.debugMode)
                     {
                         if (buildingData.m_problems == Notification.Problem.None)
@@ -90,7 +88,6 @@ namespace RealConstruction.Patch
                     Notification.Problem problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem.NoResources);
                     buildingData.m_problems = problem;
                 }
-                MainDataStore.isBuildingLackOfResource[buildingID] = false;
             }
 
             if (CustomPlayerBuildingAI.CanConstruction(buildingID, ref buildingData))

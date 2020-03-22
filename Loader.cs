@@ -10,30 +10,12 @@ using System.Reflection;
 using UnityEngine;
 using System.IO;
 using ColossalFramework.Plugins;
-using RealConstruction.NewData;
 
 namespace RealConstruction
 {
     public class Loader : LoadingExtensionBase
     {
         public static LoadMode CurrentLoadMode;
-
-        public class Detour
-        {
-            public MethodInfo OriginalMethod;
-            public MethodInfo CustomMethod;
-            public RedirectCallsState Redirect;
-
-            public Detour(MethodInfo originalMethod, MethodInfo customMethod)
-            {
-                this.OriginalMethod = originalMethod;
-                this.CustomMethod = customMethod;
-                this.Redirect = RedirectionHelper.RedirectCalls(originalMethod, customMethod);
-            }
-        }
-
-        public static List<Detour> Detours { get; set; }
-        public static bool DetourInited = false;
         public static bool HarmonyDetourInited = false;
         public static bool HarmonyDetourFailed = true;
         public static bool isGuiRunning = false;
@@ -46,7 +28,6 @@ namespace RealConstruction
 
         public override void OnCreated(ILoading loading)
         {
-            Detours = new List<Detour>();
             base.OnCreated(loading);
         }
 
@@ -59,7 +40,6 @@ namespace RealConstruction
                 if (mode == LoadMode.LoadGame || mode == LoadMode.NewGame)
                 {
                     DebugLog.LogToFileOnly("OnLevelLoaded");
-                    InitDetour();
                     HarmonyInitDetour();
                     SetupGui();
                     RealConstruction.LoadSetting();
@@ -91,7 +71,6 @@ namespace RealConstruction
             {
                 if (RealConstruction.IsEnabled)
                 {
-                    RevertDetour();
                     HarmonyRevertDetour();
                     RealConstructionThreading.isFirstTime = true;
                     if (Loader.isGuiRunning)
@@ -203,82 +182,6 @@ namespace RealConstruction
                 HarmonyDetours.DeApply();
                 HarmonyDetourFailed = true;
                 HarmonyDetourInited = false;
-            }
-        }
-
-        public void InitDetour()
-        {
-            if (!DetourInited)
-            {
-                DebugLog.LogToFileOnly("Init detours");
-                bool detourFailed = false;
-
-                //1
-                DebugLog.LogToFileOnly("Detour PlayerBuildingAI::GetConstructionTime calls");
-                try
-                {
-                    Detours.Add(new Detour(typeof(PlayerBuildingAI).GetMethod("GetConstructionTime", BindingFlags.NonPublic | BindingFlags.Instance),
-                                           typeof(CustomPlayerBuildingAI).GetMethod("GetConstructionTime", BindingFlags.NonPublic | BindingFlags.Instance)));
-                }
-                catch (Exception)
-                {
-                    DebugLog.LogToFileOnly("Could not detour PlayerBuildingAI::GetConstructionTime");
-                    detourFailed = true;
-                }
-
-                //2
-                DebugLog.LogToFileOnly("Detour PlayerBuildingAI::GetBudget calls");
-                try
-                {
-                    Detours.Add(new Detour(typeof(PlayerBuildingAI).GetMethod("GetBudget", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType() }, null),
-                                           typeof(CustomPlayerBuildingAI).GetMethod("CustomGetBudget", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(ushort), typeof(Building).MakeByRefType() }, null)));
-                }
-                catch (Exception)
-                {
-                    DebugLog.LogToFileOnly("Could not detour PlayerBuildingAI::GetBudget");
-                    detourFailed = true;
-                }
-
-                //3
-                DebugLog.LogToFileOnly("Detour CustomDistrictPark::GetAcademicYearProgress calls");
-                try
-                {
-                    Detours.Add(new Detour(typeof(DistrictPark).GetMethod("GetAcademicYearProgress", BindingFlags.Public | BindingFlags.Instance), 
-                                           typeof(CustomDistrictPark).GetMethod("GetAcademicYearProgress", BindingFlags.Public | BindingFlags.Static)));
-                }
-                catch (Exception)
-                {
-                    DebugLog.LogToFileOnly("Could not redirect CustomDistrictPark::GetAcademicYearProgress");
-                    detourFailed = true;
-                }
-
-                isRealCityRunning = CheckRealCityIsLoaded();
-
-                if (detourFailed)
-                {
-                    DebugLog.LogToFileOnly("Detours failed");
-                }
-                else
-                {
-                    DebugLog.LogToFileOnly("Detours successful");
-                }
-                DetourInited = true;
-            }
-        }
-
-        public void RevertDetour()
-        {
-            if (DetourInited)
-            {
-                DebugLog.LogToFileOnly("Revert detours");
-                Detours.Reverse();
-                foreach (Detour d in Detours)
-                {
-                    RedirectionHelper.RevertRedirect(d.OriginalMethod, d.Redirect);
-                }
-                DetourInited = false;
-                Detours.Clear();
-                DebugLog.LogToFileOnly("Reverting detours finished.");
             }
         }
 

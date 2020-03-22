@@ -63,9 +63,11 @@
     <Compile Include="NewAI\ConstructionAI.cs" />
     <Compile Include="NewAI\OperationAI.cs" />
     <Compile Include="NewAI\ResourceBuildingAI.cs" />
-    <Compile Include="NewData\CustomDistrictPark.cs" />
+    <Compile Include="Patch\DistrictParkGetAcademicYearProgressPatch.cs" />
     <Compile Include="Patch\CarAIPathfindFailurePatch.cs" />
     <Compile Include="Patch\CargoTruckAIArriveAtTargetPatch.cs" />
+    <Compile Include="Patch\PlayerBuildingAIGetBudgetPatch.cs" />
+    <Compile Include="Patch\PlayerBuildingAIGetConstructionTimePatch.cs" />
     <Compile Include="Patch\PrivateBuildingAISimulationStepPatch.cs" />
     <Compile Include="Patch\PlayerBuildingAISimulationStepPatch.cs" />
     <Compile Include="Patch\CommonBuildingAIReleaseBuildingPatch.cs" />
@@ -86,7 +88,6 @@
     <Compile Include="RealConstruction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RealConstructionThreading.cs" />
-    <Compile Include="Util\RedirectionHelper.cs" />
     <Compile Include="Util\SaveAndRestore.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -32,9 +32,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Lib.Harmony">
-      <Version>1.2.0.1</Version>
-    </PackageReference>
+    <Reference Include="0Harmony1.9">
+      <HintPath>..\0Harmony1.9.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>F:\SteamLibrary\steamapps\common\Cities_Skylines\Cities_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
@@ -104,7 +104,7 @@
 rd /q /s "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Locales"
 mkdir "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Locales"
 copy "D:\Mod\RealConstruction\Locales\*.txt" "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Locales"
-copy "D:\Mod\RealConstruction\bin\Release\0Harmony.dll"  "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\0Harmony.dll"
+copy "D:\Mod\RealConstruction\bin\Release\0Harmony1.9.dll"  "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\0Harmony.dll"
 rd /q /s "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"
 mkdir "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"
 copy "D:\Mod\RealConstruction\Icon\*.png" "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"

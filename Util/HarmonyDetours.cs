@@ -2,21 +2,21 @@
 
 namespace RealConstruction.Util
 {
-    internal static class HarmonyDetours
+    public class HarmonyDetours
     {
-        public const string ID = "pcfantasy.realconstruction";
+        public const string Id = "pcfantasy.realconstruction";
         public static void Apply()
         {
-            var harmony = HarmonyInstance.Create(ID);
-            harmony.PatchAll();
+            var harmony = new Harmony.Harmony(Id);
+            harmony.PatchAll(typeof(HarmonyDetours).Assembly);
             Loader.HarmonyDetourFailed = false;
             DebugLog.LogToFileOnly("Harmony patches applied");
         }
 
         public static void DeApply()
         {
-            var harmony = HarmonyInstance.Create(ID);
-            harmony.UnpatchAll(ID);
+            var harmony = new Harmony.Harmony(Id);
+            harmony.UnpatchAll(Id);
             DebugLog.LogToFileOnly("Harmony patches DeApplied");
         }
     }

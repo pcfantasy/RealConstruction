@@ -25,13 +25,8 @@ namespace RealConstruction.UI
         private UILabel petrol;
         private UILabel constructionResource;
         private UILabel operationResource;
-        public static UICheckBox both;
-        public static UICheckBox construction;
-        public static UICheckBox operation;
-        private UILabel bothText;
-        private UILabel constructionText;
-        private UILabel operationText;
-
+        private UILabel buildingType;
+        private UIDropDown buildingTypeDD;
         public override void Update()
         {
             this.RefreshDisplayData();
@@ -95,201 +90,24 @@ namespace RealConstruction.UI
             this.operationResource.relativePosition = new Vector3(SPACING, this.constructionResource.relativePosition.y + SPACING22);
             this.operationResource.autoSize = true;
 
-            both = base.AddUIComponent<UICheckBox>();
-            both.relativePosition = new Vector3(15f, operationResource.relativePosition.y + 20f);
-            this.bothText = base.AddUIComponent<UILabel>();
-            this.bothText.relativePosition = new Vector3(both.relativePosition.x + both.width + 20f, both.relativePosition.y + 5f);
-            both.height = 16f;
-            both.width = 16f;
-            both.label = this.bothText;
-            both.text = Localization.Get("GENERATE_BOTH_RESOURCES");
-            UISprite uISprite0 = both.AddUIComponent<UISprite>();
-            uISprite0.height = 20f;
-            uISprite0.width = 20f;
-            uISprite0.relativePosition = new Vector3(0f, 0f);
-            uISprite0.spriteName = "check-unchecked";
-            uISprite0.isVisible = true;
-            UISprite uISprite1 = both.AddUIComponent<UISprite>();
-            uISprite1.height = 20f;
-            uISprite1.width = 20f;
-            uISprite1.relativePosition = new Vector3(0f, 0f);
-            uISprite1.spriteName = "check-checked";
-            both.checkedBoxObject = uISprite1;
-            both.isChecked = (MainDataStore.resourceCategory[MainDataStore.lastBuildingID] == 0) ? true : false;
-            both.isEnabled = true;
-            both.isVisible = true;
-            both.canFocus = true;
-            both.isInteractive = true;
-            both.eventCheckChanged += delegate (UIComponent component, bool eventParam)
+            buildingType = AddUIComponent<UILabel>();
+            buildingType.text = Localization.Get("BUILDING_TYPE");
+            buildingType.relativePosition = new Vector3(15f, operationResource.relativePosition.y + 20f);
+            buildingType.autoSize = true;
+
+            buildingTypeDD = UIUtil.CreateDropDown(this);
+            buildingTypeDD.items = new string[] { Localization.Get("NORMAL_BUILDING"), Localization.Get("GENERATE_BOTH_RESOURCES"), Localization.Get("GENERATE_CONSTRUCTION_RESOURCES"), Localization.Get("GENERATE_OPERATION_RESOURCES"), Localization.Get("NONEED_RESOURCE") };
+            buildingTypeDD.selectedIndex = MainDataStore.resourceCategory[MainDataStore.lastBuildingID];
+            buildingTypeDD.size = new Vector2(250f, 25f);
+            buildingTypeDD.relativePosition = new Vector3(15f, buildingType.relativePosition.y + 20f);
+            buildingTypeDD.eventSelectedIndexChanged += delegate (UIComponent c, int sel)
             {
-                Both_OnCheckChanged(component, eventParam);
+                MainDataStore.resourceCategory[MainDataStore.lastBuildingID] = (byte)sel;
             };
-
-            construction = base.AddUIComponent<UICheckBox>();
-            construction.relativePosition = new Vector3(15f, both.relativePosition.y + 20f);
-            this.constructionText = base.AddUIComponent<UILabel>();
-            this.constructionText.relativePosition = new Vector3(construction.relativePosition.x + construction.width + 20f, construction.relativePosition.y + 5f);
-            construction.height = 16f;
-            construction.width = 16f;
-            construction.label = this.constructionText;
-            construction.text = Localization.Get("GENERATE_CONSTRUCTION_RESOURCES");
-            UISprite uISprite2 = construction.AddUIComponent<UISprite>();
-            uISprite2.height = 20f;
-            uISprite2.width = 20f;
-            uISprite2.relativePosition = new Vector3(0f, 0f);
-            uISprite2.spriteName = "check-unchecked";
-            uISprite2.isVisible = true;
-            UISprite uISprite3 = construction.AddUIComponent<UISprite>();
-            uISprite3.height = 20f;
-            uISprite3.width = 20f;
-            uISprite3.relativePosition = new Vector3(0f, 0f);
-            uISprite3.spriteName = "check-checked";
-            construction.checkedBoxObject = uISprite3;
-            construction.isChecked = (MainDataStore.resourceCategory[MainDataStore.lastBuildingID] == 1) ? true : false;
-            construction.isEnabled = true;
-            construction.isVisible = true;
-            construction.canFocus = true;
-            construction.isInteractive = true;
-            construction.eventCheckChanged += delegate (UIComponent component, bool eventParam)
-            {
-                Construction_OnCheckChanged(component, eventParam);
-            };
-
-            operation = base.AddUIComponent<UICheckBox>();
-            operation.relativePosition = new Vector3(15f, construction.relativePosition.y + 20f);
-            this.operationText = base.AddUIComponent<UILabel>();
-            this.operationText.relativePosition = new Vector3(operation.relativePosition.x + operation.width + 20f, operation.relativePosition.y + 5f);
-            operation.height = 16f;
-            operation.width = 16f;
-            operation.label = this.operationText;
-            operation.text = Localization.Get("GENERATE_OPERATION_RESOURCES");
-            UISprite uISprite4 = operation.AddUIComponent<UISprite>();
-            uISprite4.height = 20f;
-            uISprite4.width = 20f;
-            uISprite4.relativePosition = new Vector3(0f, 0f);
-            uISprite4.spriteName = "check-unchecked";
-            uISprite4.isVisible = true;
-            UISprite uISprite5 = operation.AddUIComponent<UISprite>();
-            uISprite5.height = 20f;
-            uISprite5.width = 20f;
-            uISprite5.relativePosition = new Vector3(0f, 0f);
-            uISprite5.spriteName = "check-checked";
-            operation.checkedBoxObject = uISprite5;
-            operation.isChecked = (MainDataStore.resourceCategory[MainDataStore.lastBuildingID] == 2) ? true : false;
-            operation.isEnabled = true;
-            operation.isVisible = true;
-            operation.canFocus = true;
-            operation.isInteractive = true;
-            operation.eventCheckChanged += delegate (UIComponent component, bool eventParam)
-            {
-                Operation_OnCheckChanged(component, eventParam);
-            };
-        }
-
-        public static void Both_OnCheckChanged(UIComponent UIComp, bool bValue)
-        {
-            MainDataStore.lastBuildingID = WorldInfoPanel.GetCurrentInstanceID().Building;
-            if (bValue)
-            {
-                MainDataStore.resourceCategory[MainDataStore.lastBuildingID] = 0;
-                operation.isChecked = false;
-                construction.isChecked = false;
-                both.isChecked = true;
-            }
-            else
-            {
-                if (MainDataStore.resourceCategory[MainDataStore.lastBuildingID] == 0)
-                {
-                    both.isChecked = true;
-                    operation.isChecked = false;
-                    construction.isChecked = false;
-                }
-                else if (MainDataStore.resourceCategory[MainDataStore.lastBuildingID] == 1)
-                {
-                    both.isChecked = false;
-                    operation.isChecked = false;
-                    construction.isChecked = true;
-                }
-                else if (MainDataStore.resourceCategory[MainDataStore.lastBuildingID] == 2)
-                {
-                    both.isChecked = false;
-                    operation.isChecked = true;
-                    construction.isChecked = false;
-                }
-            }
-        }
-
-        public static void Construction_OnCheckChanged(UIComponent UIComp, bool bValue)
-        {
-            MainDataStore.lastBuildingID = WorldInfoPanel.GetCurrentInstanceID().Building;
-            if (bValue)
-            {
-                MainDataStore.resourceCategory[MainDataStore.lastBuildingID] = 1;
-                operation.isChecked = false;
-                construction.isChecked = true;
-                both.isChecked = false;
-            }
-            else
-            {
-                if (MainDataStore.resourceCategory[MainDataStore.lastBuildingID] == 0)
-                {
-                    both.isChecked = true;
-                    operation.isChecked = false;
-                    construction.isChecked = false;
-                }
-                else if (MainDataStore.resourceCategory[MainDataStore.lastBuildingID] == 1)
-                {
-                    both.isChecked = false;
-                    operation.isChecked = false;
-                    construction.isChecked = true;
-                }
-                else if (MainDataStore.resourceCategory[MainDataStore.lastBuildingID] == 2)
-                {
-                    both.isChecked = false;
-                    operation.isChecked = true;
-                    construction.isChecked = false;
-                }
-            }
-        }
-
-        public static void Operation_OnCheckChanged(UIComponent UIComp, bool bValue)
-        {
-            MainDataStore.lastBuildingID = WorldInfoPanel.GetCurrentInstanceID().Building;
-            if (bValue)
-            {
-                MainDataStore.resourceCategory[MainDataStore.lastBuildingID] = 2;
-                operation.isChecked = true;
-                construction.isChecked = false;
-                both.isChecked = false;
-            }
-            else
-            {
-                if (MainDataStore.resourceCategory[MainDataStore.lastBuildingID] == 0)
-                {
-                    both.isChecked = true;
-                    operation.isChecked = false;
-                    construction.isChecked = false;
-                }
-                else if (MainDataStore.resourceCategory[MainDataStore.lastBuildingID] == 1)
-                {
-                    both.isChecked = false;
-                    operation.isChecked = false;
-                    construction.isChecked = true;
-                }
-                else if (MainDataStore.resourceCategory[MainDataStore.lastBuildingID] == 2)
-                {
-                    both.isChecked = false;
-                    operation.isChecked = true;
-                    construction.isChecked = false;
-                }
-            }
         }
 
         private void RefreshDisplayData()
         {
-            uint currentFrameIndex = Singleton<SimulationManager>.instance.m_currentFrameIndex;
-            uint num2 = currentFrameIndex & 255u;
-
             if (refeshOnce || (MainDataStore.lastBuildingID != WorldInfoPanel.GetCurrentInstanceID().Building))
             {
                 if (base.isVisible)
@@ -305,15 +123,10 @@ namespace RealConstruction.UI
                         this.petrol.text = string.Format(Localization.Get("PETROL_STORED") + " [{0}]", MainDataStore.petrolBuffer[MainDataStore.lastBuildingID]);
                         this.operationResource.text = string.Format(Localization.Get("OPERATION_RESOURCE") + " [{0}]", MainDataStore.operationResourceBuffer[MainDataStore.lastBuildingID]);
                         this.constructionResource.text = string.Format(Localization.Get("CONSTRUCTION_RESOURCE") + " [{0}]", MainDataStore.constructionResourceBuffer[MainDataStore.lastBuildingID]);
-                        both.isChecked = (MainDataStore.resourceCategory[MainDataStore.lastBuildingID] == 0) ? true : false;
-                        construction.isChecked = (MainDataStore.resourceCategory[MainDataStore.lastBuildingID] == 1) ? true : false;
-                        operation.isChecked = (MainDataStore.resourceCategory[MainDataStore.lastBuildingID] == 2) ? true : false;
-                        both.isVisible = true;
-                        construction.isVisible = true;
-                        operation.isVisible = true;
-                        both.text = Localization.Get("GENERATE_BOTH_RESOURCES");
-                        construction.text = Localization.Get("CONSTRUCTION_RESOURCE");
-                        operation.text = Localization.Get("OPERATION_RESOURCE");
+                        buildingType.text = Localization.Get("BUILDING_TYPE");
+                        buildingTypeDD.items = new string[] { Localization.Get("NORMAL_BUILDING"), Localization.Get("GENERATE_BOTH_RESOURCES"), Localization.Get("GENERATE_CONSTRUCTION_RESOURCES"), Localization.Get("GENERATE_OPERATION_RESOURCES"), Localization.Get("NONEED_RESOURCE") };
+                        if (buildingTypeDD.selectedIndex != MainDataStore.resourceCategory[MainDataStore.lastBuildingID])
+                            buildingTypeDD.selectedIndex = MainDataStore.resourceCategory[MainDataStore.lastBuildingID];
                     }
                     else
                     {
@@ -323,17 +136,15 @@ namespace RealConstruction.UI
                         this.petrol.text = "";
                         this.constructionResource.text = "";
                         this.operationResource.text = string.Format(Localization.Get("OPERATION_RESOURCE_LEFT") + " [{0}]", MainDataStore.operationResourceBuffer[MainDataStore.lastBuildingID]);
-                        both.isVisible = false;
-                        construction.isVisible = false;
-                        operation.isVisible = false;
-                        both.text = "";
-                        construction.text = "";
-                        operation.text = "";
+                        buildingType.text = Localization.Get("BUILDING_TYPE");
+                        buildingTypeDD.items = new string[] { Localization.Get("NORMAL_BUILDING"), Localization.Get("GENERATE_BOTH_RESOURCES"), Localization.Get("GENERATE_CONSTRUCTION_RESOURCES"), Localization.Get("GENERATE_OPERATION_RESOURCES"), Localization.Get("NONEED_RESOURCE") };
+                        if (buildingTypeDD.selectedIndex != MainDataStore.resourceCategory[MainDataStore.lastBuildingID])
+                            buildingTypeDD.selectedIndex = MainDataStore.resourceCategory[MainDataStore.lastBuildingID];
                     }
                     refeshOnce = false;
                     this.BringToFront();
 
-                    if (!CustomPlayerBuildingAI.CanOperation(MainDataStore.lastBuildingID, ref buildingData) && !ResourceBuildingAI.IsSpecialBuilding(MainDataStore.lastBuildingID))
+                    if (!CustomPlayerBuildingAI.CanOperation(MainDataStore.lastBuildingID, ref buildingData, false) && !ResourceBuildingAI.IsSpecialBuilding(MainDataStore.lastBuildingID))
                     {
                         this.Hide();
                     }

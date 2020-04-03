@@ -12,9 +12,10 @@ namespace RealConstruction.NewAI
     {
         public static bool IsSpecialBuilding(ushort id)
         {
-            BuildingManager instance = Singleton<BuildingManager>.instance;
-            int num = instance.m_buildings.m_buffer[id].Info.m_buildingAI.GetConstructionCost();
-            if (num == 208600)
+            //0 normal building
+            //1-3 resource building
+            //4 normal building and do not need resource
+            if (MainDataStore.resourceCategory[id] != 0 && MainDataStore.resourceCategory[id] != 4)
             {
                 return true;
             }
@@ -28,7 +29,7 @@ namespace RealConstruction.NewAI
             {
                 if (MainDataStore.lumberBuffer[buildingID] > materialConsumption && MainDataStore.coalBuffer[buildingID] > materialConsumption && MainDataStore.constructionResourceBuffer[buildingID] < 64000)
                 {
-                    if (MainDataStore.resourceCategory[buildingID] == 0 || MainDataStore.resourceCategory[buildingID] == 1)
+                    if (MainDataStore.resourceCategory[buildingID] == 1 || MainDataStore.resourceCategory[buildingID] == 2)
                     {
                         MainDataStore.lumberBuffer[buildingID] -= (ushort)materialConsumption;
                         MainDataStore.coalBuffer[buildingID] -= (ushort)materialConsumption;
@@ -38,7 +39,7 @@ namespace RealConstruction.NewAI
 
                 if (MainDataStore.petrolBuffer[buildingID] > materialConsumption && MainDataStore.foodBuffer[buildingID] > materialConsumption && MainDataStore.operationResourceBuffer[buildingID] < 64000)
                 {
-                    if (MainDataStore.resourceCategory[buildingID] == 0 || MainDataStore.resourceCategory[buildingID] == 2)
+                    if (MainDataStore.resourceCategory[buildingID] == 1 || MainDataStore.resourceCategory[buildingID] == 3)
                     {
                         MainDataStore.petrolBuffer[buildingID] -= (ushort)materialConsumption;
                         MainDataStore.foodBuffer[buildingID] -= (ushort)materialConsumption;
@@ -115,7 +116,7 @@ namespace RealConstruction.NewAI
             int num34 = 0;
             TransferManager.TransferReason incomingTransferReason = default(TransferManager.TransferReason);
             //Foods
-            if (MainDataStore.resourceCategory[buildingID] == 0 || MainDataStore.resourceCategory[buildingID] == 2)
+            if (MainDataStore.resourceCategory[buildingID] == 1 || MainDataStore.resourceCategory[buildingID] == 3)
             {
                 incomingTransferReason = TransferManager.TransferReason.Food;
                 if (incomingTransferReason != TransferManager.TransferReason.None)
@@ -167,7 +168,7 @@ namespace RealConstruction.NewAI
                 }
             }
             //Coal
-            if (MainDataStore.resourceCategory[buildingID] == 0 || MainDataStore.resourceCategory[buildingID] == 1)
+            if (MainDataStore.resourceCategory[buildingID] == 1 || MainDataStore.resourceCategory[buildingID] == 2)
             {
                 incomingTransferReason = TransferManager.TransferReason.Coal;
                 num27 = 0;

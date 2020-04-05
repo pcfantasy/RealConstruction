@@ -24,7 +24,7 @@ namespace RealConstruction.Patch
                 __result = info.m_eventAI.GetBudget(eventIndex, ref instance.m_events.m_buffer[eventIndex]);
             }
 
-            if (MainDataStore.operationResourceBuffer[buildingID] < 1000 && CustomPlayerBuildingAI.CanOperation(buildingID, ref buildingData))
+            if (MainDataStore.operationResourceBuffer[buildingID] < 1000 && CustomPlayerBuildingAI.CanOperation(buildingID, ref buildingData) && (RealConstruction.operationConsumption != 2))
             {
                 __result = 10;
             }

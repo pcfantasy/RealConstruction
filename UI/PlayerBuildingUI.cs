@@ -16,7 +16,6 @@ namespace RealConstruction.UI
         public static readonly string cacheName = "PlayerBuildingUI";
         private static readonly float SPACING = 15f;
         private static readonly float SPACING22 = 22f;
-        private Dictionary<string, UILabel> _valuesControlContainer = new Dictionary<string, UILabel>(16);
         public CityServiceWorldInfoPanel baseBuildingWindow;
         public static bool refeshOnce = false;
         private UILabel food;

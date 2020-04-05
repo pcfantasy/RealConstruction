@@ -20,6 +20,7 @@ namespace RealConstruction.Patch
             MainDataStore.coalBuffer[buildingID] = 0;
             MainDataStore.constructionResourceBuffer[buildingID] = 0;
             MainDataStore.operationResourceBuffer[buildingID] = 0;
+            MainDataStore.resourceCategory[buildingID] = 0;
             TransferManager.TransferOffer offer = default(TransferManager.TransferOffer);
             offer.Building = buildingID;
             Singleton<TransferManager>.instance.RemoveOutgoingOffer((TransferManager.TransferReason)124, offer);

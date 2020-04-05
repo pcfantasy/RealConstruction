@@ -18,3 +18,7 @@ DEBUG_MODE	Debug UI
 SHOW_LACK_OF_RESOURCE	Show lack of resource icon on buildings when lack of construction or operation resources
 FIX_UNROUTED_TRANSFER_MATCH_DESCRIPTION	Fix UnRouted Transfer Match If you have district with broken roadnetwork
 FIX_UNROUTED_TRANSFER_MATCH_ENALBE	Fix UnRouted Transfer Match Enable
+OPERATION_RESOURCE_CONSUMPTION	Operation resource consumption speed
+NORMAL	Normal
+HALF	Half
+NONE	None

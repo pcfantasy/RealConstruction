@@ -18,7 +18,7 @@ namespace RealConstruction.Patch
         public static void Postfix(ushort buildingID, ref Building buildingData, ref Building.Frame frameData)
         {
             // Update problems
-            if (CustomPlayerBuildingAI.CanOperation(buildingID, ref buildingData) && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
+            if (CustomPlayerBuildingAI.CanOperation(buildingID, ref buildingData) && buildingData.m_flags.IsFlagSet(Building.Flags.Completed) && (RealConstruction.operationConsumption != 0))
             {
                 OperationAI.ProcessPlayerBuildingOperation(buildingID, ref buildingData);
                 if (MainDataStore.operationResourceBuffer[buildingID] > 100)
@@ -27,28 +27,46 @@ namespace RealConstruction.Patch
                     {
                         if (buildingData.Info.m_class.m_subService == ItemClass.SubService.PlayerIndustryFarming)
                         {
-                            MainDataStore.operationResourceBuffer[buildingID] -= 10;
+                            if (RealConstruction.operationConsumption == 1)
+                                MainDataStore.operationResourceBuffer[buildingID] -= 5;
+                            else
+                                MainDataStore.operationResourceBuffer[buildingID] -= 10;
                         }
                         else if (buildingData.Info.m_class.m_subService == ItemClass.SubService.PlayerIndustryForestry)
                         {
-                            MainDataStore.operationResourceBuffer[buildingID] -= 20;
+                            if (RealConstruction.operationConsumption == 1)
+                                MainDataStore.operationResourceBuffer[buildingID] -= 10;
+                            else
+                                MainDataStore.operationResourceBuffer[buildingID] -= 20;
                         }
                         else if (buildingData.Info.m_class.m_subService == ItemClass.SubService.PlayerIndustryOre)
                         {
-                            MainDataStore.operationResourceBuffer[buildingID] -= 30;
+                            if (RealConstruction.operationConsumption == 1)
+                                MainDataStore.operationResourceBuffer[buildingID] -= 15;
+                            else
+                                MainDataStore.operationResourceBuffer[buildingID] -= 30;
                         }
                         else if (buildingData.Info.m_class.m_subService == ItemClass.SubService.PlayerIndustryOil)
                         {
-                            MainDataStore.operationResourceBuffer[buildingID] -= 40;
+                            if (RealConstruction.operationConsumption == 1)
+                                MainDataStore.operationResourceBuffer[buildingID] -= 20;
+                            else
+                                MainDataStore.operationResourceBuffer[buildingID] -= 40;
                         }
                         else
                         {
-                            MainDataStore.operationResourceBuffer[buildingID] -= 50;
+                            if (RealConstruction.operationConsumption == 1)
+                                MainDataStore.operationResourceBuffer[buildingID] -= 25;
+                            else
+                                MainDataStore.operationResourceBuffer[buildingID] -= 50;
                         }
                     }
                     else
                     {
-                        MainDataStore.operationResourceBuffer[buildingID] -= 100;
+                        if (RealConstruction.operationConsumption == 1)
+                            MainDataStore.operationResourceBuffer[buildingID] -= 50;
+                        else
+                            MainDataStore.operationResourceBuffer[buildingID] -= 100;
                     }
 
                     if (CustomPlayerBuildingAI.CanRemoveNoResource(buildingID, ref buildingData))

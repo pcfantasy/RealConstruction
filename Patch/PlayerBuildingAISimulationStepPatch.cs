@@ -18,7 +18,7 @@ namespace RealConstruction.Patch
         public static void Postfix(ushort buildingID, ref Building buildingData, ref Building.Frame frameData)
         {
             // Update problems
-            if (CustomPlayerBuildingAI.CanOperation(buildingID, ref buildingData) && buildingData.m_flags.IsFlagSet(Building.Flags.Completed) && (RealConstruction.operationConsumption != 0))
+            if (CustomPlayerBuildingAI.CanOperation(buildingID, ref buildingData) && buildingData.m_flags.IsFlagSet(Building.Flags.Completed) && (RealConstruction.operationConsumption != 2))
             {
                 OperationAI.ProcessPlayerBuildingOperation(buildingID, ref buildingData);
                 if (MainDataStore.operationResourceBuffer[buildingID] > 100)

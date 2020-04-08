@@ -12,3 +12,5 @@
 *.props
 *.targets
 *.CopyComplete
+
+packages/*

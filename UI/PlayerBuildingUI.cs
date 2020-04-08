@@ -123,11 +123,6 @@ namespace RealConstruction.UI
                         this.petrol.text = string.Format(Localization.Get("PETROL_STORED") + " [{0}]", MainDataStore.petrolBuffer[MainDataStore.lastBuildingID]);
                         this.operationResource.text = string.Format(Localization.Get("OPERATION_RESOURCE") + " [{0}]", MainDataStore.operationResourceBuffer[MainDataStore.lastBuildingID]);
                         this.constructionResource.text = string.Format(Localization.Get("CONSTRUCTION_RESOURCE") + " [{0}]", MainDataStore.constructionResourceBuffer[MainDataStore.lastBuildingID]);
-                        buildingType.text = Localization.Get("BUILDING_TYPE");
-                        buildingTypeDD.items = new string[] { Localization.Get("NORMAL_BUILDING"), Localization.Get("GENERATE_BOTH_RESOURCES"), Localization.Get("GENERATE_CONSTRUCTION_RESOURCES"), Localization.Get("GENERATE_OPERATION_RESOURCES"), Localization.Get("NONEED_RESOURCE") };
-                        if (buildingTypeDD.selectedIndex != MainDataStore.resourceCategory[MainDataStore.lastBuildingID])
-                            buildingTypeDD.selectedIndex = MainDataStore.resourceCategory[MainDataStore.lastBuildingID];
-
                     }
                     else
                     {
@@ -136,12 +131,14 @@ namespace RealConstruction.UI
                         this.coal.text = "";
                         this.petrol.text = "";
                         this.constructionResource.text = "";
-                        this.operationResource.text = string.Format(Localization.Get("OPERATION_RESOURCE_LEFT") + " [{0}]", MainDataStore.operationResourceBuffer[MainDataStore.lastBuildingID]);
-                        buildingType.text = Localization.Get("BUILDING_TYPE");
-                        buildingTypeDD.items = new string[] { Localization.Get("NORMAL_BUILDING"), Localization.Get("GENERATE_BOTH_RESOURCES"), Localization.Get("GENERATE_CONSTRUCTION_RESOURCES"), Localization.Get("GENERATE_OPERATION_RESOURCES"), Localization.Get("NONEED_RESOURCE") };
-                        if (buildingTypeDD.selectedIndex != MainDataStore.resourceCategory[MainDataStore.lastBuildingID])
-                            buildingTypeDD.selectedIndex = MainDataStore.resourceCategory[MainDataStore.lastBuildingID];
+                        this.operationResource.text = string.Format(Localization.Get("OPERATION_RESOURCE_LEFT") + " [{0}]", MainDataStore.operationResourceBuffer[MainDataStore.lastBuildingID]);                        
                     }
+
+                    if (buildingType.text != Localization.Get("BUILDING_TYPE"))
+                        buildingTypeDD.items = new string[] { Localization.Get("NORMAL_BUILDING"), Localization.Get("GENERATE_BOTH_RESOURCES"), Localization.Get("GENERATE_CONSTRUCTION_RESOURCES"), Localization.Get("GENERATE_OPERATION_RESOURCES"), Localization.Get("NONEED_RESOURCE") };
+                    if (buildingTypeDD.selectedIndex != MainDataStore.resourceCategory[MainDataStore.lastBuildingID])
+                        buildingTypeDD.selectedIndex = MainDataStore.resourceCategory[MainDataStore.lastBuildingID];
+                    buildingType.text = Localization.Get("BUILDING_TYPE");
                     refeshOnce = false;
                     this.BringToFront();
 

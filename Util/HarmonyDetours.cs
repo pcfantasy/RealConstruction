@@ -1,4 +1,4 @@
-﻿using Harmony;
+﻿using HarmonyLib;
 
 namespace RealConstruction.Util
 {
@@ -7,7 +7,7 @@ namespace RealConstruction.Util
         public const string Id = "pcfantasy.realconstruction";
         public static void Apply()
         {
-            var harmony = new Harmony.Harmony(Id);
+            var harmony = new Harmony(Id);
             harmony.PatchAll(typeof(HarmonyDetours).Assembly);
             Loader.HarmonyDetourFailed = false;
             DebugLog.LogToFileOnly("Harmony patches applied");
@@ -15,7 +15,7 @@ namespace RealConstruction.Util
 
         public static void DeApply()
         {
-            var harmony = new Harmony.Harmony(Id);
+            var harmony = new Harmony(Id);
             harmony.UnpatchAll(Id);
             DebugLog.LogToFileOnly("Harmony patches DeApplied");
         }

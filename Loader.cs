@@ -10,6 +10,7 @@ using System.Reflection;
 using UnityEngine;
 using System.IO;
 using ColossalFramework.Plugins;
+using CitiesHarmony.API;
 
 namespace RealConstruction
 {
@@ -166,22 +167,28 @@ namespace RealConstruction
 
         public void HarmonyInitDetour()
         {
-            if (!HarmonyDetourInited)
+            if (HarmonyHelper.IsHarmonyInstalled)
             {
-                DebugLog.LogToFileOnly("Init harmony detours");
-                HarmonyDetours.Apply();
-                HarmonyDetourInited = true;
+                if (!HarmonyDetourInited)
+                {
+                    DebugLog.LogToFileOnly("Init harmony detours");
+                    HarmonyDetours.Apply();
+                    HarmonyDetourInited = true;
+                }
             }
         }
 
         public void HarmonyRevertDetour()
         {
-            if (HarmonyDetourInited)
+            if (HarmonyHelper.IsHarmonyInstalled)
             {
-                DebugLog.LogToFileOnly("Revert harmony detours");
-                HarmonyDetours.DeApply();
-                HarmonyDetourFailed = true;
-                HarmonyDetourInited = false;
+                if (HarmonyDetourInited)
+                {
+                    DebugLog.LogToFileOnly("Revert harmony detours");
+                    HarmonyDetours.DeApply();
+                    HarmonyDetourFailed = true;
+                    HarmonyDetourInited = false;
+                }
             }
         }
 

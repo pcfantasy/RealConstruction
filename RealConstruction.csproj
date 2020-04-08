@@ -32,14 +32,17 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony1.9">
-      <HintPath>..\0Harmony1.9.dll</HintPath>
+    <Reference Include="0Harmony, Version=2.0.0.9, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Lib.Harmony.2.0.0.9\lib\net35\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>F:\SteamLibrary\steamapps\common\Cities_Skylines\Cities_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>F:\SteamLibrary\steamapps\common\Cities_Skylines\Cities_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="CitiesHarmony.API, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\CitiesHarmony.API.1.0.4\lib\net35\CitiesHarmony.API.dll</HintPath>
     </Reference>
     <Reference Include="ColossalManaged">
       <HintPath>F:\SteamLibrary\steamapps\common\Cities_Skylines\Cities_Data\Managed\ColossalManaged.dll</HintPath>
@@ -98,14 +101,18 @@
     <Content Include="Locales\zh.txt" />
     <Content Include="PreviewImage.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "D:\Mod\RealConstruction\bin\Release\RealConstruction.dll"  "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\RealConstruction.dll"
+    <PostBuildEvent>rd /q /s "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108"
+mkdir "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108"
+copy "D:\Mod\RealConstruction\bin\Release\RealConstruction.dll"  "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\RealConstruction.dll"
 rd /q /s "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Locales"
 mkdir "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Locales"
 copy "D:\Mod\RealConstruction\Locales\*.txt" "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Locales"
-copy "D:\Mod\RealConstruction\bin\Release\0Harmony1.9.dll"  "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\0Harmony.dll"
+copy "D:\Mod\RealConstruction\bin\Release\CitiesHarmony.API.dll"  "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\CitiesHarmony.API.dll"
 rd /q /s "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"
 mkdir "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"
 copy "D:\Mod\RealConstruction\Icon\*.png" "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"

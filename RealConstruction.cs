@@ -1,15 +1,7 @@
-﻿using ColossalFramework;
-using ColossalFramework.Globalization;
-using ColossalFramework.Plugins;
-using ColossalFramework.UI;
+﻿using CitiesHarmony.API;
 using ICities;
 using RealConstruction.Util;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace RealConstruction
 {
@@ -35,6 +27,7 @@ namespace RealConstruction
             IsEnabled = true;
             FileStream fs = File.Create("RealConstruction.txt");
             fs.Close();
+            HarmonyHelper.EnsureHarmonyInstalled();
         }
 
         public void OnDisabled()

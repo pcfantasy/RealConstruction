@@ -109,11 +109,9 @@
     <PostBuildEvent>rd /q /s "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108"
 mkdir "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108"
 copy "D:\Mod\RealConstruction\bin\Release\RealConstruction.dll"  "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\RealConstruction.dll"
-rd /q /s "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Locales"
 mkdir "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Locales"
 copy "D:\Mod\RealConstruction\Locales\*.txt" "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Locales"
 copy "D:\Mod\RealConstruction\bin\Release\CitiesHarmony.API.dll"  "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\CitiesHarmony.API.dll"
-rd /q /s "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"
 mkdir "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"
 copy "D:\Mod\RealConstruction\Icon\*.png" "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"
 copy "D:\Mod\RealConstruction\PreviewImage.png"  "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\PreviewImage.png"</PostBuildEvent>

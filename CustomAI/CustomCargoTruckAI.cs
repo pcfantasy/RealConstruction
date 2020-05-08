@@ -27,42 +27,5 @@ namespace RealConstruction.CustomAI
                 }
             }
         }
-
-        public static float GetResourcePrice(TransferManager.TransferReason material)
-        {
-            //Need to sync with RealCity mod
-            float num;
-            if (!RealConstructionThreading.reduceVehicle)
-            {
-                switch (material)
-                {
-                    case TransferManager.TransferReason.Petrol:
-                        num = 3f; break;
-                    case TransferManager.TransferReason.Food:
-                        num = 1.5f; break;
-                    case TransferManager.TransferReason.Lumber:
-                        num = 2f; break;
-                    case TransferManager.TransferReason.Coal:
-                        num = 2.5f; break;
-                    default: DebugLog.LogToFileOnly("Error: Unknow material in RealConstruction = " + material.ToString()); num = 0f; break;
-                }
-            }
-            else
-            {
-                switch (material)
-                {
-                    case TransferManager.TransferReason.Petrol:
-                        num = 3f * RealConstructionThreading.reduceCargoDiv; break;
-                    case TransferManager.TransferReason.Food:
-                        num = 1.5f * RealConstructionThreading.reduceCargoDiv; break;
-                    case TransferManager.TransferReason.Lumber:
-                        num = 2f * RealConstructionThreading.reduceCargoDiv; break;
-                    case TransferManager.TransferReason.Coal:
-                        num = 2.5f * RealConstructionThreading.reduceCargoDiv; break;
-                    default: DebugLog.LogToFileOnly("Error: Unknow material in RealConstruction = " + material.ToString()); num = 0f; break;
-                }
-            }
-            return (float)(UniqueFacultyAI.IncreaseByBonus(UniqueFacultyAI.FacultyBonus.Science, 100) / 100f) * num ;
-        }
     }
 }

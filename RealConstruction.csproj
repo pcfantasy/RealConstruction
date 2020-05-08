@@ -79,6 +79,8 @@
     <Compile Include="UI\UniqueFactoryButton.cs" />
     <Compile Include="UI\WarehouseButton.cs" />
     <Compile Include="Util\CaculationVehicle.cs" />
+    <Compile Include="Util\FastDelegateFactory.cs" />
+    <Compile Include="Util\RealCityUtil.cs" />
     <Compile Include="Util\HarmonyDetours.cs" />
     <Compile Include="Util\SpriteUtilities.cs" />
     <Compile Include="Util\DebugLog.cs" />

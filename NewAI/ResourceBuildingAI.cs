@@ -24,7 +24,8 @@ namespace RealConstruction.NewAI
 
         public static void ProcessCityResourceDepartmentBuildingGoods(ushort buildingID, ref Building buildingData)
         {
-            int materialConsumption = 40 / RealConstructionThreading.reduceCargoDiv;
+            RealCityUtil.InitDelegate();
+            int materialConsumption = 40 / RealCityUtil.GetReduceCargoDiv();
             if (buildingData.m_fireIntensity == 0 && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
             {
                 if (MainDataStore.lumberBuffer[buildingID] > materialConsumption && MainDataStore.coalBuffer[buildingID] > materialConsumption && MainDataStore.constructionResourceBuffer[buildingID] < 64000)

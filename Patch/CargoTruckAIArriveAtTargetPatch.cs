@@ -53,7 +53,8 @@ namespace RealConstruction.Patch
                                     }
                                     if (Loader.isRealCityRunning)
                                     {
-                                        float productionValue1 = vehicleData.m_transferSize * CustomCargoTruckAI.GetResourcePrice((TransferManager.TransferReason)vehicleData.m_transferType);
+                                        RealCityUtil.InitDelegate();
+                                        float productionValue1 = vehicleData.m_transferSize * RealCityUtil.GetResourcePrice((TransferManager.TransferReason)vehicleData.m_transferType);
                                         Singleton<EconomyManager>.instance.FetchResource(EconomyManager.Resource.ResourcePrice, (int)productionValue1, ItemClass.Service.PlayerIndustry, ItemClass.SubService.PlayerIndustryFarming, ItemClass.Level.Level1);
                                     }
                                     vehicleData.m_transferSize = 0;
@@ -66,7 +67,8 @@ namespace RealConstruction.Patch
                                     }
                                     if (Loader.isRealCityRunning)
                                     {
-                                        float productionValue1 = vehicleData.m_transferSize * CustomCargoTruckAI.GetResourcePrice((TransferManager.TransferReason)vehicleData.m_transferType);
+                                        RealCityUtil.InitDelegate();
+                                        float productionValue1 = vehicleData.m_transferSize * RealCityUtil.GetResourcePrice((TransferManager.TransferReason)vehicleData.m_transferType);
                                         Singleton<EconomyManager>.instance.FetchResource(EconomyManager.Resource.ResourcePrice, (int)productionValue1, ItemClass.Service.PlayerIndustry, ItemClass.SubService.PlayerIndustryForestry, ItemClass.Level.Level1);
                                     }
                                     vehicleData.m_transferSize = 0;
@@ -78,7 +80,8 @@ namespace RealConstruction.Patch
                                     }
                                     if (Loader.isRealCityRunning)
                                     {
-                                        float productionValue1 = vehicleData.m_transferSize * CustomCargoTruckAI.GetResourcePrice((TransferManager.TransferReason)vehicleData.m_transferType);
+                                        RealCityUtil.InitDelegate();
+                                        float productionValue1 = vehicleData.m_transferSize * RealCityUtil.GetResourcePrice((TransferManager.TransferReason)vehicleData.m_transferType);
                                         Singleton<EconomyManager>.instance.FetchResource(EconomyManager.Resource.ResourcePrice, (int)productionValue1, ItemClass.Service.PlayerIndustry, ItemClass.SubService.PlayerIndustryOre, ItemClass.Level.Level1);
                                     }
                                     vehicleData.m_transferSize = 0;
@@ -90,7 +93,8 @@ namespace RealConstruction.Patch
                                     }
                                     if (Loader.isRealCityRunning)
                                     {
-                                        float productionValue1 = vehicleData.m_transferSize * CustomCargoTruckAI.GetResourcePrice((TransferManager.TransferReason)vehicleData.m_transferType);
+                                        RealCityUtil.InitDelegate();
+                                        float productionValue1 = vehicleData.m_transferSize * RealCityUtil.GetResourcePrice((TransferManager.TransferReason)vehicleData.m_transferType);
                                         Singleton<EconomyManager>.instance.FetchResource(EconomyManager.Resource.ResourcePrice, (int)productionValue1, ItemClass.Service.PlayerIndustry, ItemClass.SubService.PlayerIndustryOil, ItemClass.Level.Level1);
                                     }
                                     vehicleData.m_transferSize = 0;

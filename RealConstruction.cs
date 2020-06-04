@@ -10,7 +10,7 @@ namespace RealConstruction
         public static bool IsEnabled = false;
         public static bool debugMode = false;
         public static bool fixUnRouteTransfer = false;
-        public static int operationConsumption = 0;
+        public static int operationConsumption = 2;
 
         public string Name
         {
@@ -75,9 +75,9 @@ namespace RealConstruction
                 }
 
                 strLine = sr.ReadLine();
-                if (strLine == "2")
+                if (strLine == "0")
                 {
-                    operationConsumption = 2;
+                    operationConsumption = 0;
                 }
                 else if (strLine == "1")
                 {
@@ -85,7 +85,7 @@ namespace RealConstruction
                 }
                 else
                 {
-                    operationConsumption = 0;
+                    operationConsumption = 2;
                 }
 
                 sr.Close();

@@ -11,6 +11,8 @@ using UnityEngine;
 using System.IO;
 using ColossalFramework.Plugins;
 using CitiesHarmony.API;
+using ColossalFramework.Globalization;
+using UnityEngine.SocialPlatforms;
 
 namespace RealConstruction
 {
@@ -43,6 +45,9 @@ namespace RealConstruction
                     DebugLog.LogToFileOnly("OnLevelLoaded");
                     HarmonyInitDetour();
                     SetupGui();
+                    SetupLocalization();
+
+                    
                     RealConstruction.LoadSetting();
                     if (mode == LoadMode.NewGame)
                     {
@@ -190,6 +195,29 @@ namespace RealConstruction
                     HarmonyDetourInited = false;
                 }
             }
+        }
+
+        private void SetupLocalization()
+        {
+            var delivery_construction_key = new Locale.Key
+            {
+                m_Identifier = "VEHICLE_STATUS_CARGOTRUCK_DELIVER",
+                m_Key = "124",
+                m_Index = 0
+            };
+            var delivery_operation_key = new Locale.Key
+            {
+                m_Identifier = "VEHICLE_STATUS_CARGOTRUCK_DELIVER",
+                m_Key = "125",
+                m_Index = 0
+            };
+
+            var loc = new Locale();
+            loc.AddLocalizedString(delivery_construction_key, Localization.Get("TRANSFER_CONSTRUCTION_RESOURCE_TO"));
+            loc.AddLocalizedString(delivery_operation_key, Localization.Get("TRANSFER_OPERATION_RESOURCE_TO"));
+
+            loc.appendOverride = true;
+            Locale.LocaleOverride = loc;
         }
 
         private bool Check3rdPartyModLoaded(string namespaceStr, bool printAll = false)

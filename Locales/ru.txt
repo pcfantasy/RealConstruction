@@ -1,0 +1,24 @@
+﻿FOOD_STORED	Еда
+LUMBER_STORED	Пиломатериалы
+COAL_STORED	Уголь
+PETROL_STORED	Топливо
+CONSTRUCTION_RESOURCE	Стройматериалы
+OPERATION_RESOURCE	Расходники
+OPERATION_RESOURCE_LEFT	Осталось расходников
+TRANSFER_CONSTRUCTION_RESOURCE_TO	Доставка стройматериалов
+TRANSFER_OPERATION_RESOURCE_TO	Доставка расходников
+GOING_FOR_FUEL_TO	Следует на АЗС в
+BUILDING_TYPE	Строение
+NORMAL_BUILDING	требует ресурсы
+GENERATE_BOTH_RESOURCES	производит два вида ресурсов
+GENERATE_CONSTRUCTION_RESOURCES	производит стройматериалы
+GENERATE_OPERATION_RESOURCES	производит расходники
+NONEED_RESOURCE	не требует ресурсов
+DEBUG_MODE	Отладочный ПИ
+SHOW_LACK_OF_RESOURCE	Отображать иконку "недостаточно сырья" когда не хватает стройматериалов или расходников
+FIX_UNROUTED_TRANSFER_MATCH_DESCRIPTION	Включите исправление отсутствия маршрута если у Вас есть район с разорваннной дорожной сетью.
+FIX_UNROUTED_TRANSFER_MATCH_ENALBE	Включить исправление отсутствия маршрута.
+OPERATION_RESOURCE_CONSUMPTION	Скорость потребления расходников
+NORMAL	Нормальная
+HALF	Половинная
+NONE	Нулевая

@@ -13,7 +13,7 @@ namespace RealConstruction
     public class RealConstructionThreading : ThreadingExtensionBase
     {
         public static bool isFirstTime = true;
-        public const int HarmonyPatchNum = 8;
+        public const int HarmonyPatchNum = 9;
 
         public override void OnBeforeSimulationFrame()
         {

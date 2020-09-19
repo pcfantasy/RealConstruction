@@ -69,6 +69,7 @@
     <Compile Include="Patch\DistrictParkGetAcademicYearProgressPatch.cs" />
     <Compile Include="Patch\CarAIPathfindFailurePatch.cs" />
     <Compile Include="Patch\CargoTruckAIArriveAtTargetPatch.cs" />
+    <Compile Include="Patch\PlayerBuildingAICreateBuildingPatch.cs" />
     <Compile Include="Patch\PlayerBuildingAIGetBudgetPatch.cs" />
     <Compile Include="Patch\PlayerBuildingAIGetConstructionTimePatch.cs" />
     <Compile Include="Patch\PrivateBuildingAISimulationStepPatch.cs" />

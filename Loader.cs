@@ -46,8 +46,8 @@ namespace RealConstruction
                     HarmonyInitDetour();
                     SetupGui();
                     SetupLocalization();
+                    isRealCityRunning = CheckRealCityIsLoaded();
 
-                    
                     RealConstruction.LoadSetting();
                     if (mode == LoadMode.NewGame)
                     {

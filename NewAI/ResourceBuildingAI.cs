@@ -1,9 +1,5 @@
 ﻿using ColossalFramework;
 using RealConstruction.Util;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace RealConstruction.NewAI
@@ -25,12 +21,16 @@ namespace RealConstruction.NewAI
         public static void ProcessCityResourceDepartmentBuildingGoods(ushort buildingID, ref Building buildingData)
         {
             int reduceCargoDiv = 1;
+            float averageSalary = 40f;
             if (Loader.isRealCityRunning)
             {
                 RealCityUtil.InitDelegate();
                 reduceCargoDiv = RealCityUtil.GetReduceCargoDiv();
+                averageSalary = RealCityUtil.GetAverageSalary();
             }
-            int materialConsumption = 40 / reduceCargoDiv;
+            int materialConsumption = (int)(1f * averageSalary / reduceCargoDiv);
+            if (materialConsumption == 0)
+                materialConsumption = 1;
             if (buildingData.m_fireIntensity == 0 && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
             {
                 if (MainDataStore.lumberBuffer[buildingID] > materialConsumption && MainDataStore.coalBuffer[buildingID] > materialConsumption && MainDataStore.constructionResourceBuffer[buildingID] < 64000)
@@ -39,7 +39,7 @@ namespace RealConstruction.NewAI
                     {
                         MainDataStore.lumberBuffer[buildingID] -= (ushort)materialConsumption;
                         MainDataStore.coalBuffer[buildingID] -= (ushort)materialConsumption;
-                        MainDataStore.constructionResourceBuffer[buildingID] += 800;
+                        MainDataStore.constructionResourceBuffer[buildingID] += 400;
                     }
                 }
 
@@ -49,7 +49,7 @@ namespace RealConstruction.NewAI
                     {
                         MainDataStore.petrolBuffer[buildingID] -= (ushort)materialConsumption;
                         MainDataStore.foodBuffer[buildingID] -= (ushort)materialConsumption;
-                        MainDataStore.operationResourceBuffer[buildingID] += 800;
+                        MainDataStore.operationResourceBuffer[buildingID] += 400;
                     }
                 }
             }

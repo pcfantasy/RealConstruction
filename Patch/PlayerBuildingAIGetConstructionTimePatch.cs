@@ -15,9 +15,12 @@ namespace RealConstruction.Patch
         {
             if ((Singleton<ToolManager>.instance.m_properties.m_mode & ItemClass.Availability.AssetEditor) != ItemClass.Availability.None)
             {
-                __result = 0;
+
             }
-            __result = 100;
+            else
+            {
+                __result = 100;
+            }
             return false;
         }
     }

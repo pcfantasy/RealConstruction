@@ -7,6 +7,9 @@ namespace RealConstruction.Util
         public delegate bool RealCityGetRealCityV10();
         public static RealCityGetRealCityV10 GetRealCityV10;
 
+        public delegate float RealCityGetAverageSalary();
+        public static RealCityGetAverageSalary GetAverageSalary;
+
         public delegate int RealCityGetReduceCargoDiv();
         public static RealCityGetReduceCargoDiv GetReduceCargoDiv;
 
@@ -29,20 +32,18 @@ namespace RealConstruction.Util
         public static void InitDelegate()
         {
             if (GetRealCityV10 != null)
-                return;
-            if (GetReduceCargoDiv != null)
-                return;
-            if (GetResourcePrice != null)
-                return;
-            if (GetOutsideTouristMoney != null)
-                return;
-            if (GetOutsideGovermentMoney != null)
-                return;
-            if (SetOutsideTouristMoney != null)
-                return;
-            if (SetOutsideGovermentMoney != null)
-                return;
+                if (GetAverageSalary != null)
+                    if (GetReduceCargoDiv != null)
+                        if (GetResourcePrice != null)
+                            if (GetOutsideTouristMoney != null)
+                                if (GetOutsideGovermentMoney != null)
+                                    if (SetOutsideTouristMoney != null)
+                                        if (SetOutsideGovermentMoney != null)
+                                            return;
+
+            DebugLog.LogToFileOnly("Try to InitDelegate in RealCityUtil");
             GetRealCityV10 = FastDelegateFactory.Create<RealCityGetRealCityV10>(Assembly.Load("RealCity").GetType("RealCity.RealCity"), "GetRealCityV10", instanceMethod: false);
+            GetAverageSalary = FastDelegateFactory.Create<RealCityGetAverageSalary>(Assembly.Load("RealCity").GetType("RealCity.RealCity"), "GetAverageSalary", instanceMethod: false);
             GetReduceCargoDiv = FastDelegateFactory.Create<RealCityGetReduceCargoDiv>(Assembly.Load("RealCity").GetType("RealCity.RealCity"), "GetReduceCargoDiv", instanceMethod: false);
             GetResourcePrice = FastDelegateFactory.Create<RealCityGetResourcePrice>(Assembly.Load("RealCity").GetType("RealCity.CustomAI.RealCityIndustryBuildingAI"), "GetResourcePrice", instanceMethod: false);
             GetOutsideTouristMoney = FastDelegateFactory.Create<RealCityGetOutsideTouristMoney>(Assembly.Load("RealCity").GetType("RealCity.RealCity"), "GetOutsideTouristMoney", instanceMethod: false);

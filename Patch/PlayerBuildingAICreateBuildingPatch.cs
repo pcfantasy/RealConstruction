@@ -19,13 +19,20 @@ namespace RealConstruction.Patch
             if (data.Info.name == "1908304237.City Resource Building_Data")
             {
                 //special building default value
+                //special building have initial resource
                 if (RealConstruction.operationConsumption == 2)
                 {
                     MainDataStore.resourceCategory[buildingID] = 2;
+                    MainDataStore.lumberBuffer[buildingID] = 1000;
+                    MainDataStore.coalBuffer[buildingID] = 1000;
                 }
                 else
                 {
                     MainDataStore.resourceCategory[buildingID] = 1;
+                    MainDataStore.lumberBuffer[buildingID] = 1000;
+                    MainDataStore.coalBuffer[buildingID] = 1000;
+                    MainDataStore.petrolBuffer[buildingID] = 1000;
+                    MainDataStore.foodBuffer[buildingID] = 1000;
                 }
             }
         }

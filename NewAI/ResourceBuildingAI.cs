@@ -28,7 +28,7 @@ namespace RealConstruction.NewAI
                 reduceCargoDiv = RealCityUtil.GetReduceCargoDiv();
                 averageSalary = RealCityUtil.GetAverageSalary();
             }
-            int materialConsumption = (int)(1f * averageSalary / reduceCargoDiv);
+            int materialConsumption = (int)(0.5f * averageSalary / reduceCargoDiv);
             if (materialConsumption == 0)
                 materialConsumption = 1;
             if (buildingData.m_fireIntensity == 0 && buildingData.m_flags.IsFlagSet(Building.Flags.Completed))
@@ -39,7 +39,7 @@ namespace RealConstruction.NewAI
                     {
                         MainDataStore.lumberBuffer[buildingID] -= (ushort)materialConsumption;
                         MainDataStore.coalBuffer[buildingID] -= (ushort)materialConsumption;
-                        MainDataStore.constructionResourceBuffer[buildingID] += 400;
+                        MainDataStore.constructionResourceBuffer[buildingID] += 600;
                     }
                 }
 
@@ -49,7 +49,7 @@ namespace RealConstruction.NewAI
                     {
                         MainDataStore.petrolBuffer[buildingID] -= (ushort)materialConsumption;
                         MainDataStore.foodBuffer[buildingID] -= (ushort)materialConsumption;
-                        MainDataStore.operationResourceBuffer[buildingID] += 400;
+                        MainDataStore.operationResourceBuffer[buildingID] += 600;
                     }
                 }
             }

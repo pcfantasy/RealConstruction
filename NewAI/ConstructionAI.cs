@@ -17,7 +17,25 @@ namespace RealConstruction.NewAI
                 System.Random rand = new System.Random();
                 if (buildingData.m_flags.IsFlagSet(Building.Flags.Created) && (!buildingData.m_flags.IsFlagSet(Building.Flags.Completed)) && (!buildingData.m_flags.IsFlagSet(Building.Flags.Deleted)))
                 {
-                    frameData.m_constructState = 10;
+                    var currentConstructState = (byte)(10 + (200f * MainDataStore.constructionResourceBuffer[buildingID] / 8000f));
+
+                    if (frameData.m_constructState > currentConstructState)
+                        frameData.m_constructState = currentConstructState;
+
+                    var currentBuilding = buildingData;
+                    while (currentBuilding.m_subBuilding != 0)
+                    {
+                        if (Singleton<BuildingManager>.instance.m_buildings.m_buffer[currentBuilding.m_subBuilding].m_frame0.m_constructState > currentConstructState)
+                            Singleton<BuildingManager>.instance.m_buildings.m_buffer[currentBuilding.m_subBuilding].m_frame0.m_constructState = currentConstructState;
+                        if (Singleton<BuildingManager>.instance.m_buildings.m_buffer[currentBuilding.m_subBuilding].m_frame1.m_constructState > currentConstructState)
+                            Singleton<BuildingManager>.instance.m_buildings.m_buffer[currentBuilding.m_subBuilding].m_frame1.m_constructState = currentConstructState;
+                        if (Singleton<BuildingManager>.instance.m_buildings.m_buffer[currentBuilding.m_subBuilding].m_frame2.m_constructState > currentConstructState)
+                            Singleton<BuildingManager>.instance.m_buildings.m_buffer[currentBuilding.m_subBuilding].m_frame2.m_constructState = currentConstructState;
+                        if (Singleton<BuildingManager>.instance.m_buildings.m_buffer[currentBuilding.m_subBuilding].m_frame3.m_constructState > currentConstructState)
+                            Singleton<BuildingManager>.instance.m_buildings.m_buffer[currentBuilding.m_subBuilding].m_frame3.m_constructState = currentConstructState;
+                        currentBuilding = Singleton<BuildingManager>.instance.m_buildings.m_buffer[currentBuilding.m_subBuilding];
+                    }
+
                     int num27 = 0;
                     int num28 = 0;
                     int num29 = 0;

@@ -37,15 +37,13 @@ namespace RealConstruction.Patch
                         if (vehicleData.m_transferType == 124)
                         {
                             vehicleData.m_transferSize = 0;
-                            float sizeAdjust = buildingData.m_width * buildingData.m_length / 16f;
+                            int sizeAdjust = buildingData.m_width * buildingData.m_length;
                             Singleton<ImmaterialResourceManager>.instance.CheckLocalResource(ImmaterialResourceManager.Resource.LandValue, buildingData.m_position, out int landPrice);
-                            float landPriceAdjust = landPrice / 10f;
-                            if (sizeAdjust < 1f)
-                                sizeAdjust = 1f;
-                            if (landPriceAdjust < 1f)
-                                landPriceAdjust = 1f;
+                            int totalAdjust = (sizeAdjust * landPrice) >> 8;
+                            if (totalAdjust < 1)
+                                totalAdjust = 1;
 
-                            float finalResource = 8000f / (sizeAdjust * landPriceAdjust);
+                            int finalResource = (8000 / totalAdjust) + 1;
                             MainDataStore.constructionResourceBuffer[vehicleData.m_targetBuilding] += (ushort)finalResource;
                         }
                     }

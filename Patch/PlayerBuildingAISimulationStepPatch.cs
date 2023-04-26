@@ -71,7 +71,7 @@ namespace RealConstruction.Patch
 
                     if (CustomPlayerBuildingAI.CanRemoveNoResource(buildingID, ref buildingData))
                     {
-                        Notification.Problem problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                        Notification.Problem1 problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem1.NoResources);
                         buildingData.m_problems = problem;
                     }
                 }
@@ -80,9 +80,9 @@ namespace RealConstruction.Patch
                     MainDataStore.operationResourceBuffer[buildingID] = 0;
                     if (RealConstruction.debugMode)
                     {
-                        if (buildingData.m_problems == Notification.Problem.None)
+                        if (buildingData.m_problems == Notification.Problem1.None)
                         {
-                            Notification.Problem problem = Notification.AddProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                            Notification.Problem1 problem = Notification.AddProblems(buildingData.m_problems, Notification.Problem1.NoResources);
                             buildingData.m_problems = problem;
                         }
                     }
@@ -90,7 +90,7 @@ namespace RealConstruction.Patch
                     {
                         if (CustomPlayerBuildingAI.CanRemoveNoResource(buildingID, ref buildingData))
                         {
-                            Notification.Problem problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                            Notification.Problem1 problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem1.NoResources);
                             buildingData.m_problems = problem;
                         }
                     }
@@ -100,7 +100,7 @@ namespace RealConstruction.Patch
             {
                 if (CustomPlayerBuildingAI.CanRemoveNoResource(buildingID, ref buildingData))
                 {
-                    Notification.Problem problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                    Notification.Problem1 problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem1.NoResources);
                     buildingData.m_problems = problem;
                 }
             }
@@ -112,16 +112,16 @@ namespace RealConstruction.Patch
                     ConstructionAI.ProcessBuildingConstruction(buildingID, ref buildingData, ref frameData);
                     if (MainDataStore.constructionResourceBuffer[buildingID] >= 8000)
                     {
-                        Notification.Problem problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                        Notification.Problem1 problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem1.NoResources);
                         buildingData.m_problems = problem;
                     }
                     else
                     {
                         if (RealConstruction.debugMode)
                         {
-                            if (buildingData.m_problems == Notification.Problem.None)
+                            if (buildingData.m_problems == Notification.Problem1.None)
                             {
-                                Notification.Problem problem = Notification.AddProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                                Notification.Problem1 problem = Notification.AddProblems(buildingData.m_problems, Notification.Problem1.NoResources);
                                 buildingData.m_problems = problem;
                             }
                         }

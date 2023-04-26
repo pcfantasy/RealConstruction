@@ -22,16 +22,16 @@ namespace RealConstruction.Patch
             {
                 if (MainDataStore.constructionResourceBuffer[buildingID] >= 8000)
                 {
-                    Notification.Problem problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                    Notification.Problem1 problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem1.NoResources);
                     buildingData.m_problems = problem;
                 }
                 else
                 {
                     if (RealConstruction.debugMode)
                     {
-                        if (buildingData.m_problems == Notification.Problem.None)
+                        if (buildingData.m_problems == Notification.Problem1.None)
                         {
-                            Notification.Problem problem = Notification.AddProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                            Notification.Problem1 problem = Notification.AddProblems(buildingData.m_problems, Notification.Problem1.NoResources);
                             buildingData.m_problems = problem;
                         }
                     }
@@ -39,7 +39,7 @@ namespace RealConstruction.Patch
             }
             else
             {
-                Notification.Problem problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem.NoResources);
+                Notification.Problem1 problem = Notification.RemoveProblems(buildingData.m_problems, Notification.Problem1.NoResources);
                 buildingData.m_problems = problem;
             }
         }

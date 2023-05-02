@@ -19,6 +19,6 @@ SHOW_LACK_OF_RESOURCE	Anzeige von Symbolen an Gebäuden,wenn Bau-oder Betriebsst
 FIX_UNROUTED_TRANSFER_MATCH_DESCRIPTION	Wenn ein Gebiet von Straßenverbindungen in andere Gebiete isoliert ist
 FIX_UNROUTED_TRANSFER_MATCH_ENALBE	Reparieren Sie den unverbundenen Transport.
 OPERATION_RESOURCE_CONSUMPTION	Betriebsmittelverbrauch Geschwindigkeit
-NORMAL	üblich
+NORMAL	Normal
 HALF	Halb
 NONE	Keine

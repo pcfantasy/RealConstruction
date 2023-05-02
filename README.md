@@ -66,6 +66,13 @@ Collaborators: **@Pourov(Sagiluv1)**
 *Update logs:*
 ---
 
+* 02/05/2023:
+	1. Add German translation de.txt.
+
+* 27/04/2023:
+	1. Compatible with Cities Skylines 1.16.1-f2 (Hubs & Transport)
+	2. Add Japanese translation ja.txt.
+
 * 20/03/2019:
 	1. Increase resource building production speed a little
 	2. Add garbage service as high priority in resource supply

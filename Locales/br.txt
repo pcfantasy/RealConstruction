@@ -1,0 +1,24 @@
+﻿FOOD_STORED	Alimentos
+LUMBER_STORED	Madeira
+COAL_STORED	Minério
+PETROL_STORED	Petróleo
+CONSTRUCTION_RESOURCE	Recursos de construção
+OPERATION_RESOURCE	Recursos operacionais
+OPERATION_RESOURCE_LEFT	Recursos operacionais excedentes
+TRANSFER_CONSTRUCTION_RESOURCE_TO	Transporte de recursos de construção
+TRANSFER_OPERATION_RESOURCE_TO	Transporte de recursos operacionais.
+GOING_FOR_FUEL_TO	No caminho para o posto de gasolina
+BUILDING_TYPE	Tipo de edifício
+NORMAL_BUILDING	Edifício normal
+GENERATE_BOTH_RESOURCES	Produzir ambos os recursos
+GENERATE_CONSTRUCTION_RESOURCES	Produzir recursos de construção
+GENERATE_OPERATION_RESOURCES	Produzir recursos operacionais
+NONEED_RESOURCE	Não há necessidade de recursos
+DEBUG_MODE	UI de depuração
+SHOW_LACK_OF_RESOURCE	Exibir ícones nos edifícios quando houver escassez de recursos.
+FIX_UNROUTED_TRANSFER_MATCH_DESCRIPTION	Quando isolado de outras conexões rodoviárias da área
+FIX_UNROUTED_TRANSFER_MATCH_ENALBE	Correção de transporte não conectado.
+OPERATION_RESOURCE_CONSUMPTION	Velocidade de consumo de recursos de operação
+NORMAL	Normais
+HALF	Metade
+NONE	Nenhum

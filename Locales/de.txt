@@ -3,8 +3,8 @@ LUMBER_STORED	Holz
 COAL_STORED	Kohle
 PETROL_STORED	Erdöl
 CONSTRUCTION_RESOURCE	Ressourcen für den Bau
-OPERATION_RESOURCE	Betriebsmittel
-OPERATION_RESOURCE_LEFT	Operation Verbleibende Ressourcen
+OPERATION_RESOURCE	betriebliche Ressourcen
+OPERATION_RESOURCE_LEFT	Überschüssige Betriebsmittel
 TRANSFER_CONSTRUCTION_RESOURCE_TO	Entsendung von Baumitteln nach
 TRANSFER_OPERATION_RESOURCE_TO	Senden von Betriebsmitteln an
 GOING_FOR_FUEL_TO	Auf dem Weg zur Tankstelle in
@@ -15,10 +15,10 @@ GENERATE_CONSTRUCTION_RESOURCES	Ressourcen für den Bau produzieren
 GENERATE_OPERATION_RESOURCES	Betriebsmittel produzieren
 NONEED_RESOURCE	Kein Bedarf an Ressourcen
 DEBUG_MODE	Debug UI
-SHOW_LACK_OF_RESOURCE	Anzeige des Symbols für fehlende Ressourcen auf Gebäuden, wenn keine Bau- oder Betriebsressourcen vorhanden sind
-FIX_UNROUTED_TRANSFER_MATCH_DESCRIPTION	Fix UnRouted Transfer Match Wenn Sie einen Bezirk mit kaputtem Straßennetz haben
-FIX_UNROUTED_TRANSFER_MATCH_ENALBE	Fix Ungeleitete Übertragung abgleichen Aktivieren
+SHOW_LACK_OF_RESOURCE	Anzeige von Symbolen an Gebäuden,wenn Bau-oder Betriebsstoffe knapp sind.
+FIX_UNROUTED_TRANSFER_MATCH_DESCRIPTION	Wenn ein Gebiet von Straßenverbindungen in andere Gebiete isoliert ist
+FIX_UNROUTED_TRANSFER_MATCH_ENALBE	Reparieren Sie den unverbundenen Transport.
 OPERATION_RESOURCE_CONSUMPTION	Betriebsmittelverbrauch Geschwindigkeit
-NORMAL	Normal
+NORMAL	üblich
 HALF	Halb
 NONE	Keine

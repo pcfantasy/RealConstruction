@@ -60,11 +60,16 @@
 
 Author: **@pcfantasy**
 
-Collaborators: **@Pourov(Sagiluv1)**
-
+Collaborators: **@Pourov(Sagiluv1)** **@iwarin123(iwarin123)**
 
 *Update logs:*
 ---
+
+* 08/05/2023:
+	1. German wording has been corrected under @DJKLI supervision.
+
+* 03/05/2023:
+	1. Add Spanish, French, Polish, Brazilian Portuguese translation.
 
 * 02/05/2023:
 	1. Add German translation de.txt.

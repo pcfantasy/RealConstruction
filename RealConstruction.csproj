@@ -121,6 +121,7 @@ rem copy "$(TargetDir)CitiesHarmony.API.dll"  "%25DST_PATH%25\CitiesHarmony.API.
 mkdir "%25DST_PATH%25\Icon"
 copy "%25SRC_PATH%25\Icon\*.png" "%25DST_PATH%25\Icon"
 copy "%25SRC_PATH%25\PreviewImage2.png"  "%25DST_PATH%25\PreviewImage.png"
+start "" "%25DST_PATH%25\"
 endlocal</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

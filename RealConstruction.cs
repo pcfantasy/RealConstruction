@@ -1,7 +1,9 @@
 ﻿using CitiesHarmony.API;
 using ICities;
 using RealConstruction.Util;
+using System;
 using System.IO;
+using System.Reflection;
 
 namespace RealConstruction
 {
@@ -12,9 +14,25 @@ namespace RealConstruction
         public static bool fixUnRouteTransfer = false;
         public static int operationConsumption = 2;
 
+#if DEBUG
+        private static string config => " [DEBUG]";
+#else
+		private static string config => "";
+#endif
+        public static string ModName => $"Real Construction{config}";
+
         public string Name
         {
-            get { return "Real Construction"; }
+            get {
+                // Get the currently executing assembly (.exe assembly)
+                var assembly = Assembly.GetExecutingAssembly();
+                var name = assembly.GetName();
+
+                // Retrieve and display the version
+                var version = $" {name.Version}";
+
+                return ModName + version;
+            }
         }
 
         public string Description

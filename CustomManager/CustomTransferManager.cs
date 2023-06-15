@@ -97,7 +97,7 @@ namespace RealConstruction.CustomManager
             }
         }
 
-        public static void ForgetFailedBuilding(ushort targetBuilding, int idex)
+        public static void ForgetFailedBuilding(ushort targetBuilding, int index)
         {
             if (RealConstruction.fixUnRouteTransfer)
             {
@@ -109,7 +109,7 @@ namespace RealConstruction.CustomManager
                         {
                             //After several times we can refresh fail building list.
                             MainDataStore.canNotConnectedBuildingIDCount[targetBuilding]--;
-                            MainDataStore.canNotConnectedBuildingID[targetBuilding, idex] = MainDataStore.canNotConnectedBuildingID[targetBuilding, MainDataStore.canNotConnectedBuildingIDCount[targetBuilding]];
+                            MainDataStore.canNotConnectedBuildingID[targetBuilding, index] = MainDataStore.canNotConnectedBuildingID[targetBuilding, MainDataStore.canNotConnectedBuildingIDCount[targetBuilding]];
                             MainDataStore.canNotConnectedBuildingID[targetBuilding, MainDataStore.canNotConnectedBuildingIDCount[targetBuilding]] = 0;
                             MainDataStore.refreshCanNotConnectedBuildingIDCount[targetBuilding] = 0;
                         }
@@ -305,35 +305,35 @@ namespace RealConstruction.CustomManager
                 float maxDistance = (distanceMultiplier == 0f) ? 0f : (0.01f / distanceMultiplier);
                 for (int priority = 7; priority >= 0; priority--)
                 {
-                    int offerIdex = (int)material * 8 + priority;
-                    int incomingCount = m_incomingCount[offerIdex];
-                    int outgoingCount = m_outgoingCount[offerIdex];
-                    int incomingIdex = 0;
-                    int outgoingIdex = 0;
+                    int offerIndex = (int)material * 8 + priority;
+                    int incomingCount = m_incomingCount[offerIndex];
+                    int outgoingCount = m_outgoingCount[offerIndex];
+                    int incomingIndex = 0;
+                    int outgoingIndex = 0;
                     int oldPriority = priority;
                     // NON-STOCK CODE START
                     byte matchOffersMode = MatchOffersMode(material);
                     bool isLoopValid = false;
                     if (matchOffersMode == 2)
                     {
-                        isLoopValid = (incomingIdex < incomingCount || outgoingIdex < outgoingCount);
+                        isLoopValid = (incomingIndex < incomingCount || outgoingIndex < outgoingCount);
                     }
                     else if (matchOffersMode == 1)
                     {
-                        isLoopValid = (outgoingIdex < outgoingCount);
+                        isLoopValid = (outgoingIndex < outgoingCount);
                     }
                     else if (matchOffersMode == 0)
                     {
-                        isLoopValid = (incomingIdex < incomingCount);
+                        isLoopValid = (incomingIndex < incomingCount);
                     }
 
                     // NON-STOCK CODE END
                     while (isLoopValid)
                     {
                         //use incomingOffer to match outgoingOffer
-                        if (incomingIdex < incomingCount && (matchOffersMode != 1))
+                        if (incomingIndex < incomingCount && (matchOffersMode != 1))
                         {
-                            TransferOffer incomingOffer = m_incomingOffers[offerIdex * 256 + incomingIdex];
+                            TransferOffer incomingOffer = m_incomingOffers[offerIndex * 256 + incomingIndex];
                             // NON-STOCK CODE START
                             Vector3 incomingPositionNew = Vector3.zero;
                             bool canUseNewMatchOffers = CanUseNewMatchOffers(incomingOffer.Building, material);
@@ -369,13 +369,13 @@ namespace RealConstruction.CustomManager
                                 // NON-STOCK CODE END
                                 int incomingPriorityExclude = (!incomingOffer.Exclude) ? incomingPriority : Mathf.Max(0, 3 - priority);
                                 int validPriority = -1;
-                                int validOutgoingIdex = -1;
+                                int validOutgoingIndex = -1;
                                 float distanceOffsetPre = -1f;
-                                int outgoingIdexInsideIncoming = outgoingIdex;
+                                int outgoingIndexInsideIncoming = outgoingIndex;
                                 for (int incomingPriorityInside = priority; incomingPriorityInside >= incomingPriority; incomingPriorityInside--)
                                 {
-                                    int outgoingIdexWithPriority = (int)material * 8 + incomingPriorityInside;
-                                    int outgoingCountWithPriority = m_outgoingCount[outgoingIdexWithPriority];
+                                    int outgoingIndexWithPriority = (int)material * 8 + incomingPriorityInside;
+                                    int outgoingCountWithPriority = m_outgoingCount[outgoingIndexWithPriority];
                                     //To let incomingPriorityInsideFloat!=0
                                     float incomingPriorityInsideFloat = (float)incomingPriorityInside + 0.1f;
                                     //Higher priority will get more chance to match
@@ -385,9 +385,9 @@ namespace RealConstruction.CustomManager
                                         break;
                                     }
                                     //Find the nearest offer to match in every priority.
-                                    for (int i = outgoingIdexInsideIncoming; i < outgoingCountWithPriority; i++)
+                                    for (int i = outgoingIndexInsideIncoming; i < outgoingCountWithPriority; i++)
                                     {
-                                        TransferOffer outgoingOfferPre = m_outgoingOffers[outgoingIdexWithPriority * 256 + i];
+                                        TransferOffer outgoingOfferPre = m_outgoingOffers[outgoingIndexWithPriority * 256 + i];
                                         if (incomingOffer.m_object != outgoingOfferPre.m_object && (!outgoingOfferPre.Exclude || incomingPriorityInside >= incomingPriorityExclude))
                                         {
                                             float incomingOutgoingDistance = Vector3.SqrMagnitude(outgoingOfferPre.Position - incomingPosition);
@@ -410,7 +410,7 @@ namespace RealConstruction.CustomManager
                                                     if (!IsUnRoutedMatch(incomingOffer, outgoingOfferPre, material))
                                                     {
                                                         validPriority = incomingPriorityInside;
-                                                        validOutgoingIdex = i;
+                                                        validOutgoingIndex = i;
                                                         currentShortestDistance = incomingOutgoingDistanceNew;
                                                     }
                                                 }
@@ -420,7 +420,7 @@ namespace RealConstruction.CustomManager
                                             if ((distanceOffset > distanceOffsetPre) && !canUseNewMatchOffers)
                                             {
                                                 validPriority = incomingPriorityInside;
-                                                validOutgoingIdex = i;
+                                                validOutgoingIndex = i;
                                                 distanceOffsetPre = distanceOffset;
                                                 if ((incomingOutgoingDistance < maxDistance))
                                                 {
@@ -429,7 +429,7 @@ namespace RealConstruction.CustomManager
                                             }
                                         }
                                     }
-                                    outgoingIdexInsideIncoming = 0;
+                                    outgoingIndexInsideIncoming = 0;
                                 }
                                 // NON-STOCK CODE START
                                 if (canUseNewMatchOffers)
@@ -442,8 +442,8 @@ namespace RealConstruction.CustomManager
                                     break;
                                 }
                                 //Find a validPriority, get outgoingOffer
-                                int matchedOutgoingOfferIdex = (int)material * 8 + validPriority;
-                                TransferOffer outgoingOffer = m_outgoingOffers[matchedOutgoingOfferIdex * 256 + validOutgoingIdex];
+                                int matchedOutgoingOfferIndex = (int)material * 8 + validPriority;
+                                TransferOffer outgoingOffer = m_outgoingOffers[matchedOutgoingOfferIndex * 256 + validOutgoingIndex];
                                 int outgoingOfferAmount = outgoingOffer.Amount;
                                 int matchedOfferAmount = Mathf.Min(incomingOfferAmount, outgoingOfferAmount);
                                 if (matchedOfferAmount != 0)
@@ -455,10 +455,10 @@ namespace RealConstruction.CustomManager
                                 //matched outgoingOffer is empty now
                                 if (outgoingOfferAmount == 0)
                                 {
-                                    int outgoingCountPost = m_outgoingCount[matchedOutgoingOfferIdex] - 1;
-                                    m_outgoingCount[matchedOutgoingOfferIdex] = (ushort)outgoingCountPost;
-                                    m_outgoingOffers[matchedOutgoingOfferIdex * 256 + validOutgoingIdex] = m_outgoingOffers[matchedOutgoingOfferIdex * 256 + outgoingCountPost];
-                                    if (matchedOutgoingOfferIdex == offerIdex)
+                                    int outgoingCountPost = m_outgoingCount[matchedOutgoingOfferIndex] - 1;
+                                    m_outgoingCount[matchedOutgoingOfferIndex] = (ushort)outgoingCountPost;
+                                    m_outgoingOffers[matchedOutgoingOfferIndex * 256 + validOutgoingIndex] = m_outgoingOffers[matchedOutgoingOfferIndex * 256 + outgoingCountPost];
+                                    if (matchedOutgoingOfferIndex == offerIndex)
                                     {
                                         outgoingCount = outgoingCountPost;
                                     }
@@ -466,7 +466,7 @@ namespace RealConstruction.CustomManager
                                 else
                                 {
                                     outgoingOffer.Amount = outgoingOfferAmount;
-                                    m_outgoingOffers[matchedOutgoingOfferIdex * 256 + validOutgoingIdex] = outgoingOffer;
+                                    m_outgoingOffers[matchedOutgoingOfferIndex * 256 + validOutgoingIndex] = outgoingOffer;
                                 }
                                 incomingOffer.Amount = incomingOfferAmount;
                             }
@@ -475,21 +475,21 @@ namespace RealConstruction.CustomManager
                             if (incomingOfferAmount == 0)
                             {
                                 incomingCount--;
-                                m_incomingCount[offerIdex] = (ushort)incomingCount;
-                                m_incomingOffers[offerIdex * 256 + incomingIdex] = m_incomingOffers[offerIdex * 256 + incomingCount];
+                                m_incomingCount[offerIndex] = (ushort)incomingCount;
+                                m_incomingOffers[offerIndex * 256 + incomingIndex] = m_incomingOffers[offerIndex * 256 + incomingCount];
                             }
                             else
                             {
                                 incomingOffer.Amount = incomingOfferAmount;
-                                m_incomingOffers[offerIdex * 256 + incomingIdex] = incomingOffer;
-                                incomingIdex++;
+                                m_incomingOffers[offerIndex * 256 + incomingIndex] = incomingOffer;
+                                incomingIndex++;
                             }
                         }
                         //For RealConstruction, We only satisify incoming building
                         //use outgoingOffer to match incomingOffer
-                        if (outgoingIdex < outgoingCount && (matchOffersMode != 0))
+                        if (outgoingIndex < outgoingCount && (matchOffersMode != 0))
                         {
-                            TransferOffer outgoingOffer = m_outgoingOffers[offerIdex * 256 + outgoingIdex];
+                            TransferOffer outgoingOffer = m_outgoingOffers[offerIndex * 256 + outgoingIndex];
                             // NON-STOCK CODE START
                             bool canUseNewMatchOffers = CanUseNewMatchOffers(outgoingOffer.Building, material);
                             Vector3 outgoingPositionNew = Vector3.zero;
@@ -525,13 +525,13 @@ namespace RealConstruction.CustomManager
                                 // NON-STOCK CODE END
                                 int outgoingPriorityExclude = (!outgoingOffer.Exclude) ? outgoingPriority : Mathf.Max(0, 3 - priority);
                                 int validPriority = -1;
-                                int validIncomingIdex = -1;
+                                int validIncomingIndex = -1;
                                 float distanceOffsetPre = -1f;
-                                int incomingIdexInsideOutgoing = incomingIdex;
+                                int incomingIndexInsideOutgoing = incomingIndex;
                                 for (int outgoingPriorityInside = priority; outgoingPriorityInside >= outgoingPriority; outgoingPriorityInside--)
                                 {
-                                    int incomingIdexWithPriority = (int)material * 8 + outgoingPriorityInside;
-                                    int incomingCountWithPriority = m_incomingCount[incomingIdexWithPriority];
+                                    int incomingIndexWithPriority = (int)material * 8 + outgoingPriorityInside;
+                                    int incomingCountWithPriority = m_incomingCount[incomingIndexWithPriority];
                                     //To let outgoingPriorityInsideFloat!=0
                                     float outgoingPriorityInsideFloat = (float)outgoingPriorityInside + 0.1f;
                                     //Higher priority will get more chance to match
@@ -539,9 +539,9 @@ namespace RealConstruction.CustomManager
                                     {
                                         break;
                                     }
-                                    for (int j = incomingIdexInsideOutgoing; j < incomingCountWithPriority; j++)
+                                    for (int j = incomingIndexInsideOutgoing; j < incomingCountWithPriority; j++)
                                     {
-                                        TransferOffer incomingOfferPre = m_incomingOffers[incomingIdexWithPriority * 256 + j];
+                                        TransferOffer incomingOfferPre = m_incomingOffers[incomingIndexWithPriority * 256 + j];
                                         if (outgoingOffer.m_object != incomingOfferPre.m_object && (!incomingOfferPre.Exclude || outgoingPriorityInside >= outgoingPriorityExclude))
                                         {
                                             float incomingOutgoingDistance = Vector3.SqrMagnitude(incomingOfferPre.Position - outgoingPosition);
@@ -564,7 +564,7 @@ namespace RealConstruction.CustomManager
                                                     if (!IsUnRoutedMatch(incomingOfferPre, outgoingOffer, material))
                                                     {
                                                         validPriority = outgoingPriorityInside;
-                                                        validIncomingIdex = j;
+                                                        validIncomingIndex = j;
                                                         currentShortestDistance = incomingOutgoingDistanceNew;
                                                     }
                                                 }
@@ -574,7 +574,7 @@ namespace RealConstruction.CustomManager
                                             if ((distanceOffset > distanceOffsetPre) && !canUseNewMatchOffers)
                                             {
                                                 validPriority = outgoingPriorityInside;
-                                                validIncomingIdex = j;
+                                                validIncomingIndex = j;
                                                 distanceOffsetPre = distanceOffset;
                                                 if (incomingOutgoingDistance < maxDistance)
                                                 {
@@ -583,7 +583,7 @@ namespace RealConstruction.CustomManager
                                             }
                                         }
                                     }
-                                    incomingIdexInsideOutgoing = 0;
+                                    incomingIndexInsideOutgoing = 0;
                                 }
                                 // NON-STOCK CODE START
                                 if (canUseNewMatchOffers)
@@ -596,8 +596,8 @@ namespace RealConstruction.CustomManager
                                     break;
                                 }
                                 //Find a validPriority, get incomingOffer
-                                int matchedIncomingOfferIdex = (int)material * 8 + validPriority;
-                                TransferOffer incomingOffers = m_incomingOffers[matchedIncomingOfferIdex * 256 + validIncomingIdex];
+                                int matchedIncomingOfferIndex = (int)material * 8 + validPriority;
+                                TransferOffer incomingOffers = m_incomingOffers[matchedIncomingOfferIndex * 256 + validIncomingIndex];
                                 int incomingOffersAmount = incomingOffers.Amount;
                                 int matchedOfferAmount = Mathf.Min(outgoingOfferAmount, incomingOffersAmount);
                                 if (matchedOfferAmount != 0)
@@ -609,10 +609,10 @@ namespace RealConstruction.CustomManager
                                 //matched incomingOffer is empty now
                                 if (incomingOffersAmount == 0)
                                 {
-                                    int incomingCountPost = m_incomingCount[matchedIncomingOfferIdex] - 1;
-                                    m_incomingCount[matchedIncomingOfferIdex] = (ushort)incomingCountPost;
-                                    m_incomingOffers[matchedIncomingOfferIdex * 256 + validIncomingIdex] = m_incomingOffers[matchedIncomingOfferIdex * 256 + incomingCountPost];
-                                    if (matchedIncomingOfferIdex == offerIdex)
+                                    int incomingCountPost = m_incomingCount[matchedIncomingOfferIndex] - 1;
+                                    m_incomingCount[matchedIncomingOfferIndex] = (ushort)incomingCountPost;
+                                    m_incomingOffers[matchedIncomingOfferIndex * 256 + validIncomingIndex] = m_incomingOffers[matchedIncomingOfferIndex * 256 + incomingCountPost];
+                                    if (matchedIncomingOfferIndex == offerIndex)
                                     {
                                         incomingCount = incomingCountPost;
                                     }
@@ -620,7 +620,7 @@ namespace RealConstruction.CustomManager
                                 else
                                 {
                                     incomingOffers.Amount = incomingOffersAmount;
-                                    m_incomingOffers[matchedIncomingOfferIdex * 256 + validIncomingIdex] = incomingOffers;
+                                    m_incomingOffers[matchedIncomingOfferIndex * 256 + validIncomingIndex] = incomingOffers;
                                 }
                                 outgoingOffer.Amount = outgoingOfferAmount;
                             }
@@ -629,29 +629,29 @@ namespace RealConstruction.CustomManager
                             if (outgoingOfferAmount == 0)
                             {
                                 outgoingCount--;
-                                m_outgoingCount[offerIdex] = (ushort)outgoingCount;
-                                m_outgoingOffers[offerIdex * 256 + outgoingIdex] = m_outgoingOffers[offerIdex * 256 + outgoingCount];
+                                m_outgoingCount[offerIndex] = (ushort)outgoingCount;
+                                m_outgoingOffers[offerIndex * 256 + outgoingIndex] = m_outgoingOffers[offerIndex * 256 + outgoingCount];
                             }
                             else
                             {
                                 outgoingOffer.Amount = outgoingOfferAmount;
-                                m_outgoingOffers[offerIdex * 256 + outgoingIdex] = outgoingOffer;
-                                outgoingIdex++;
+                                m_outgoingOffers[offerIndex * 256 + outgoingIndex] = outgoingOffer;
+                                outgoingIndex++;
                             }
                         }
 
                         // NON-STOCK CODE START
                         if (matchOffersMode == 2)
                         {
-                            isLoopValid = (incomingIdex < incomingCount || outgoingIdex < outgoingCount);
+                            isLoopValid = (incomingIndex < incomingCount || outgoingIndex < outgoingCount);
                         }
                         else if (matchOffersMode == 1)
                         {
-                            isLoopValid = (outgoingIdex < outgoingCount);
+                            isLoopValid = (outgoingIndex < outgoingCount);
                         }
                         else if (matchOffersMode == 0)
                         {
-                            isLoopValid = (incomingIdex < incomingCount);
+                            isLoopValid = (incomingIndex < incomingCount);
                         }
                         // NON-STOCK CODE END
                     }
@@ -754,8 +754,8 @@ namespace RealConstruction.CustomManager
                             int outgoingIndexInsideIncoming = outgoingIndex;
                             for (int incomingPriorityInside = priority; incomingPriorityInside >= incomingPriority; incomingPriorityInside--)
                             {
-                                int outgoingIdexWithPriority = (int)material * 8 + incomingPriorityInside;
-                                int outgoingCountWithPriority = m_outgoingCount[outgoingIdexWithPriority];
+                                int outgoingIndexWithPriority = (int)material * 8 + incomingPriorityInside;
+                                int outgoingCountWithPriority = m_outgoingCount[outgoingIndexWithPriority];
                                 // To let incomingPriorityInsideFloat != 0
                                 float incomingPriorityInsideFloat = (float)incomingPriorityInside + 0.1f;
 
@@ -775,7 +775,7 @@ namespace RealConstruction.CustomManager
                                 // Find the nearest offer to match in every priority.
                                 for (int i = outgoingIndexInsideIncoming; i < outgoingCountWithPriority; i++)
                                 {
-                                    TransferOffer outgoingOfferPre = m_outgoingOffers[outgoingIdexWithPriority * 256 + i];
+                                    TransferOffer outgoingOfferPre = m_outgoingOffers[outgoingIndexWithPriority * 256 + i];
                                     if (!(incomingOffer.m_object != outgoingOfferPre.m_object) || incomingOffer.m_isLocalPark != outgoingOfferPre.m_isLocalPark || (outgoingOfferPre.Exclude && incomingPriorityInside < incomingPriorityExclude))
                                     {
                                         continue;

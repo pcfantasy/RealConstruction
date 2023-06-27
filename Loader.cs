@@ -46,7 +46,9 @@ namespace RealConstruction
                     HarmonyInitDetour();
                     SetupGui();
                     SetupLocalization();
-                    isRealCityRunning = CheckRealCityIsLoaded();
+
+                    // [RealCity] Disable it temporarily. Will support "RealCity Revised" in the future.
+                    // isRealCityRunning = CheckRealCityIsLoaded();
 
                     RealConstruction.LoadSetting();
                     if (mode == LoadMode.NewGame)

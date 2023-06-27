@@ -38,5 +38,5 @@ using System.Runtime.InteropServices;
 //       ("プライマリーバージョン . セカンダリーバージョン . 世代番号(Generation Number) . リビジョン番号")
 //       これらの値をすべて指定することもできますが、以下のように "*"を使用することで、"Generate "と "Revision "のデフォルト値を使用することができます。
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("3.2.04.18")]
-[assembly: AssemblyFileVersion("3.2.04.18")]
+[assembly: AssemblyVersion("3.2.05.18")]
+[assembly: AssemblyFileVersion("3.2.05.18")]

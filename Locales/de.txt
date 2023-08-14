@@ -1,0 +1,24 @@
+﻿FOOD_STORED	Lebensmittel
+LUMBER_STORED	Holz
+COAL_STORED	Kohle
+PETROL_STORED	Erdöl
+CONSTRUCTION_RESOURCE	Baumaterial
+OPERATION_RESOURCE	Betriebsmittel
+OPERATION_RESOURCE_LEFT	Überschüssige Betriebsmittel
+TRANSFER_CONSTRUCTION_RESOURCE_TO	Liefere Baumaterial nach
+TRANSFER_OPERATION_RESOURCE_TO	Liefere Betriebsmittel an
+GOING_FOR_FUEL_TO	Auf dem Weg zur Tankstelle in
+BUILDING_TYPE	Gebäude Funktion
+NORMAL_BUILDING	Normales Gebäude
+GENERATE_BOTH_RESOURCES	Beide Ressourcen produzieren
+GENERATE_CONSTRUCTION_RESOURCES	 Produziere Baumaterial
+GENERATE_OPERATION_RESOURCES	Produziere Betriebsmittel
+NONEED_RESOURCE	Kein Bedarf an Ressourcen
+DEBUG_MODE	Debug UI
+SHOW_LACK_OF_RESOURCE	Symbolen über Gebäuden anzeigen, wenn Bau-oder Betriebsstoffe knapp sind.
+FIX_UNROUTED_TRANSFER_MATCH_DESCRIPTION	Wenn ein Gebiet von Straßenverbindungen in andere Gebiete isoliert ist
+FIX_UNROUTED_TRANSFER_MATCH_ENALBE	Reparieren Sie den unverbundenen Transport.
+OPERATION_RESOURCE_CONSUMPTION	Betriebsmittelverbrauchsgeschwindigkeit
+NORMAL	Normal
+HALF	Halb
+NONE	Keine

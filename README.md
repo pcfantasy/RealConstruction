@@ -60,11 +60,23 @@
 
 Author: **@pcfantasy**
 
-Collaborators: **@Pourov(Sagiluv1)**
-
+Collaborators: **@Pourov(Sagiluv1)** **@iwarin123(iwarin123)**
 
 *Update logs:*
 ---
+
+* 08/05/2023:
+	1. German wording has been corrected under @DJKLI supervision.
+
+* 03/05/2023:
+	1. Add Spanish, French, Polish, Brazilian Portuguese translation.
+
+* 02/05/2023:
+	1. Add German translation de.txt.
+
+* 27/04/2023:
+	1. Compatible with Cities Skylines 1.16.1-f2 (Hubs & Transport)
+	2. Add Japanese translation ja.txt.
 
 * 20/03/2019:
 	1. Increase resource building production speed a little

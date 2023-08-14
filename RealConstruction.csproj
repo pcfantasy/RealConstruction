@@ -33,10 +33,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>F:\SteamLibrary\steamapps\common\Cities_Skylines\Cities_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>F:\SteamLibrary\steamapps\common\Cities_Skylines\Cities_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="CitiesHarmony.API, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\CitiesHarmony.API.2.0.0\lib\net35\CitiesHarmony.API.dll</HintPath>
@@ -45,10 +45,10 @@
       <HintPath>packages\CitiesHarmony.Harmony.2.0.4\lib\net35\CitiesHarmony.Harmony.dll</HintPath>
     </Reference>
     <Reference Include="ColossalManaged">
-      <HintPath>F:\SteamLibrary\steamapps\common\Cities_Skylines\Cities_Data\Managed\ColossalManaged.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\ColossalManaged.dll</HintPath>
     </Reference>
     <Reference Include="ICities">
-      <HintPath>F:\SteamLibrary\steamapps\common\Cities_Skylines\Cities_Data\Managed\ICities.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\ICities.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -57,7 +57,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
-      <HintPath>F:\SteamLibrary\steamapps\common\Cities_Skylines\Cities_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Cities_Skylines\Cities_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +69,7 @@
     <Compile Include="Patch\DistrictParkGetAcademicYearProgressPatch.cs" />
     <Compile Include="Patch\CarAIPathfindFailurePatch.cs" />
     <Compile Include="Patch\CargoTruckAIArriveAtTargetPatch.cs" />
+    <Compile Include="Patch\MatchOffersPatch.cs" />
     <Compile Include="Patch\PlayerBuildingAICreateBuildingPatch.cs" />
     <Compile Include="Patch\PlayerBuildingAIGetBudgetPatch.cs" />
     <Compile Include="Patch\PlayerBuildingAIGetConstructionTimePatch.cs" />
@@ -99,7 +100,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon\RealConstruction.png" />
+    <Content Include="Locales\de.txt" />
     <Content Include="Locales\en.txt" />
+    <Content Include="Locales\es.txt" />
+    <Content Include="Locales\fr.txt" />
+    <Content Include="Locales\ja.txt" />
+    <Content Include="Locales\ko.txt" />
+    <Content Include="Locales\pl.txt" />
+    <Content Include="Locales\pt.txt" />
+    <Content Include="Locales\ru.txt" />
     <Content Include="Locales\zh-cn.txt" />
     <Content Include="Locales\zh.txt" />
     <Content Include="PreviewImage.png" />
@@ -109,15 +118,20 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>rd /q /s "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108"
-mkdir "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108"
-copy "D:\Mod\RealConstruction\bin\Release\RealConstruction.dll"  "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\RealConstruction.dll"
-mkdir "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Locales"
-copy "D:\Mod\RealConstruction\Locales\*.txt" "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Locales"
-copy "D:\Mod\RealConstruction\bin\Release\CitiesHarmony.API.dll"  "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\CitiesHarmony.API.dll"
-mkdir "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"
-copy "D:\Mod\RealConstruction\Icon\*.png" "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\Icon"
-copy "D:\Mod\RealConstruction\PreviewImage.png"  "F:\SteamLibrary\steamapps\workshop\content\255710\1614061108\PreviewImage.png"</PostBuildEvent>
+    <PostBuildEvent>setlocal
+set SRC_PATH=$(ProjectDir)
+set DST_PATH=%25LOCALAPPDATA%25\Colossal Order\Cities_Skylines\Addons\Mods\RealConstruction
+rd /q /s "%25DST_PATH%25"
+mkdir "%25DST_PATH%25"
+copy "$(TargetPath)" "%25DST_PATH%25\RealConstruction.dll"
+mkdir "%25DST_PATH%25\Locales"
+copy "%25SRC_PATH%25\Locales\*.txt" "%25DST_PATH%25\Locales"
+rem copy "$(TargetDir)CitiesHarmony.API.dll"  "%25DST_PATH%25\CitiesHarmony.API.dll"
+mkdir "%25DST_PATH%25\Icon"
+copy "%25SRC_PATH%25\Icon\*.png" "%25DST_PATH%25\Icon"
+copy "%25SRC_PATH%25\PreviewImage2.png"  "%25DST_PATH%25\PreviewImage.png"
+start "" "%25DST_PATH%25\"
+endlocal</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

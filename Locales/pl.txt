@@ -1,0 +1,24 @@
+﻿FOOD_STORED	Żywność
+LUMBER_STORED	Tarcica
+COAL_STORED	Węgiel
+PETROL_STORED	Benzyna
+CONSTRUCTION_RESOURCE	Zasoby budowlane
+OPERATION_RESOURCE	Zasoby operacyjne
+OPERATION_RESOURCE_LEFT	nadmiar zasobów operacyjnych
+TRANSFER_CONSTRUCTION_RESOURCE_TO	Transport materiałów budowlanych
+TRANSFER_OPERATION_RESOURCE_TO	Transport środków operacyjnych.
+GOING_FOR_FUEL_TO	W drodze na stację benzynową
+BUILDING_TYPE	Rodzaj budynku
+NORMAL_BUILDING	Normalny budynek
+GENERATE_BOTH_RESOURCES	Produkuj oba zasoby
+GENERATE_CONSTRUCTION_RESOURCES	Produkuj zasoby budowlane
+GENERATE_OPERATION_RESOURCES	Produkuj zasoby operacyjne
+NONEED_RESOURCE	Nie potrzeba zasobów
+DEBUG_MODE	Debug UI
+SHOW_LACK_OF_RESOURCE	Pokaż ikonę braku zasobów na budynkach, gdy brakuje zasobów budowlanych lub operacyjnych.
+FIX_UNROUTED_TRANSFER_MATCH_DESCRIPTION	W przypadku odizolowania od innych połączeń drogowych obszaru.
+FIX_UNROUTED_TRANSFER_MATCH_ENALBE	Naprawić niepołączony transport.
+OPERATION_RESOURCE_CONSUMPTION	Działanie zużycie zasobów szybkość
+NORMAL	Normalna
+HALF	Pół
+NONE	Bez

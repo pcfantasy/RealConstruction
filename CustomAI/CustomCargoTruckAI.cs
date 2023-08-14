@@ -23,7 +23,7 @@ namespace RealConstruction.CustomAI
                 }
                 else
                 {
-                    DebugLog.LogToFileOnly("find unknow transfor for SpecialBuilding " + data.m_transferType.ToString());
+                    DebugLog.LogToFileOnly("find unknown transfer for SpecialBuilding " + data.m_transferType.ToString());
                 }
             }
         }

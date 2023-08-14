@@ -31,7 +31,9 @@ namespace RealConstruction.Util
                     }
                 }
                 num = instance.m_vehicles.m_buffer[(int)num].m_nextGuestVehicle;
-                if (++num2 > 16384)
+
+                int vehicleMaxCount = instance.m_vehicles.m_buffer.Length;
+                if (++num2 > vehicleMaxCount)
                 {
                     CODebugBase<LogChannel>.Error(LogChannel.Core, "Invalid list detected!\n" + Environment.StackTrace);
                     break;
@@ -61,7 +63,9 @@ namespace RealConstruction.Util
                     }
                 }
                 num = instance.m_vehicles.m_buffer[(int)num].m_nextOwnVehicle;
-                if (++num2 > 16384)
+
+                int vehicleMaxCount = instance.m_vehicles.m_buffer.Length;
+                if (++num2 > vehicleMaxCount)
                 {
                     CODebugBase<LogChannel>.Error(LogChannel.Core, "Invalid list detected!\n" + Environment.StackTrace);
                     break;

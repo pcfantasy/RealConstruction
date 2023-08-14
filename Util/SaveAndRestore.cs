@@ -8,38 +8,38 @@ namespace RealConstruction.Util
     { 
         private static ISerializableData _serializableData;
 
-        public static void SaveData(ref int idex, byte[] item, ref byte[] container)
+        public static void SaveData(ref int index, byte[] item, ref byte[] container)
         {
             int j;
             for (j = 0; j < item.Length; j++)
             {
-                container[idex + j] = item[j];
+                container[index + j] = item[j];
             }
-            idex += item.Length;
+            index += item.Length;
         }
 
-        public static void LoadData(ref int idex, byte[] container, ref byte[] item)
+        public static void LoadData(ref int index, byte[] container, ref byte[] item)
         {
             int i;
-            if (idex < container.Length)
+            if (index < container.Length)
             {
                 for (i = 0; i < item.Length; i++)
                 {
-                    item[i] = container[idex];
-                    idex++;
+                    item[i] = container[index];
+                    index++;
                 }
             }
             else
             {
                 for (i = 0; i < item.Length; i++)
                 {
-                    idex++;
+                    index++;
                 }
                 DebugLog.LogToFileOnly("load data is too short, please check" + container.Length.ToString());
             }
         }
 
-        public static void SaveData(ref int idex, ushort[] item, ref byte[] container)
+        public static void SaveData(ref int index, ushort[] item, ref byte[] container)
         {
             int i; int j;
             byte[] bytes;
@@ -48,21 +48,21 @@ namespace RealConstruction.Util
                 bytes = BitConverter.GetBytes(item[j]);
                 for (i = 0; i < bytes.Length; i++)
                 {
-                    container[idex + i] = bytes[i];
+                    container[index + i] = bytes[i];
                 }
-                idex += bytes.Length;
+                index += bytes.Length;
             }
         }
 
-        public static void LoadData(ref int idex, byte[] container, ref ushort[] item)
+        public static void LoadData(ref int index, byte[] container, ref ushort[] item)
         {
             int i;
-            if (idex < container.Length)
+            if (index < container.Length)
             {
                 for (i = 0; i < item.Length; i++)
                 {
-                    item[i] = BitConverter.ToUInt16(container, idex);
-                    idex += 2;
+                    item[i] = BitConverter.ToUInt16(container, index);
+                    index += 2;
                 }
             }
             else
@@ -70,7 +70,7 @@ namespace RealConstruction.Util
                 DebugLog.LogToFileOnly("load data is too short, please check" + container.Length.ToString());
                 for (i = 0; i < item.Length; i++)
                 {
-                    idex += 2;
+                    index += 2;
                 }
             }
         }

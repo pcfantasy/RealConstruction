@@ -32,7 +32,7 @@ namespace RealConstruction.UI
 
         public override void Start()
         {
-            base.normalBgSprite = "ToolbarIconGroup1Nomarl";
+            base.normalBgSprite = "ToolbarIconGroup1Normal";
             base.hoveredBgSprite = "ToolbarIconGroup1Hovered";
             base.focusedBgSprite = "ToolbarIconGroup1Focused";
             base.pressedBgSprite = "ToolbarIconGroup1Pressed";
